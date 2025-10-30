@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-11-11T19:02:30+01:00",
+  "id": "SPA_K1-priprema",
+  "duration": 50,
+  "title": "Ponavljanje za K1",
+  "authors": "Divna Krpan",
+  "summary": "Strukture podataka i algoritmi",
+  "source": "SPA_K1-priprema/index.md",
+  "theme": "",
+  "status": [
+    "[draft]"
+  ],
+  "category": [
+    "web"
+  ],
+  "tags": [
+    "web"
+  ],
+  "url": "SPA_K1-priprema"
+}

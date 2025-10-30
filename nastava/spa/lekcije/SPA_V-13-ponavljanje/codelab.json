@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2025-01-14T22:25:07+01:00",
+  "id": "SPA_V-13-ponavljanje",
+  "duration": 50,
+  "title": "SPA: K2 ponavljanje",
+  "authors": "Divna Krpan",
+  "summary": "Strukture podataka i algoritmi",
+  "source": "SPA_V-13-ponavljanje\\index.md",
+  "theme": "",
+  "status": [
+    "[draft]"
+  ],
+  "category": [
+    "web"
+  ],
+  "tags": [
+    "web"
+  ],
+  "url": "SPA_V-13-ponavljanje"
+}

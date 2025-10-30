@@ -1,0 +1,662 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>SPA-Vježbe 03: Sortiranje</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+<link rel="stylesheet" href="css/prism-coy-all.css">
+<script src="css/prism-coy-all.js"></script>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="SPA_V-03-Sort"
+                  title="SPA-Vježbe 03: Sortiranje"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Uvod" duration="90">
+        <h2 is-upgraded><strong>Strukture podataka i algoritmi sortiranja u C#</strong></h2>
+<p>U ovom dijelu ćemo implementirati vlastitu strukturu podataka koristeći niz te primijeniti osnovne algoritme sortiranja u obliku metoda koje će biti dio te klase. Moramo se podsjetiti kako pristupamo članovima klase dok pišemo kod u tijelu klase i u nekom drugom dijelu programa.</p>
+<h2 is-upgraded><strong>Temeljni pojmovi</strong></h2>
+<ul>
+<li>📌 <strong>Imenski prostori (eng. namespace)</strong> i korištenje <strong>using</strong> direktive.</li>
+<li>📌 <strong>Klase</strong> u C# – Definiranje i implementacija klase s poljima.</li>
+<li>📌 <strong>Nizovi</strong> (eng. arrays) – Pohrana podataka u niz.</li>
+<li>📌 <strong>Metode</strong> za dodavanje, ispis, uređivanje.</li>
+<li>📌 <strong>Algoritmi sortiranja</strong> (primjeri <em>bubble sort, selection sort, insertion sort</em>)</li>
+<li>📌 <strong>Mjerenje vremena izvođenja</strong> (DateTime, Stopwatch, TimeSpan)</li>
+<li>📌 <strong>Rad s datotekama</strong> – Učitavanje i spremanje podataka iz/u tekstualnu datoteku.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Podsjetnik: Klase i imenski prostori u C#-u" duration="0">
+        <h2 is-upgraded><strong>Imenski prostori</strong></h2>
+<p>Imenske prostore (eng. namespace) koristimo kako bi organizirali kôd te izbjegli potencijalne konflikte između naziva (ili imena) klasa, pogotovo u složenim projektima, gdje različite klase ili metode mogu imati iste nazive. Npr. možete imati klasu s nazivom <strong>List</strong> u jednom imenskom prostoru, a potpuno drugačiju klasu <strong>List</strong> u drugom.</p>
+<p>Pomoću imenskih prostora možemo grupirati međusobno povezane klase i metode u logične cjeline (povećavamo preglednost kôda). Ako koristimo imenske prostore, odmah je jasno iz kojeg dijela dolazi određena klasa ili metoda.</p>
+<p>Na početku svakog C# programa ćete najčešće vidjeti liniju:</p>
+<pre><code>using System;
+</code></pre>
+<p>Taj redak omogućava nam korištenje svih klasa unutar <strong>System</strong> imenskog prostora, poput <strong>Console</strong>, bez potrebe da svaki put pišemo <strong>System.Console</strong>. To je imenski prostor koji već postoji u bibliotekama kôda. Ako pišemo vlastiti imenski prostor, onda navodimo sljedeće:</p>
+<pre><code>namespace StrukturaPodataka
+{
+    class MojPopis
+    {
+        // Tijelo klase
+    }
+}
+</code></pre>
+<p>Ako u nekom drugom projektu želimo koristiti već definiranu klasu iz imenskog prostora <em>StrukturaPodataka</em> onda jednostavno dodamo postojeću <strong>cs</strong> datoteku u novi projekt te u novom projektu pišemo:</p>
+<pre><code>StrukturaPodataka.MojPopis a = new StrukturaPodataka.MojPopis();
+</code></pre>
+<p>jer novi projekt nema isti naziv imenskog prostora.</p>
+<p>Ako koristimo <strong>using StrukturaPodataka;</strong>, onda je dovoljno pisati:</p>
+<pre><code>MojPopis a = new MojPopis();
+</code></pre>
+<aside class="warning"><p>❓ Što bi se dogodilo ako bi samo promijenili naziv imenskog prostora <em>StrukturaPodataka</em> u naziv kojeg koristimo u projektu?</p>
+</aside>
+<p>Na prvi pogled se taj postupak čini jednostavnim, ali u praksi nije. Naime, ako ćemo koristiti tu novu strukturu u više projekata, onda svaki put moramo mijenjati &#34;originalnu&#34; <strong>cs</strong> datoteku. Kao što se inače događa s programskom podrškom... što ako napravimo izmjene u toj strukturi? U tom slučaju, umjesto jednostavnog dodavanja nove <strong>cs</strong> datoteke, za svaki projekt moramo raditi usklađivanje naziva.</p>
+<p>Imenski prostori su ključni alat za upravljanje velikim i složenim projektima te osiguravaju urednu organizaciju i smanjenje mogućih problema s nazivima.</p>
+<h2 is-upgraded><strong>Klase</strong></h2>
+<p>Klase imaju svoje članove (eng. members):</p>
+<ul>
+<li><strong>Polja</strong> (eng. fields)</li>
+<li><strong>Svojstva</strong> (eng. properties)</li>
+<li><strong>Metode</strong></li>
+<li><strong>Konstruktore</strong></li>
+</ul>
+<p>Svi članovi klase mogu biti označeni modifikatorima pristupa:</p>
+<ul>
+<li><strong>private</strong> - dostupni samo unutar klase</li>
+<li><strong>public</strong> - neograničen pristup (dostupno svima koji vide klasu)</li>
+<li><strong>protected</strong> - ograničeno na klase koje nasljeđuju</li>
+<li><strong>internal</strong> - slično kao public, ali pristup je ograničen samo na trenutni skup biblioteka (<em>assembly</em>)</li>
+</ul>
+<p>Posebna vrsta modifikatora koja se može koristiti u kombinaciji s gore navedenima:</p>
+<ul>
+<li><strong>static</strong> - predstavljaju statičkog člana koji <strong>pripada klasi, a ne objektu.</strong></li>
+</ul>
+<aside class="warning"><p>⚠️ Ako izostavimo modifikator pristupa, onda se podrazumijeva da je član klase <strong>private</strong>.</p>
+</aside>
+<p>Na ovom kolegiju nećemo koristiti <strong>protected</strong> jer je usko vezan uz koncept nasljeđivanja koji se detaljnije obrađuje kasnije. Za ostalo je prilično jednostavno, ako nam treba nešto sakriti (zaštititi), onda koristimo <strong>private</strong>, a ako želimo omogućiti dostupnost (vidljivost) van klase onda koristimo <strong>public</strong>.</p>
+<p>Ako nam treba &#34;finija&#34; kontrola nad nekim poljem, npr. treba nam podatak koji je samo za čitanje (eng. read-only) kao što je to primjerice <strong>Length</strong> za niz, onda ćemo tu namjenu koristiti <strong>svojstvo</strong>. Naime, svojstvo se sastoji od dva dijela:</p>
+<ul>
+<li>dohvaćanja/čitanja spremljenog podatka (get) i</li>
+<li>spremanja/postavljanja podataka (set)</li>
+</ul>
+<p>U svakom od ta dva navedena dijela možemo pisati dodatni kôd kojim kontroliramo pristup. Na primjer, ako korisnik pokuša upisati prazan string za ime, može se javiti iznimka (greška) ili se može spremiti tekst &#34;nepoznato&#34; i sl.</p>
+<p>Što je s <strong>internal</strong>? Pojednostavljeno, jako je sličan <strong>public</strong> tako da ga nećemo koristiti. Za potrebe izrade projekata na ovom kolegiju, zapravo niti nema razlike. Članovi označeni s internal su javno dostupni svima ostalima unutar jednog <strong><em>assembly</em></strong>.</p>
+<p>Ovdje smo ostavili engleski naziv jer je malo teže (ili nespretnije) prevesti taj pojam. Podrazumijeva fizičku jedinicu kôda koja sadrži sve što je potrebno kako bi se određeni dio programa izvršio (klase, metode itd.) te informacije (metapodatke) koje su potrebne kako bi sve funkcioniralo (verzije, resursi, sigurnosne informacije i sl.). Dijeli se na izvršne <strong>exe</strong> datoteke i <strong>dll</strong> datoteke s bibliotekama kôda. Kad napravite složenije projekte, onda se vaša aplikacija može sastojati od više takvih <em>assembly-ja</em>.</p>
+<p>Svaki <em>assembly</em> može sadržavati više imenskih prostora. Primjerice, kad instalirate neki program (aplikaciju) na vaše računalo, taj program se sastoji od jedne više <strong>exe</strong> i <strong>dll</strong> datoteka koje su različiti <em>assembly</em>-ji.</p>
+<p>Kad <em>kompajlirate</em> vaš projekt, također se generiraju <strong>dll</strong> datoteke (1 ili više, ovisno o tome što koristite).</p>
+<p class="image-container"><img alt="788fbcec78eaf015.png" style="width: 168.67px" src="img/788fbcec78eaf015.png"></p>
+<p>Dakle, <em>assembly</em> možemo zamisliti kao <em>paket</em> koji sadrži sve potrebne dijelove za rad aplikacije.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Mjerenje vremena izvođenja" duration="0">
+        <p>Prije nego što krenemo s implementacijom, napravit ćemo pregled načina na koje možemo mjeriti vrijeme izvođenja nekog programa. Mjerenje vremena izvođenja programa je važno jer nam pomaže razumjeti koliko je naš kôd učinkovit. U svijetu programiranja, učinkovitost je ključna jer se ne radi samo o tome da program radi, nego i o tome koliko brzo i s koliko resursa se izvršava.</p>
+<p>Neki algoritmi mogu riješiti isti problem na različite načine, ali s vrlo različitim brzinama. Mjerenjem vremena izvođenja možemo odabrati najbrži algoritam ili pristup za određeni zadatak. Na primjer, BubbleSort je u određenim situacijama sporiji od drugih algoritama, pa je važno znati koliko je vremena potrebno različitim algoritmima na različitim skupovima i vrstama podataka. S povećanjem količine podataka, neki algoritmi postaju značajno sporiji.</p>
+<p>Ne smijemo zaboraviti i iskustvo korisnika. Ako program dugo izvršava neki zadatak, korisnici mogu postati frustrirani ili ga čak prestati koristiti.</p>
+<p>Kad spominjemo učinkovite programe koji se temelje na pažljivo odabranim strukturama podataka i algoritmima, onda ne smijemo zaboraviti kako pored vremena izvođenja &#34;troše&#34; i radnu memoriju te samim tim i dodatne resurse. Prema tome, važno je znati što i kako implementirati kako bi smanjili troškove.</p>
+<p>Ovdje ćemo se osvrnuti detaljnije samo na vrijeme jer nam je to jednostavno.</p>
+<p>Načine mjerenja (za potrebe učenja i nastave) možemo podijeliti na:</p>
+<ul>
+<li>Mjerenje s <strong>DateTime</strong> - jednostavno oduzimanje vremena početka i kraja,</li>
+<li>Primjena klase <strong>Stopwatch</strong> - preciznije mjerenje od prethodnog ,</li>
+<li>Mjerenje vremena izvršavanja procesa - primjena <strong>TimeSpan</strong> i <strong>Process</strong>.</li>
+</ul>
+<p><strong>TimeSpan</strong> predstavlja određeni vremenski period izražen u obliku pozitivnih ili negativnih brojeva dana, sati, minuta, sekundi i dijelova sekunde. Vrijednost TimeSpan objekta predstavljena je kao:</p>
+<ul>
+<li>​​[-]d.hh:mm:ss.ff (predznak je opcionalan, <strong>d</strong> označava broj dana, <strong>hh</strong> broj sati, <strong>mm</strong> broj minuta, <strong>ss</strong> broj sekundi, a <strong>ff</strong> dijelove sekunde),</li>
+<li>broj otkucaja (eng. ticks) u nekom vremenskom intervalu, a jedan „tick&#34; za TimeSpan odgovara 100 nanosekundi.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Mjerenje izvođenja s DateTime" duration="0">
+        <p>Prije dijela kôda za kojeg želimo izmjeriti vrijeme pišemo:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+
+namespace test; // novi način pisanja za namespace
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // deklariramo varijablu
+        DateTime pocetak;
+
+        pocetak = DateTime.Now;
+        // dio programa kojeg mjerimo
+        Console.WriteLine(&#34;Hello, World!&#34;);
+        // kraj mjerenja
+        TimeSpan kraj = DateTime.Now.Subtract(pocetak);
+
+        Console.WriteLine(&#34;Vrijeme: &#34; + kraj);
+    }
+}
+</code></pre>
+<p>Primijetite kako ne moramo posebno izdvajati sekunde, minute itd. već postoji metoda Subtract() kojom možemo jednostavno obaviti računanje. Ako zadržimo strelicu miša na metodi, VS Code će nam dati neke informacije (isječak na slici):</p>
+<p class="image-container"><img alt="ae5a24ac8871cf2b.png" style="width: 386.67px" src="img/ae5a24ac8871cf2b.png"></p>
+<p>Vidimo kako metoda <strong>Subtract() prima</strong> vrijednost tipa <strong>DateTime</strong>, a <strong>vraća</strong> vrijednost tipa <strong>TimeSpan</strong>.</p>
+<p>Nakon pokretanja programa, ispisat će se poruka slična ovoj:</p>
+<pre><code>Hello, World!
+Vrijeme: 00:00:00.0514960
+</code></pre>
+<p>Ako više puta pokrenete program, primijetit ćete i kako se vrijeme izvođenja razlikuje iako nismo mijenjali program.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Primjena Stopwatch" duration="0">
+        <p><strong>Stopwatch</strong> klasa u C#-u omogućuje preciznije mjerenje vremena koje je proteklo između dvije točke u vašem programu. <strong>To je klasa iz System.Diagnostics</strong> imenskog prostora koja koristi unutarnji sat procesora za točno praćenje vremena, pa je korisna za mjerenje performansi algoritama i dijelova koda.</p>
+<p>Za razliku od jednostavnog korištenja DateTime objekta, Stopwatch pruža precizniji pristup jer je ta klasa oblikovana upravo za mjerenje vremena izvođenja.</p>
+<p>Korištenje Stopwatch klase je vrlo jednostavno, a slijedi ovaj osnovni pristup:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+using System.Diagnostics;
+
+namespace test;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Inicijalizacija Stopwatch instance
+        Stopwatch sw = new Stopwatch();
+
+        // Pokretanje mjerenja vremena
+        sw.Start();
+
+        // Kod čije vrijeme izvođenja želimo mjeriti
+        for (int i = 0; i &lt; 1000000; i++)
+        {
+            // Simulacija operacije
+        }
+
+        // Zaustavljanje mjerenja vremena
+        sw.Stop();
+
+        // Ispis proteklog vremena
+        Console.WriteLine(&#34;Vrijeme: &#34; + sw.Elapsed);
+        Console.WriteLine(&#34;MS: &#34; + sw.ElapsedMilliseconds + &#34; ms&#34;);
+        Console.WriteLine(&#34;Ticks: &#34; + sw.ElapsedTicks + &#34; ticks&#34;);
+    }
+}
+</code></pre>
+<p>Izlaz</p>
+<pre><code>Vrijeme: 00:00:00.0025961
+MS: 2 ms
+Ticks: 2664403 ticks
+</code></pre>
+<p>Broj otkucaja (ticks) ovisi o računalu i operacijskom sustavu tako da neće biti isti na različitim računalima.</p>
+<p>Kao što možete primijetiti u VS Code-u, objekt <strong>sw</strong> iz gornjeg primjera ima <strong>svojstva</strong>:</p>
+<p class="image-container"><img alt="977bda4de92ec683.png" style="width: 301.00px" src="img/977bda4de92ec683.png"></p>
+<p>Prepoznajemo ih po specifičnoj &#34;ikonici&#34;.</p>
+<p>Klasa <strong>Stopwatch</strong> ima metode:</p>
+<ul>
+<li><strong>Start</strong>() - pokreće brojač,</li>
+<li><strong>Stop</strong>() - zaustavlja brojač,</li>
+<li>Reset() - postavlja brojač na 0,</li>
+<li>Restart() - kombinira Reset() i Start() - postavlja brojač na 0 i ponovo pokreće mjerenje (ako je već bilo pokrenuto, zaustavit će ga prije postavljanja na 0).</li>
+</ul>
+<h2 is-upgraded><strong>Problem smeća u memoriji</strong></h2>
+<p>Kada mjerimo vrijeme izvođenja programa, važno je razumjeti kako C# upravlja memorijom jer to može značajno utjecati na performanse. U C#-u, memorija se koristi na dva glavna načina: kroz <strong>stog</strong> (stack) i <strong>gomilu</strong> (heap). Ovi pojmovi su ključni za razumijevanje kako se program ponaša u pogledu resursa te zašto je važno mjeriti i optimizirati vrijeme izvođenja.</p>
+<p>C# dijeli podatke na dvije glavne vrste:</p>
+<ul>
+<li><strong>referentni</strong> tipovi - uključuju stringove, nizove, instance klasa, itd.</li>
+<li><strong>vrijednosni</strong> tipovi - uključuju jednostavne numeričke tipove, stringove, bool i sl.</li>
+</ul>
+<p>Kada koristimo referentni tip, konkretni podaci (ili objekt) se pohranjuju na gomilu (heap), dok se referenca na te podatke čuva na stogu (stack). S druge strane, sadržaj vrijednosnih tipova se izravno sprema na stogu jer sadrže stvarnu vrijednost, a ne samo referencu.</p>
+<p>Kad metoda završi, sve varijable koje su se tu nalazile se automatski brišu iz radne memorije koja se prema tome oslobađa. Za razliku od stoga, dio memorije organizirane u obliku <em>gomile</em> neće se automatski počistiti već se koristi poseban mehanizam <strong>skupljanja smeća</strong> (eng. garbage collection, GC). C# koristi automatsko upravljanje memorijom. To znači da programer ne mora ručno oslobađati memoriju kao što je to slučaj u nekim drugim programskim jezicima (npr. C ili C++), ali to ne znači da je upravljanje memorijom potpuno zanemarivo.</p>
+<p>Skupljanje smeća je proces koji traži objekte u radnoj memoriji koji više nisu dostupni, odnosno u programu više ne postoje reference na te objekte. Taj proces može povremeno uzrokovati kratke pauze u vašem programu.</p>
+<p><em>Garbage collector</em> se obično pokreće kada memorija postane ograničena ili kada postoji mnogo nepotrebnih objekata u memoriji. Ipak, GC nije predvidiv, što znači da se može dogoditi u bilo kojem trenutku.</p>
+<p>Možemo programerski pokrenuti izvršavanje: <strong>GC.Collect();</strong>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Mjerenje vremena izvršavanja procesa" duration="0">
+        <p><strong>Stopwatch</strong> mjeri ukupno vrijeme koje je proteklo od trenutka kada je pokrenut brojač do trenutka kada je zaustavljen. To uključuje i vrijeme kada CPU nije bio zauzet izvršavanjem vašeg koda, npr. zbog pauza koje su nastale izvršavanjem nekih drugih procesa.</p>
+<p><strong>Process.GetCurrentProcess().UserProcessorTime</strong> mjeri procesorsko vrijeme (CPU) koje je konkretan proces aktivno trošio. Ovo ne uključuje vrijeme dok je proces čekao na nešto (npr. dohvaćanje podataka s diska i sl.) ili dok je sustav izvršavao druge procese.</p>
+<p>Dakle, ovaj način mjerenja možemo koristiti kada želimo vidjeti koliko procesorskog vremena program aktivno koristi, a ne koliko je stvarnog vremena proteklo.</p>
+<p>Pogledajte primjer kako je implementirana klasa koja mjeri vrijeme izvršavanja procesa:</p>
+<p><code>Mjerenje.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+using System.Diagnostics;
+
+namespace Biblioteka
+{
+    class Mjerenje
+    {
+        private TimeSpan pocetak, ukupno;
+        // konstruktor
+        public Mjerenje()
+        {
+            pocetak = new TimeSpan(0);
+            ukupno = new TimeSpan(0);
+        }
+        // sprema vrijeme kad je proces počeo raditi
+        // prije početka će pokupiti i smeće
+        public void Start()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            pocetak = Process.GetCurrentProcess()
+                      .UserProcessorTime;
+        }
+        // sprema razliku vremena
+        public void Stop()
+        {
+            ukupno = Process.GetCurrentProcess()
+                     .UserProcessorTime.Subtract(pocetak);
+        }
+        // koristimo metodu jer ukupno nije public
+        public TimeSpan Trajanje()
+        {
+            return ukupno;
+        }
+
+    }
+}
+</code></pre>
+<p>Primijenimo novu klasu u glavnom programu:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+using System.Diagnostics;
+// koristimo ovo jer nije isti namespace!
+using Biblioteka;
+
+namespace test;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Mjerenje m = new Mjerenje();
+        m.Start();
+        // Kod čije vrijeme izvođenja želimo mjeriti
+        for (int i = 0; i &lt; 1000000; i++)
+        {
+            // Simulacija operacije
+        }
+        m.Stop();
+        Console.WriteLine(&#34;Vrijeme: &#34; + m.Trajanje());
+    }
+}
+</code></pre>
+<p>Izlaz:</p>
+<pre><code>Vrijeme: 00:00:00.0029470
+</code></pre>
+<aside class="special"><p><strong>Pregled:</strong></p>
+<p>⛔ Računanje razlike vremena (DateTime) - primitivan način.</p>
+<p>✅ Primjena <strong>Stopwatch</strong> - prihvatljivo.</p>
+<p>✅ Primjena računanja vremena procesa - nije primjenjivo za ove vježbe.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗Zadatak: Implementacija klase" duration="0">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>U ovom zadatku napravit ćemo klasu koja koristi niz za pohranu cijelih brojeva. Implementirat ćemo osnovne metode za rad s podacima i metode za sortiranje.</p>
+<p>Klasa <strong>KlasaNiz</strong> ima polja i metode.</p>
+<p>Polja:</p>
+<ul>
+<li>Niz cijelih brojeva: <strong>int[] niz</strong></li>
+<li>Koliko je trenutno upisano elemenata: <strong>brojac</strong></li>
+</ul>
+<p>Prvo polje je <strong>public</strong> jer će nam kasnije trebati pristup elementima.</p>
+<aside class="warning"><p>❓Zašto koristimo varijablu <strong>brojac</strong> kad imamo <strong>Length</strong>?</p>
+</aside>
+<p>Metode:</p>
+<ul>
+<li><strong>Dodaj</strong>() - prima cijeli broj i dodaje ga u niz</li>
+<li><strong>PopisElemenata</strong>() - ne prima ništa, ali vraća popis elemenata u obliku stringa (brojevi odvojeni zarezom)</li>
+<li><strong>BubbleSort</strong>() - ne prima ništa, obavlja sortiranje</li>
+<li><strong>SelectionSort</strong>() - ne prima ništa, obavlja sortiranje</li>
+<li><strong>InsertionSort</strong>() - ne prima ništa, obavlja sortiranje</li>
+</ul>
+<p>Konstruktor:</p>
+<ol type="1">
+<li>Prima dimenziju (veličinu) niza, stvara novi niz i postavlja brojač na 0.</li>
+</ol>
+<h2 is-upgraded><strong>Korak 1: preuzimanje predloška</strong></h2>
+<p>Radi jednostavnosti, napravite sljedeće:</p>
+<ul>
+<li>Novi konzolski projekt pod nazivom <strong>Zad01</strong>.</li>
+<li>Dodajte <strong>cs</strong> datoteku <strong>KlasaNiz.cs</strong>.</li>
+<li>Kopirajte sadržaj za KlasaNiz.cs i Program.cs.</li>
+</ul>
+<p><code>KlasaNiz.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace Biblioteka
+{
+    class KlasaNiz
+    {
+        public int[] niz;
+        private int brojac; // koliko je upisano
+        public KlasaNiz(int velicina)
+        {
+            niz = new int[velicina];
+            brojac = 0;
+        }
+        
+        public void Dodaj(int broj)
+        {
+            niz[brojac] = broj;
+            brojac++;
+        }
+        public string PopisElemenata()
+        {
+            string ispis = &#34;&#34;;
+            foreach (int el in niz)
+            {
+                ispis += el + &#34;,&#34;;
+            }
+            return ispis.Trim(&#39;,&#39;);
+        }
+
+        //sort
+        public void BubbleSort()
+        {
+            
+        } //bubble sort
+
+        public void SelectionSort()
+        {
+            
+        } //selection sort
+
+        public void InsertionSort()
+        {
+            
+        } //insert sort
+    }
+}
+</code></pre>
+<p>Glavni dio programa (za sad) izgleda ovako:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+using System.Diagnostics;
+using Biblioteka;
+
+namespace Zad01;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.Write(&#34;Koliko brojeva želite? &#34;);
+        int n = int.Parse(Console.ReadLine());
+
+        // napraviti novi objekt
+        // dodati slučajne brojeve
+
+    }
+}
+</code></pre>
+<h2 is-upgraded><strong>Korak 2: Primjena nove strukture</strong></h2>
+<p>Napunite našu novu strukturu s n slučajno odabranih brojeva iz intervala [1, 100] i ispišite sadržaj niza.</p>
+<ol type="1">
+<li>Napravit ćemo novi objekt.</li>
+<li>Slučajne brojeve ćemo generirati primjenom klase <strong>Random</strong> i metode <strong>Next()</strong>, a dodat ćemo ih u novu strukturu pomoću metode <strong>Dodaj()</strong>.</li>
+<li>Brojeve ćemo ispisati pozivom metode <strong>PopisElemenata()</strong> koja vraća string.</li>
+</ol>
+<p>Ispis bi trebao izgledati ovako:</p>
+<pre><code>Koliko brojeva želite? 10
+3,26,5,55,18,60,15,42,44,59
+</code></pre>
+<aside class="warning"><p>❓Zašto smo koristili metodu <strong>PopisElemenata()</strong> umjesto ispisa na konzolu u klasi <strong>KlasaNiz</strong>?</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗Zadatak: Bubble sort" duration="0">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Nastavit ćemo raditi na prethodnom programu. Implementirajte bubble sort algoritam, sortirajte niz brojeva.</p>
+<h3 is-upgraded><strong>Bubble sort</strong></h3>
+<p>Bubble Sort je jednostavan algoritam za sortiranje koji uspoređuje susjedne elemente u nizu i zamjenjuje ih ako su u pogrešnom redoslijedu. Ovaj proces se ponavlja sve dok cijeli niz ne bude sortiran.</p>
+<p>Neka je zadan niz brojeva:</p>
+<p class="image-container"><img alt="b7f4882d9c659a97.png" style="width: 354.00px" src="img/b7f4882d9c659a97.png"></p>
+<p>Kako Bubble Sort radi:</p>
+<ol type="1">
+<li>Počnemo od prvog elementa niza i uspoređujemo ga sa sljedećim.</li>
+<li>Ako je prvi element veći od drugog, zamijenimo ih.</li>
+<li>Zatim prelazimo na sljedeći par elemenata (drugi i treći element) i ponavljamo usporedbu i zamjenu.</li>
+</ol>
+<p>Ovaj proces se nastavlja do kraja niza, što dovodi do toga da &#34;najveći&#34; element ispliva na kraj niza – baš kao mjehur koji se podiže na površinu (otuda naziv &#34;bubble sort&#34;).</p>
+<p class="image-container"><img alt="5a231213e337bb13.png" style="width: 354.00px" src="img/5a231213e337bb13.png"></p>
+<p>Obavimo zamjenu.</p>
+<p class="image-container"><img alt="7a4a55badc32c44a.png" style="width: 354.00px" src="img/7a4a55badc32c44a.png"></p>
+<p>Nema zamjene.</p>
+<p class="image-container"><img alt="389375964532d67c.png" style="width: 354.00px" src="img/389375964532d67c.png"></p>
+<p class="image-container"><img alt="c72195827d66dc0.png" style="width: 354.00px" src="img/c72195827d66dc0.png"></p>
+<p class="image-container"><img alt="a05f273c53c65bb1.png" style="width: 354.00px" src="img/a05f273c53c65bb1.png"></p>
+<p class="image-container"><img alt="9e099877de1950f4.png" style="width: 353.00px" src="img/9e099877de1950f4.png"></p>
+<p>Nakon što smo prošli cijeli niz, ponovno ponavljamo postupak, ali ovaj put ignoriramo zadnji element (jer je on već na svom mjestu). Proces ponavljamo sve dok niz ne bude potpuno sortiran. Ako je niz već sortiran, onda neće biti zamjena.</p>
+<p class="image-container"><img alt="7a95999aaccf4afd.png" style="width: 353.00px" src="img/7a95999aaccf4afd.png"></p>
+<p>Ovdje ćemo malo ubrzati (nećemo pisati svaki korak). Nakon što prođu sve usporedbe, dobit ćemo stanje u kojem će najveći od ostatka niza završiti na kraju:</p>
+<p class="image-container"><img alt="7497f8ddf3163697.png" style="width: 353.00px" src="img/7497f8ddf3163697.png"></p>
+<p>Nakon sljedećeg prolaza 15 dolazi do svoje pozicije:</p>
+<p class="image-container"><img alt="ee54314d906c80ad.png" style="width: 323.00px" src="img/ee54314d906c80ad.png"></p>
+<p>Nakon ovog prolaza, algoritam završava jer s preostala tri elementa više nema zamjena.</p>
+<p>Sad to jednostavno moramo prebaciti u formalni jezik, C#. Metoda ne prima ništa i ne vraća ništa:</p>
+<pre><code>public void BubbleSort()
+{
+    
+} //bubble sort
+</code></pre>
+<p>Na kraju metode možemo staviti komentar kako bi nam se bilo lakše snaći u pisanju kôda.</p>
+<p>Metoda ne prima ništa jer pišemo kôd unutar klase gdje joj je dostupno lokalno polje (varijabla) <strong>niz</strong> u kojoj su podaci. Također, metoda ne mora ništa vraćati jer izravno manipulira s podacima koji su u nizu.</p>
+<p>Cijeli postupak ponavljamo dok ima ponavljanja - izgleda da nam je potrebna petlja s nepoznatim brojem ponavljanja, odnosno uvjetom, a to je <strong>while</strong> ili <strong>do-while</strong>. Svakako moramo obaviti bar jedan prolaz pa bi nam do-while odgovarala. Međutim, kako inače u nekim programskim jezicima nemamo takav tip petlje, pokušat ćemo riješiti s petljom while.</p>
+<pre><code>public void BubbleSort()
+{
+    bool zamjena = true;
+    while (zamjena)
+    {
+        zamjena = false;
+        // ostalo
+    }
+} //bubble sort
+</code></pre>
+<p>Obzirom da se petlja izvodi dok ima zamjena, najprije ćemo spremiti <strong>true</strong> kako bi ostvarili prvi ulazak u petlju, a na samom početku tijela petlje ćemo postaviti na <strong>false</strong>.</p>
+<p>Nakon toga nam treba petlja koja će uspoređivati dva susjedna elementa počevši od prvog (0). Ako ne budu u ispravnom poretku, zamijeniti ih te promijeniti vrijednost varijable <em>zamjena</em>.</p>
+<aside class="warning"><p>💡Ne zaboravite, nakon što usporedimo sve parove do kraja, onda petlja više neće ići do zadnjeg elementa.</p>
+</aside>
+<p>Sada u glavni dio programa primjenjujemo novu metodu.</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+using System.Diagnostics;
+using Biblioteka;
+
+namespace Zad01;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.Write(&#34;Koliko brojeva želite? &#34;);
+        int n = int.Parse(Console.ReadLine());
+
+        // napraviti novi objekt
+        KlasaNiz a = new KlasaNiz(n);
+        // dodati slučajne brojeve
+        Random g = new Random();
+        for (int i = 0; i &lt; n; i++)
+        {
+            a.Dodaj(g.Next(1, 101));
+        }
+
+        // BubbleSort
+        Console.WriteLine(a.PopisElemenata());
+        a.BubbleSort();
+        Console.WriteLine(&#34;BubbleSort\n&#34; + a.PopisElemenata());
+    }
+}
+</code></pre>
+<p>Ispis:</p>
+<pre><code>Koliko brojeva želite? 10
+57,88,1,15,45,31,44,82,3,93
+BubbleSort
+1,3,15,31,44,45,57,82,88,93
+</code></pre>
+<p>Pokušajte sortirati 100 brojeva, što će se dogoditi?</p>
+<p>Obzirom da želimo mjeriti vrijeme izvođenja algoritma na velikoj količini brojeva, onda će nam ispis smetati. Prema tome, dodajte uvjet u metodu za ispis tako da ne ispisuje niz ako ima više od 20 elemenata.</p>
+<p><code>KlasaNiz.cs</code></p>
+<pre><code language="language-cs" class="language-cs">public string PopisElemenata()
+{
+    if (this.niz.Length &gt; 20)
+        return &#34;...&#34;;
+    string ispis = &#34;&#34;;
+    foreach (int el in niz)
+    {
+        ispis += el + &#34;,&#34;;
+    }
+    return ispis.Trim(&#39;,&#39;);
+}
+</code></pre>
+<p>Ispis:</p>
+<pre><code>Koliko brojeva želite? 50
+...
+BubbleSort
+...
+</code></pre>
+<p>Sad ne vidimo ispis, ali možemo mjeriti vrijeme.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗Zadatak: neki drugi sort" duration="0">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Mjerenje često provodimo kako bi usporedili vrijeme izvođenja različitih algoritama. Implementirajte neki drugi algoritam te ga usporedite s bubble sort algoritmom. Možete odabrati jedan od:</p>
+<ul>
+<li>Insertion (ili insert) sort - sortiranje umetanjem</li>
+<li>Selection (ili select) sort - sortiranje odabirom</li>
+</ul>
+<p>Pronađite upute (algoritam) kako radi željeni algoritam, implementirajte ga i testirajte na različitim vrstama podataka.</p>
+<p>Koristite <strong>Stopwatch</strong> za mjerenje vremena izvođenja.</p>
+<pre><code>Koliko brojeva želite? 20000
+...
+BubbleSort
+...
+Vrijeme: 00:00:02.4718541
+...
+InsertionSort
+...
+Vrijeme: 00:00:00.6728540
+...
+SelectionSort
+...
+Vrijeme: 00:00:00.9263852
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗Zadatak: čitanje iz datoteke" duration="0">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Napravi datoteku koja se sastoji od najmanje 100 string vrijednosti (ili preuzmite sa stranice kolegija).</p>
+<p>Sortirajte stringove iz datoteke &#34;po abecedi&#34; upotrebom bubble sort algoritma. Ispisati sortirane podatke.</p>
+<h2 is-upgraded><strong>Čitanje iz datoteke</strong></h2>
+<p>Čitanje iz <strong>tekstualne</strong> datoteke u C#-u možemo implementirati na više načina. Dosta je jednostavno koristiti gotove metode koje pročitaju cijeli sadržaj odjednom, kao primjerice metode koje sadrži klasa <strong>File</strong>:</p>
+<p class="image-container"><img alt="b41348498562d1d9.png" style="width: 251.33px" src="img/b41348498562d1d9.png"></p>
+<p>Međutim, problem može nastati kad datoteka ima velike količine podataka tako da čitanje odjednom jako uspori cijeli program. To se neće dogoditi ako čitamo liniju po liniju. Naravno, ako su male količine podataka, onda možete raditi kako vam odgovara.</p>
+<p>Ispod je primjer metode za čitanje podataka iz datoteke liniju po liniju. Potrebno je sljedeće:</p>
+<ul>
+<li>Stvoriti objekt tipa <strong>StreamReader</strong>.</li>
+<li>Inicijalno pokušati pročitati prvu liniju (jer datoteka može biti i prazna), kako bi ispitali možemo li krenuti s čitanjem.</li>
+<li>Čitati liniju po liniju.</li>
+</ul>
+<aside class="warning"><p>📍Ne zaboravite u tijelu petlje ponovo pozvati čitanje linije - jer je to uvjet!</p>
+</aside>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">static void Citanje(string fileName)
+{
+    StreamReader sr = new StreamReader(fileName);
+
+    // čitamo dok ima linija u datoteci
+    string linija = sr.ReadLine();
+    int br = 0;
+    while (linija != null)
+    {
+        Console.WriteLine(linija);
+        linija = sr.ReadLine();
+        br++;
+    }
+    Console.WriteLine(&#34;Pročitano: &#34; + br);
+    sr.Close();
+}
+</code></pre>
+<p>Ovdje vodite računa da je metoda <strong>Citanje()</strong> pisana <strong>unutar Program.cs</strong> te da su elementi klase Program <strong>statički</strong> - kako bi ih mogli pozvati bez instanciranja klase <strong>Program</strong>.</p>
+<p>Međutim, ako program radi dovoljno brzo i za neku od metoda iz klase <strong>File</strong>, onda možete napisati metodu za čitanje i ovako:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">static void Citanje2(string fileName)
+{
+    string[] sve = File.ReadAllLines(fileName);
+    foreach (string linija in sve)
+    {
+        Console.WriteLine(linija);
+    }
+    Console.WriteLine(&#34;Pročitano: &#34; + sve.Length);
+}
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗Zadatak: Sortiranje već sortiranih" duration="0">
+        <p>Nizovi podataka koji su već sortirani (ili približno sortirani) te nizovi podataka koji su obrnuto sortirani od onog što nam je potrebno su posebni slučajevi na koje će svaki od naša tri spomenuta algoritma drugačije reagirati. Uvjerite se sami.</p>
+<h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<ul>
+<li>Napunite niz već sortiranim podacima (cijelim brojevima) koji su poredani od najmanjeg do najvećeg. Pozovite algoritme sortiranje i izmjerite vrijeme na 10000 cijelih brojeva.</li>
+<li>Napunite niz već sortiranim podacima, ali <strong>obrnuto</strong> od onog što nam treba: od najvećeg do najmanjeg. Pozovite algoritme sortiranje i izmjerite vrijeme na 10000 cijelih brojeva.</li>
+</ul>
+<aside class="warning"><p>❓Koji algoritmi su bili najbrži?</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Sažetak" duration="0">
+        <ul>
+<li>Implementirali smo vlastitu strukturu podataka u obliku klase u C# koja koristi niz za pohranu podataka.</li>
+<li>Naučili smo koristiti tri osnovna algoritma za sortiranje (BubbleSort, SelectionSort, InsertionSort).</li>
+<li>Radili smo s datotekama te sortirali stringove iz tekstualne datoteke.</li>
+<li>Upoznali smo se s načinima mjerenja vremena izvođenja algoritama pomoću DateTime, Stopwatch i mjerenja vremena izvršavanja procesa.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

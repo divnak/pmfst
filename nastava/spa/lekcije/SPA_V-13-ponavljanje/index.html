@@ -1,0 +1,664 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>SPA: K2 ponavljanje</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+<link rel="stylesheet" href="css/prism-coy-all.css">
+<script src="css/prism-coy-all.js"></script>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="SPA_V-13-ponavljanje"
+                  title="SPA: K2 ponavljanje"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Uvod" duration="0">
+        <p>📌 Primjer kolokvija iz prethodnih godina</p>
+<h2 is-upgraded><strong>Opis</strong></h2>
+<ul>
+<li>Dobit ćete predložak konzolske aplikacije koji će sadržavati izbornik i kratke upute gdje se što piše.</li>
+<li>U predložak će biti uključen tekst (pdf) zadatka te datoteke s podacima</li>
+</ul>
+<h2 is-upgraded><strong>Sadržaj drugog kolokvija</strong></h2>
+<h3 is-upgraded><strong>Strukture podataka</strong></h3>
+<p>Drugi kolokvij sastoji se od razgranatih struktura koje smo radili u drugom dijelu semestra:</p>
+<ul>
+<li>Stabla (BST)</li>
+<li>Grafovi</li>
+</ul>
+<p>Za rad sa stablima koristimo rekurzije u situacijama kad moramo obići cijelo stablo (npr. ispis). Međutim, za neke operacije (npr. dodavanje novog čvora) ili traženje po broju na kojem se temelji uređaj u stablu, rekurzije nisu učinkovite jer obilaze cijelo stablo i kad to nije potrebno.</p>
+<p>Grafove možete implementirati na dva načina:</p>
+<ul>
+<li>Pomoću nizova za popis čvorova i matrica za spremanje veza</li>
+<li>Pomoću liste za popis čvorova i liste za popis susjeda</li>
+</ul>
+<p>Prilikom rješavanja kolokvija, koristit ćete onaj način koji vam više odgovara.</p>
+<h3 is-upgraded><strong>Zadaci</strong></h3>
+<p>Kolokvij se sastoji od 5 zadataka, okvirnog sadžaja:</p>
+<ol type="1">
+<li>Stablo - unos/ispis</li>
+<li>Brisanje traženog čvora ako je list i izvršavanje neke akcije ako nije.</li>
+<li>Pretraga stabla (po ključu ili po ostalim vrijednostima) ili računanje visine.</li>
+<li>Graf - unos/ispis</li>
+<li>Pretrage (DFS/BFS).</li>
+</ol>
+<p>Za prolaznu ocjenu je potrebno riješiti cijele 2 točke od 5.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📖 Predlošci" duration="0">
+        <h2 is-upgraded><strong>Predložak izbornika</strong></h2>
+<p>Predložak možete preuzeti sa stranice kolegija.</p>
+<p>Predložak sadrži datoteku <strong>BTPrint.cs</strong> u kojoj se nalaze klase i metode koje se koriste za crtanje stabla. Polja koja su važna kako bi crtanje ispravno radilo:</p>
+<ul>
+<li>lijevo, desno, BrojID</li>
+</ul>
+<p>Prema tome, nemojte ta polja mijenjati. Polje <strong>BrojID</strong> uvijek označava broj na kojem se temelji uređaj (neovisno o tome radi li se konkretno o broju registracije auta ili broju osobne iskaznice i sl.). Ostale informacije koje se spremaju u čvor stabla možete slobodno dodati jer se ne crtaju.</p>
+<p>Preporuka je da se za čvor grafa koristi posebna klasa. Također, nije loše odvojiti unos za graf od unosa za stablo jer se može dogoditi pogreška pri radu s grafovima, pa ne želite probleme s cijelim projektom.</p>
+<p>Premda ima dosta linija u programu, također se dosta toga i ponavlja pa se lako može kopirati i prepraviti.</p>
+<aside class="warning"><p>📌 Ovdje je svako rješenje napisano na jedan način, nije nužno najbolji niti najkraći.</p>
+</aside>
+<h2 is-upgraded><strong>Primjer podataka</strong></h2>
+<p>Datoteke s podacima se također nalaze u predlošku, a možete ih kopirati:</p>
+<p><code>cvorovi.txt</code></p>
+<pre><code>Slavko;631
+Ana1;577
+Maja;259
+Pero1;704
+Tomo;484
+Mate;783
+Pero2;704
+Ivo;925
+Hana1;811
+Luka;807
+Hana;811
+Rita;720
+Marko;103
+Marija;796
+Pero;704
+Lea;658
+Anita;423
+Tanja;402
+Barbara;137
+Lola;172
+Ante;688
+Ana;577
+</code></pre>
+<p><code>veze.txt</code></p>
+<pre><code>577;259
+577;484
+577;631
+577;704
+259;103
+137;259
+259;484
+137;172
+172;423
+172;402
+402;631
+704;658
+704;783
+658;783
+658;688
+783;720
+783;811
+783;925
+811;807
+811;796
+</code></pre>
+<aside class="warning"><p><strong>Napomena:</strong> Ako vježbate na računalu gdje su regionalne postavke drugačije (npr. US gdje se za decimale koristi <strong>točka</strong>, a ne <strong>zarez</strong>, onda prilagodite podatke. Na računalima u učionici se koristi zarez za <strong>double</strong>.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak 1: Stablo - unos i ispis" duration="10">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<h3 is-upgraded><strong>a) Učitavanje podataka</strong></h3>
+<p>Iz datoteke <strong>cvorovi.txt</strong> treba učitati podatke o vlasnicima brodova u uređeno binarno stablo. Podaci o svakom brodu sastoje se od:</p>
+<ul>
+<li>imena</li>
+<li>jedinstvenog broja registracije</li>
+</ul>
+<p>Uređaj u stablu se temelji na tom broju registracije.</p>
+<h3 is-upgraded><strong>b) Rad s greškama (duplim podacima)</strong></h3>
+<p>Nisu dozvoljeni duplikati pa će se spremiti <strong>zadnji</strong> koji se pojavljuje u datoteci, a ispisat će se imena duplikata koji nisu upali u stablo.</p>
+<h3 is-upgraded><strong>c) Ispis</strong></h3>
+<p>Napisati metodu <strong>PostIspis()</strong> unutar klase BinarnoStablo koja ispisuje stablo (broj i naziv) po postorder poretku, neka su broj i ime odvojeni crticom: &#34;broj-ime&#34;.</p>
+<h2 is-upgraded><strong>Prijedlog rješenja</strong></h2>
+<p>Potrebno je koristiti predložak u kojem je već definirana klasa <strong>Cvor</strong>.</p>
+<p><code>CvorStabla.cs</code></p>
+<pre><code language="language-cs" class="language-cs">    public class Cvor
+    {
+        public int BrojID;
+        public Cvor desno, lijevo;
+
+        public Cvor(int br)
+        {
+            this.BrojID = br;
+        }
+    }
+</code></pre>
+<p>U klasu možemo dodati dodatne informacije koje se nalaze u datoteci - <strong>bez mijenjanja postojećih varijabli</strong>.</p>
+<pre><code>public string ime;
+</code></pre>
+<p>U klasi <strong>BinarnoStablo</strong> pišemo sva polja i metode koje su nam potrebne za implementaciju strukture:</p>
+<ul>
+<li>Polje <strong>korijen</strong> tipa <strong>Cvor</strong></li>
+<li>Metode za dodavanje, brisanje, traženje, ...</li>
+</ul>
+<p>Kako napisati metodu <strong>Dodaj()</strong>? To možemo na dva načina:</p>
+<ul>
+<li>Pomoću rekurzije</li>
+<li>Bez rekurzije</li>
+</ul>
+<p>U ovom primjeru ćemo rješavati <strong>bez rekurzije</strong>.</p>
+<p>Napisat ćemo metodu <strong>Dodaj()</strong> koja:</p>
+<ul>
+<li>Prima <strong>čvor stabla</strong></li>
+<li>Vraća poruku (string) o tome što se dogodilo</li>
+</ul>
+<p>Kako bi malo brže riješili, u nastavku imate primjer metode koja <strong>ne vraća ništa</strong>.</p>
+<aside class="warning"><p>Napišite novu metodu (ili promijenite postojeću) tako da:</p>
+<ul>
+<li>Vraća prazan string, ako je unos čvora bio uspješan</li>
+<li>Vraća poruku ako je uneseni čvor duplikat (ispisati poruku u skladu sa zadatkom)</li>
+</ul>
+</aside>
+<p><code>Ispis:</code></p>
+<pre><code>Dupli: 704 Pero1
+Dupli: 811 Hana1
+Dupli: 704 Pero2
+Dupli: 577 Ana1
+</code></pre>
+<aside class="warning"><p>Napišite metodu za ispis po preorder poretku tako da su broj i ime odvojeni crticom -.</p>
+</aside>
+<p>Ispis treba izgledati ovako:</p>
+<p><code>Ispis:</code></p>
+<pre><code>172-Lola
+137-Barbara
+103-Marko
+402-Tanja
+423-Anita
+484-Tomo
+259-Maja
+577-Ana
+688-Ante
+658-Lea
+720-Rita
+796-Marija
+807-Luka
+811-Hana
+925-Ivo
+783-Mate
+704-Pero
+631-Slavko
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Metoda za unos" duration="0">
+        <p><code>MojeStablo.cs</code></p>
+<pre><code language="language-cs" class="language-cs">public void Dodaj(Cvor novi)
+{
+    if (korijen == null)
+    {
+        korijen = novi;
+        return;
+    }
+
+    bool traziPoziciju = true;
+    Cvor temp = korijen;
+    while (traziPoziciju)
+    {
+        if (novi.BrojID &lt; temp.BrojID)
+        {
+            if (temp.lijevo == null)
+            {
+                temp.lijevo = novi;
+                traziPoziciju = false;
+            }
+            else
+                temp = temp.lijevo; // idi dalje
+        }
+        else if (novi.BrojID &gt; temp.BrojID)
+        {
+            if (temp.desno == null)
+            {
+                temp.desno = novi;
+                traziPoziciju = false;
+            }
+            else
+                temp = temp.desno; // idi dalje
+        }
+        else
+        {
+            // jednaki
+            traziPoziciju = false;
+        }
+    }
+} // Dodaj
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Crtanje stabla" duration="0">
+        <p>Tijekom unosa podataka u stablo, a pogotovo kad želimo brisati neki čvor, teško je bez slike znati koji čvor je list i je li brisanje bilo uspješno jer se često dogode greške, npr. program ispiše poruku, ali ne obriše čvor - to je 0 bodova.</p>
+<p>Za tu namjenu, u predlošku imamo metodu <strong>Print()</strong> koja &#34;crta&#34; stablo na konzoli pod uvjetom da je terminal dovoljno velik. Ukoliko nije prikazano dovoljno linija, neće se dobro nacrtati.</p>
+<p>Metoda je već uključena u predložak, a možemo je pozvati putem izbornika:</p>
+<p><code>Izbornik</code></p>
+<pre><code>----------------------------------
+Izbornik
+1 unos u stablo
+ i ispis
+2 traži
+3 briši
+4 unos u graf
+5 pretraga
+
+c crtaj
+0 kraj
+Unesi izbor:
+c
+</code></pre>
+<p>Ispisat će se slika:</p>
+<p class="image-container"><img alt="img\\\\9dd9835ab37a0e64.png" style="width: 348.60px" src="img\\9dd9835ab37a0e64.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak 2: Traženje" duration="10">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Napisati metodu <strong>Registracija()</strong> unutar klase BinarnoStablo koja prima znamenku i vraća sve brojeve koji završavaju s tom znamenkom, ako ih ima. Ako ih nema, ne ispisuje se ništa.</p>
+<p>Korisnik upisuje znamenku u konzolu, a program ispisuje imena i brojeve čvorova u stablu koji imaju tu znamenku.</p>
+<p>Ako takvih nema ispisati poruku. Metodu možete implementirati kako želite, ali mora se koristiti i mora biti u klasi BinarnoStablo.</p>
+<h2 is-upgraded><strong>Prijedlog rješenja</strong></h2>
+<p>Prema uputama iz zadatka, metoda bi trebala izgledati ovako:</p>
+<p><code>MojeStablo.cs</code></p>
+<pre><code language="language-cs" class="language-cs">public List&lt;int&gt; Registracija(int z)
+{
+    List&lt;int&gt; rez = new List&lt;int&gt;();
+
+    // pretraga
+
+    return rez;
+}
+</code></pre>
+<p>Međutim, premda pretražujemo brojeve po kojima su čvorovi raspoređeni, iz zadatka je jasno kako ih moramo obići sve, a to znači da ćemo koristiti <strong>rekurziju</strong>. Prema tome, napravit ćemo pomoćnu rekurziju koja će se &#34;prošetati&#34; po stablu i skupiti tražene brojeve.</p>
+<p><code>MojeStablo.cs</code></p>
+<pre><code language="language-cs" class="language-cs">private void TraziRek(Cvor k, int z, List&lt;int&gt; trazeni)
+{
+    if (k != null)
+    {
+        TraziRek(k.lijevo, z, trazeni);
+        if (k.BrojID % 10 == z)
+            trazeni.Add(k.BrojID);
+        TraziRek(k.desno, z, trazeni);
+    }
+}
+</code></pre>
+<aside class="warning"><p>Metodu je potrebno pozvati u metodi <strong>Registracija()</strong>.</p>
+<p>Metodu <strong>Registracija()</strong> treba pozvati u glavnom programu.</p>
+</aside>
+<p><code>Očekivani ispis za 8:</code></p>
+<pre><code>Unesi znamenku: 8
+658
+688
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak 3: Brisanje" duration="10">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Napisati metodu <strong>BrisiCvor()</strong> unutar klase <strong>BinarnoStablo</strong> koja pokreće brisanje odabranog čvora.</p>
+<ul>
+<li>Čvor će se pobrisati ako je list.</li>
+<li>Ako čvor nije list, ispisati tko mu je roditelj (dovoljno je samo broj roditelja).</li>
+<li>Ako čvor ne postoji ispisati poruku.</li>
+</ul>
+<h2 is-upgraded><strong>Prijedlog rješenja</strong></h2>
+<p>Prvi korak je provjeriti je li stablo prazno. Metodu ćemo napisati <strong>bez rekurzije</strong> te ćemo dodati povratnu vrijednost u obliku stringa. Metoda će vraćati informaciju što se dogodilo, a u glavnom programu će se ispisati rezultat.</p>
+<p><code>MojeStablo.cs</code></p>
+<pre><code language="language-cs" class="language-cs">public string Brisi(int x)
+{
+    string poruka = &#34;&#34;;
+
+    // ako je prazno
+    if (korijen == null)
+    {
+        poruka = &#34;prazno&#34;;
+        return poruka;
+    }
+
+    
+    return poruka;
+}
+</code></pre>
+<p>U nastavku ćemo vidjeti ispis rezultata koji se očekuje:</p>
+<p><code>Ispis (nije list)</code></p>
+<pre><code>3
+Unesi broj: 423
+Ne mogu brisati 423. Roditelj: 484
+</code></pre>
+<p class="image-container"><img alt="img\\\\a75934fba4a41021.png" style="width: 342.20px" src="img\\a75934fba4a41021.png"></p>
+<p><code>Ispis (ne postoji)</code></p>
+<pre><code>3
+Unesi broj: 900
+Čvor 900 ne postoji
+</code></pre>
+<p><code>Ispis (uspješno)</code></p>
+<pre><code>3
+Unesi broj: 796
+pobrisan: 796
+3
+Unesi broj: 796
+Čvor 796 ne postoji
+</code></pre>
+<p>Nakon brisanja 796 provjerite na slici:</p>
+<p class="image-container"><img alt="img\\\\c14b6716970dd3e5.png" style="width: 349.40px" src="img\\c14b6716970dd3e5.png"></p>
+<p>Sad slobodno možemo probati pobrisati i 807 jer više nema djece.</p>
+<p class="image-container"><img alt="img\\\\26b3559117741b88.png" style="width: 327.00px" src="img\\26b3559117741b88.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Metoda za brisanje (primjer)" duration="0">
+        <p>U nastavku je djelomično riješena metoda - bez rekurzije (jedan od načina na koji se može napisati). Ako ne znate napisati vlastitu, pokušajte dovršiti ovo:</p>
+<p><code>MojeStablo.cs</code></p>
+<pre><code language="language-cs" class="language-cs">public string Brisi(int x)
+{
+    string poruka = &#34;&#34;;
+
+    // ako je prazno
+    if (korijen == null)
+    {
+        poruka = &#34;prazno&#34;;
+        return poruka;
+    }
+
+    // postavi početne vrijednosti
+    // korijen ne smijemo micati pa koristimo temp
+    Cvor temp = korijen;
+    Cvor roditelj = korijen;
+    // ovdje umjesto bool varijable koristimo string
+    // želimo znati je li korijen, lijevo (L) ili desno (D) dijete
+    string strana = &#34;korijen&#34;;
+
+    while (temp != null)
+    {
+        // provjeri je li traženi nađen
+        if (temp.BrojID == x)
+        {
+            // pobriši ako je list
+            if (temp.lijevo == null &amp;&amp; temp.desno == null)
+            {
+                poruka = &#34;pobrisan: &#34; + x;
+                if (strana == &#34;korijen&#34;)
+                {
+                    // pobriši
+                }
+                else if (strana == &#34;L&#34;)
+                {
+                    // pobriši
+                }
+                else if (strana == &#34;D&#34;)
+                {
+                    // pobriši
+                }
+                else
+                {
+                    poruka = &#34;greška&#34;;
+                }
+                return poruka;
+            } //list
+            else
+            {
+                // vratiti poruku, npr.
+                // Ne mogu brisati 423. Roditelj: 484
+                return poruka;
+            }
+        }
+        // ako nije nađen pomakni ga lijevo
+        else if (x &lt; temp.BrojID)
+        {
+            strana = &#34;L&#34;;
+            roditelj = temp;
+            temp = temp.lijevo;
+        }
+        else
+        {
+            // dovršite
+        }
+
+    }
+
+    poruka = $&#34;Čvor {x} ne postoji&#34;;
+    return poruka;
+} // Brisi
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak 4: Graf" duration="10">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Za čvorove grafa koristiti iste podatke iz datoteke <strong>cvorovi.txt</strong>, a veze su u datoteci <strong>veze.txt</strong>. Napisati klasu/strukturu Graf koja omogućuje unos čvorova i veza u neusmjeren graf.</p>
+<p>Učitati sve podatke u strukturu grafa i ispisati na konzolu popis čvorova i veza među njima.</p>
+<p>Ispisati graf na način da se ispiše čvor s popisom susjeda ispod njega (pazite da bude pregledno).</p>
+<h2 is-upgraded><strong>Prijedlog rješenja</strong></h2>
+<p>Zadatak možemo riješiti pomoću matrice ili pomoću liste susjeda. U ovom primjeru prikazat će se rješenje (jedno od mogućih) pomoću liste susjeda.</p>
+<p>Potrebno je definirati klasu za graf te pripradajuće pomoćne klase. Premda se graf sastoji od vrhova i bridova, možemo ih za potrebe kolokvija nazivati <em>čvorovima</em> i <em>vezama</em> kako bi imali manje pojmova kod rješavanja.</p>
+<p>Klasa <strong>CvorGrafa</strong>:</p>
+<p><code>Graf.cs</code></p>
+<pre><code language="language-cs" class="language-cs">class CvorGrafa
+{
+    public int broj;
+    public string ime;
+    public bool posjecen;
+    public List&lt;CvorGrafa&gt; susjedi;
+
+    public CvorGrafa(int br)
+    {
+        broj = br;
+        susjedi = new List&lt;CvorGrafa&gt;();
+    }        
+
+}
+</code></pre>
+<p>Klasa nije još dovršena jer nedostaju susjedi, no pokušajmo najprije pripremiti osnovni dio za klasu <strong>Graf</strong>. Klasa ima:</p>
+<ul>
+<li>Polje <strong>cvorovi</strong> koje koristimo za spremanje čvorova grafa. Ovdje je u obliku liste kako bi mogli dinamički dodavati elemente. <strong>Ne zaboravite instancirati polje cvorovi</strong>!</li>
+<li>Metodu <strong>DodajCvor()</strong> - koristi se za dodavanje čvorova u polje <em>cvorovi</em>. Pri tome moramo paziti na duple vrijednosti (moramo biti u mogućnosti dohvatiti svaki čvor na jedinstven način). Metoda može primati vrijednosti ili čvor.</li>
+<li>Metodu <strong>DodajVezu()</strong> - koristi se za dodavanje veza nakon što ih pročitamo iz datoteke. Kako su u datoteci samo parovi cijelih brojeva, onda metoda mora primati cijele brojeve.</li>
+<li>Metodu <strong>Ispis()</strong> - koristi se za ispis. Ovdje vraća string, da ne koristimo konzolu u klasi grad, no nije nužno pisati tako.</li>
+</ul>
+<p><code>Graf.cs</code></p>
+<pre><code language="language-cs" class="language-cs">class Graf
+{
+    public List&lt;CvorGrafa&gt; cvorovi;
+    // konstruktor
+    public Graf()
+    {
+        cvorovi = new List&lt;CvorGrafa&gt;();
+    }
+    public void DodajCvor(CvorGrafa novi)
+    {
+        
+    }
+
+    public void DodajVezu(int id1, int id2)
+    {
+        
+    }
+
+    public string Ispis()
+    {
+        string str = &#34;&#34;;
+
+        
+
+        return str;
+    }
+}
+</code></pre>
+<h3 is-upgraded><strong>Metode za dodavanje</strong></h3>
+<p>Kod dodavanja čvorova i susjeda, potrebno je uvijek provjeriti postoji li taj čvor ili ne. Premda postoje neke ugrađene metode za provjeru (obzirom da koristimo gotovu klasu List&lt;&gt;), napisat ćemo vlastitu metodu jer će nam koristiti za dvije stvari:</p>
+<ul>
+<li>Provjeru postoji li</li>
+<li>Vraćanje indeksa</li>
+</ul>
+<p>Neka metoda <strong>TraziIndeks()</strong> prima broj kojeg tražimo, a vraća natrag indeks na kojem se mjestu nalazu i listi ili -1 ako ga nema.</p>
+<p><code>Graf.cs</code></p>
+<pre><code language="language-cs" class="language-cs">// klasa Graf
+public int TraziIndeks(int id)
+{
+    for (int i = 0; i &lt; cvorovi.Count; i++)
+    {
+        if (cvorovi[i].broj == id)
+            return i;
+    }
+
+    // ako ga nema
+    return -1;
+}
+</code></pre>
+<aside class="warning"><p>📌 Dovršite metodu <strong>DodajCvor()</strong>.</p>
+</aside>
+<p>Obzirom da smo se odlučili na listu susjeda, onda je potrebno naprabiti metodu koja će se brinuti oko dodavanja susjeda (veza) unutar same klase <strong>CvorGrafa</strong>.</p>
+<aside class="warning"><p>📌 Klasa <strong>CvorGrafa</strong> nema metodu <strong>TraziIndeks()</strong> pa je morate kopirati iz prethodnog primjera i prilagoditi da radi u klasi.</p>
+</aside>
+<p><code>Graf.cs</code></p>
+<pre><code language="language-cs" class="language-cs">// klasa CvorGrafa
+public void DodajSusjeda(CvorGrafa novi)
+{
+    int i = TraziIndeks(novi.broj);
+    if (i &lt; 0)
+    {
+        // ako ga nema
+        susjedi.Add(novi);
+    }
+}
+</code></pre>
+<aside class="special"><p>✅ Pazite, metoda za dodavanje susjeda je jako slična metodi za dodavanje čvorova.</p>
+</aside>
+<aside class="warning"><p>📌 Dovršite metodu za dodavanje veza.</p>
+<p>📌 Dovršite metodu za ispis.</p>
+</aside>
+<p><code>Graf.cs</code></p>
+<pre><code language="language-cs" class="language-cs">// klasa Graf
+public void DodajVezu(int id1, int id2)
+{
+    // provjeri postoje li
+    int i1 = TraziIndeks(id1);
+    int i2 = TraziIndeks(id2);
+    if (i1 &lt; 0 || i2 &lt; 0)
+        return;
+
+    // dohvati čvorove
+
+    // poveži ih
+}
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak 5: Graf" duration="10">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Ispisati koji čvor ima najviše susjeda.</p>
+<p>Počevši od <strong>drugog</strong> upisanog čvora ispisati sve čvorove na konzolu pomoću algoritma pretrage po <strong>širini</strong> (ispisati naziv i broj).</p>
+<p>Neposjećeni susjedi se biraju po redoslijedu unosa u graf.</p>
+<h2 is-upgraded><strong>Prijedlog rješenja</strong></h2>
+<p>Za pretragu po dubini koristimo strukturu <strong>stoga</strong>. Osnovna ideja je ponavljati sljedeće korake:</p>
+<ul>
+<li>Posjeti novi čvor</li>
+<li>Stavi ga na popis (stog)</li>
+<li>Obradi (ispis)</li>
+</ul>
+<p>dok ima elemenata u popisu.</p>
+<p>Algoritam započinjemo određivanjem početnog čvora, a to je prema zadatku <strong>drugi</strong> upisani čvor, odnosno čvor s indeksom 1. Kako bi naša metoda mogla funkcionirati neovisno o tome koji je početni čvor, napravit ćemo da prima indeks pa je u glavnom dijelu programa možemo pozvati kako nam bude potrebno.</p>
+<p>Bit će nam potrebna metoda koja provjerava neposjećene susjede.</p>
+<aside class="special"><p>✅ Obzirom da je način implementacije grafa s listom susjeda, onda je lista u klasi <strong>CvorGrafa</strong>, onda metodu za provjeru neposjećenih susjeda možemo pisati u klasi <strong>CvorGrafa</strong>.</p>
+<p>✅ Ako bi rješavali pomoću matrice, onda su veze spremljene u matrici koja se nalazi u klasi <strong>Graf</strong> pa u tom slučaju moramo metodu za neposjećene susjede pisati unutar klase <strong>Graf</strong>.</p>
+<p>✅ Nije obavezno pisati metodu, možemo sve pisati i u samoj metodi za pretragu, no preglednije je ako je napišemo posebno.</p>
+</aside>
+<p>Metoda prolazi kroz sve susjede i vraća prvog neposjećenog ili <em>null</em> ako ga nema.</p>
+<p><code>Graf.cs</code></p>
+<pre><code language="language-cs" class="language-cs">// klasa CvorGrafa
+public CvorGrafa NepSusjed()
+{
+    foreach (CvorGrafa s in susjedi)
+    {
+        if(!s.posjecen) return s;
+    }
+
+    return null;
+}
+</code></pre>
+<aside class="warning"><p>📌 Dovršite sljedeću metodu za pretragu po dubini.</p>
+</aside>
+<p><code>Graf.cs</code></p>
+<pre><code language="language-cs" class="language-cs">// klasa Graf
+public string DubinaDFS(int start)
+{
+    string str = &#34;&#34;;
+
+    Stack&lt;CvorGrafa&gt; popis = new Stack&lt;CvorGrafa&gt;();
+
+    CvorGrafa pocetni = cvorovi[start];
+    pocetni.posjecen = true;
+    popis.Push(pocetni);
+    str += pocetni.broj + &#34; &#34;;
+
+    while (popis.Count &gt; 0)
+    {
+        // pogledajmo vrh stoga
+        // nađi neposjećenog susjeda
+
+        // ako nema neposjećenih susjeda, izbaci vrh
+        // ako ima, onda:
+        // 1. posjeti
+        // 2. stavi na popis
+        // 3. dodaj u ispis
+    }
+
+    // vrati posjećenost            
+
+    return str;
+}
+</code></pre>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

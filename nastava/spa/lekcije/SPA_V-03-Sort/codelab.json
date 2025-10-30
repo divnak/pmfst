@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-10-18T18:15:08+02:00",
+  "id": "SPA_V-03-Sort",
+  "duration": 90,
+  "title": "SPA-Vježbe 03: Sortiranje",
+  "authors": "Divna Krpan",
+  "summary": "Izrada vlastitih struktura podataka i primjena algoritama sortiranja. Mjerenje vremena izvršavanja.",
+  "source": "SPA_V-03-Sort/index.md",
+  "theme": "",
+  "status": [
+    "[draft]"
+  ],
+  "category": [
+    "web"
+  ],
+  "tags": [
+    "web"
+  ],
+  "url": "SPA_V-03-Sort"
+}

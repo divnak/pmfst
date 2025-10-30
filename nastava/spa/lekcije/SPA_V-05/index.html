@@ -1,0 +1,275 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>SPA: Nasljeđivanje</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+<link rel="stylesheet" href="css/prism-coy-all.css">
+<script src="css/prism-coy-all.js"></script>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="SPA_V-05"
+                  title="SPA: Nasljeđivanje"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Uvod" duration="0">
+        <p>📌 Nasljeđivanje i nadogradnja klasa u .NET/C# okruženju</p>
+<h2 is-upgraded>Uvod u nasljeđivanje</h2>
+<p>Nasljeđivanje je jedan od temeljnih pojmova objektno orijentiranog programiranja (OOP), koji omogućava jednoj klasi nasljeđivanje svojstava i metoda druge klase. Ovo znači da klasa koja nasljeđuje (nazivamo je <em>podklasa</em> ili <em>izvedena klasa</em>), može koristiti sve javne (<strong>public</strong>) i zaštićene (<strong>protected</strong>) metode, varijable i svojstva klase koju nasljeđuje. Klasa od koje nasljeđuje naziva se <strong>osnovna</strong> ili <em>superklasa</em>.</p>
+<p>U praksi, nasljeđivanje omogućuje ponovnu upotrebu postojećeg kôda, što ubrzava razvoj i smanjuje potrebu za pisanjem kôda koji se ponavlja. Umjesto pisanja nove klase od nule svaki put kada nam je potrebna slična funkcionalnost, možemo stvoriti novu klasu koja nasljeđuje sve elemente postojeće klase, a zatim dodati specifične funkcionalnosti koje su nam potrebne.</p>
+<aside class="special"><p><strong>Napomena:</strong> Na kolegiju Strukture podataka i algoritmi (SPA), nasljeđivanje koristimo na nešto jednostavniji način, s naglaskom na nadogradnju postojećih klasa i dodavanje funkcionalnosti bez detaljne analize ostalih koncepata OOP-a.</p>
+</aside>
+<p>Primjeri koje koristimo mogu uključivati metode za ispis podataka, pretragu i slične osnovne funkcionalnosti koje olakšavaju rad sa strukturama podataka za naše potrebe, a nisu već uključene u postojeću implementaciju.</p>
+<aside class="warning"><p><strong>Napomena</strong>: Na kolegiju Objektno orijentirano programiranje (OOP) detaljnije ćete raditi nasljeđivanje i razmatrati složenije primjere. Tamo ćete vidjeti kako možete stvarati složenije hijerarhije klasa i proširivati gotove strukture s obzirom na specifične zahtjeve. Ovdje ćemo se, međutim, fokusirati na jednostavniju primjenu nasljeđivanja u kontekstu struktura podataka.</p>
+</aside>
+<p>U <em>nadogradnji</em> postojećih klasa cilj je koristiti većinu gotovih mogućnosti neke klase, poput metoda Add(), Clear() i sličnih, dok se samo dodaju određene funkcionalnosti prema specifičnim potrebama zadatka. Tako se štedi vrijeme i omogućava učinkovitije upravljanje kôdom, bez dodatne složenosti koja bi nastala kod ručnog pisanja svake klase od početka.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Kako &#34;nadograditi&#34; gotove klase?" duration="0">
+        <p>Kada želimo proširiti funkcionalnost neke već gotove klase, nasljeđivanje nam omogućuje da to učinimo na jednostavan i efikasan način. Umjesto stvaranje potpuno nove klase koja implementira iste funkcionalnosti kao postojeća klasa, možemo stvoriti novu klasu koja nasljeđuje postojeću, a zatim dodati samo one metode koje su specifične za naše potrebe.</p>
+<p>Razmotrimo primjer s klasom <strong>Queue</strong> u .NET/C# okruženju. Klasa Queue predstavlja strukturu podataka koja pohranjuje elemente u obliku reda - prvi uneseni element je prvi koji će biti uklonjen (princip &#34;prvi ušao, prvi izašao&#34; ili FIFO). Ova klasa dolazi s već definiranim metodama, poput:</p>
+<ul>
+<li><strong>Enqueue()</strong> - dodavanje elemenata na kraj reda i</li>
+<li><strong>Dequeue()</strong> - uklanjanje elemenata s početka reda,</li>
+</ul>
+<p>koje omogućuju osnovne operacije nad redom.</p>
+<p>Međutim, nama je potrebno proširiti funkcionalnost klase <strong>Queue</strong> jer želimo ispisati sve element na konzolu. Umjesto pisanja nove klase (kao što smo to radili na prvim vježbama), možemo stvoriti klasu koja nasljeđuje Queue ili čak <strong>Queue&lt;int&gt;</strong> i zatim dodati vlastitu metodu za ispis elemenata.</p>
+<p>U ovom slučaju, kreirat ćemo klasu <strong>MojQBrojeva</strong> koja nasljeđuje sve funkcionalnosti generičke klase <strong>Queue&lt;int&gt;</strong>, a zatim ćemo dodati novu metodu pod nazivom <strong>Ispis()</strong>. Metoda Ispis() će iterirati kroz sve elemente reda i ispisati ih na konzolu, čime ćemo dobiti mogućnost prikaza sadržaja reda bez potrebe za dodatnim ručnim pristupom elementima.</p>
+<p>Evo kako bi izgledala implementacija takve klase:</p>
+<p><code>MojQBrojeva.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+using System.Collections.Generic;
+
+public class MojQBrojeva : Queue&lt;int&gt;
+{
+    // Dodana metoda za ispis elemenata reda
+    public void Ispis()
+    {
+        foreach (int broj in this)
+        {
+            Console.WriteLine(broj);
+        }
+    }
+}
+</code></pre>
+<aside class="warning"><p><strong>Napomena:</strong> U implementaciji metode za ispis koristimo posebnost gotove klase Queue koja dozvoljava iteriranje po elementima reda pomoću petlje!</p>
+</aside>
+<p>To nam je ponekad potrebno, ali nije općenito osobina strukture reda jer bi teoretski trebao biti omogućen samo pristup početnom elementu. U klasama i metodama koje smo radili na početnim vježbama to nije bilo moguće, ali ovdje ne želimo pisati sve iz početka već ćemo koristiti ono što nam nudi gotova klasa.</p>
+<p>U glavnom dijelu programa možemo primijeniti novu klasu i metodu na sljedeći način:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+
+namespace Primjer_MojQ;
+class Program
+{
+    static void Main(string[] args)
+    {
+        int n = 5;
+        
+        MojQBrojeva red = new MojQBrojeva();
+
+        for (int i = 0; i &lt; n; i++)
+        {
+            red.Enqueue(i);
+        }
+
+        red.Ispis();
+    }
+}
+</code></pre>
+<p>U gornjem primjeru, u petlji <strong>for</strong> unosimo brojeve od 0 do 4 u red. Klasa <strong>Queue&lt;T&gt;</strong> nema metodu za ispis te koristimo našu &#34;nadograđenu&#34; klasu <strong>MojQBrojeva</strong> koja ispisuje elemente reda na konzolu.</p>
+<p>Dakle, umjesto instanciranja gotove klase, instanciramo našu te pozivamo metodu <strong>Enqueue()</strong> koja je naslijeđena i novu metodu <strong>Ispis()</strong> koja postoji samo u našoj novoj klasi. Metoda <em>Ispis()</em> neće izbaciti elemente iz reda već ih samo ispisuje na konzolu.</p>
+<p>Ispis:</p>
+<pre><code>0
+1
+2
+3
+4
+</code></pre>
+<p>Klasa <strong>Queue&lt;T&gt;</strong> ima i metodu <strong>ToArray()</strong> koje pretvara red u običan niz. Pri tome dobijemo kopiju elemenata reda:</p>
+<p><code>MojQBrojeva.cs</code></p>
+<pre><code language="language-cs" class="language-cs">public void Ispis2()
+{
+    // koristimo metodu ToArray() za pretvaranje u niz
+    int[] niz = this.ToArray();
+    Console.WriteLine(&#34;Ispis reda:&#34;);
+    foreach (int element in niz)
+    {
+        Console.Write(&#34;{0} &#34;, element);
+    }
+    // prijelaz u novu liniju teksta
+    Console.WriteLine();
+}
+</code></pre>
+<p>U gornjoj metodi smo se dodatno prisjetili formatiranog ispisa. U prethodnoj metodi smo pomoću petlje <strong>foreach</strong> izravno pristupali originalnim elementima.</p>
+<h2 is-upgraded><strong>Primjer rješenja bez &#34;nadogradnje&#34;</strong></h2>
+<p>Naravno da nije nužno koristiti &#34;nadogradnju&#34;, ali je korisno jer je kôd često pregledniji te ga možemo koristiti u više programa. Ovdje ćemo vidjeti rješenje prethodnog primjera bez nadogradnje. Obratite pažnju na primjenu ključne riječi <strong>this</strong> u primjeru s nadogradnjom. Moramo voditi računa o sljedećem:</p>
+<ul>
+<li>Sve metode koje se pišu u klasi <strong>Program</strong> moraju biti <strong>statičke</strong> kao što je to i metoda <strong>Main()</strong>.</li>
+<li>U ovom primjeru, metoda <strong>Ispis3()</strong> nema pristup elementima reda, pa prema tome mora <strong>primiti</strong> parametar koji je tipa <strong>Queue&lt;int&gt;</strong> te koristiti instancu (objekt) kojeg je primila.</li>
+</ul>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+using System.Collections.Generic;
+
+namespace Primjer_MojQ;
+class Program
+{
+    static void Ispis3(Queue&lt;int&gt; r)
+    {
+        foreach (int element in r)
+        {
+            Console.WriteLine(element);
+        }
+    }
+    static void Main(string[] args)
+    {
+        int n = 5;
+        
+        Queue&lt;int&gt; red = new Queue&lt;int&gt;();
+
+        for (int i = 0; i &lt; n; i++)
+        {
+            red.Enqueue(i);
+        }
+
+        // red.Ispis();
+        Ispis3(red);
+    }
+}
+</code></pre>
+<aside class="warning"><p>Primijetite:</p>
+<ul>
+<li>Metoda <strong>Ispis3()</strong> ne priprada klasi <strong>Queue&lt;int&gt;,</strong> prima objekt <strong>red</strong> te ispisuje elemente tog objekta.</li>
+<li>Metoda <strong>Ispis()</strong> pripada klasi <strong>MojQBrojeva</strong> te ispisuje elemente iz reda referencirajući ih unutar klase pomoću ključne riječi <strong>this</strong>.</li>
+</ul>
+</aside>
+<p>Što je bolje koristiti? Ovisi o zadatku kojeg rješavamo i eventualnoj budućoj primjeni postojećeg kôda. Ako u vašem zadatku na ispitu piše &#34;nadogradi postojeću klasu&#34; onda <strong>se neće priznati rješenje</strong> sa statičkom metodom u glavnom dijelu programa!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Vezana lista" duration="0">
+        <ul>
+<li>Napisati program za upis studenata na prvu godinu i formiranje rang liste.</li>
+<li>Koristiti vezanu listu (može se koristiti vlastita ili LinkedList)</li>
+</ul>
+<p>Unose se sljedeći podaci:</p>
+<ul>
+<li>Ime i prezime studenta</li>
+<li>Studijska grupa (MI, INF, ...)</li>
+<li>Broj bodova ostvaren na maturi</li>
+</ul>
+<p>Nakon unosa ispravnih podataka, svaki student se sprema na kraj liste.</p>
+<p>Dodatno omogućiti:</p>
+<ul>
+<li>Spremanje unesenih studenata u datoteku</li>
+<li>Učitavanje podataka o studentima iz datoteke</li>
+</ul>
+<h2 is-upgraded><strong>Izbornik</strong></h2>
+<p class="image-container"><img alt="img\\\\b8f6b8548d70c7ea.png" style="width: 241.50px" src="img\\b8f6b8548d70c7ea.png"></p>
+<p>Unos podataka</p>
+<ul>
+<li>unos svih podataka o studentu pomoću konzole</li>
+<li>statička metoda Unos() - ne prima ništa, vraća 1 studenta</li>
+</ul>
+<p>Spremi u datoteku</p>
+<ul>
+<li>statička metoda Spremi() - prima vezanu listu, ne vraća ništa</li>
+<li>sprema podatke iz vezane liste u datoteku odvojene s #</li>
+</ul>
+<p>Učitaj iz datoteke</p>
+<ul>
+<li>statička metoda Ucitaj() - prima vezanu listu, ne vraća ništa</li>
+<li>učitava podatke odvojene s # iz datoteke u vezanu listu</li>
+</ul>
+<p>Kraj</p>
+<ul>
+<li>Program prestaje raditi</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Nova metoda AddSort()" duration="0">
+        <ul>
+<li>Dodajte metodu <strong>AddSort()</strong> koja će dodati upisanog studenta sortirano (prema broju bodova) tako da se automatski formira rang lista (bez korištenja algoritama sortiranja)</li>
+<li>Odabirom opcije Učitaj, podaci se učitavaju iz datoteke u listu uz pomoć nove <strong>AddSort()</strong> metode.</li>
+</ul>
+<p class="image-container"><img alt="img\\\\77c122512a8113c5.png" style="width: 262.50px" src="img\\77c122512a8113c5.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Brisanje" duration="0">
+        <p>Dodati opciju <strong>Briši sve</strong> u izbornik.</p>
+<ul>
+<li>Odabirom opcije, briše se sadržaj cijele liste.</li>
+</ul>
+<p>Dodati opciju <strong>Briši 1</strong>:</p>
+<ul>
+<li>Pitati korisnika da unese redni broj od 1 do n (u skladu s ispisom)</li>
+<li>Ako se unese redni broj koji ne postoji, ispisati poruku &#34;Broj ne postoji&#34;</li>
+<li>Ako postoji redni broj, onda je potrebno izbrisati odabrani element iz vezane liste.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Raspored pacijenata za pregled" duration="0">
+        <ul>
+<li>Za one koji žele više</li>
+</ul>
+<p>Napraviti aplikaciju koja će rasporediti pacijente za pregled.</p>
+<p>Upute:</p>
+<ul>
+<li>Popis se nalazi u datoteci popis_pacijenata.csv prema redoslijedu prijava.</li>
+<li>Pacijenti imaju pored imena (odvojeno s ; ) i razinu hitnosti.</li>
+</ul>
+<p>Hitnost:</p>
+<ul>
+<li>Označena je brojevima od 1-10, s tim da manji broj znači hitnije.</li>
+<li>Ako su iste razine, onda na red dolazi pacijent koji se prije prijavio.</li>
+</ul>
+<p>Napraviti i ispisati raspored počevši od sutra pod uvjetom:</p>
+<ul>
+<li>Ordinacija radi svaki dan od 8-16</li>
+<li>Za svakog pacijenta treba 15 minuta</li>
+</ul>
+<h2 is-upgraded><strong>Izgled ispisa</strong></h2>
+<p class="image-container"><img alt="img\\\\8ec4607f73c631b0.png" style="width: 217.11px" src="img\\8ec4607f73c631b0.png"></p>
+<p>Ili:</p>
+<p class="image-container"><img alt="img\\\\3bc1da140c65fc42.png" style="width: 276.35px" src="img\\3bc1da140c65fc42.png"></p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

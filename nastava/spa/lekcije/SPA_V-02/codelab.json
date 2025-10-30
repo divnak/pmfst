@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-10-12T01:12:16+02:00",
+  "id": "SPA_V-02",
+  "duration": 0,
+  "title": "SPA-Vježbe 02: Stog i red",
+  "authors": "Divna Krpan",
+  "summary": "Uvod u stog i red",
+  "source": "SPA_V-02\\index.md",
+  "theme": "",
+  "status": [
+    "[draft]"
+  ],
+  "category": [
+    "web"
+  ],
+  "tags": [
+    "web"
+  ],
+  "url": "SPA_V-02"
+}

@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-10-11T14:49:01Z",
+  "id": "SPA_01",
+  "duration": 0,
+  "title": "SPA: Uvod",
+  "authors": "Divna Krpan",
+  "summary": "Strukture podataka i algoritmi",
+  "source": "1zQrS7viaVXmQjRB-4ISrKIMaovEiX2fo23ezuvnCYWU",
+  "theme": "web",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "web"
+  ],
+  "tags": [
+    "web"
+  ],
+  "url": "SPA_01"
+}

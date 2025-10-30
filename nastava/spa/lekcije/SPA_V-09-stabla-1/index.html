@@ -1,0 +1,444 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>SPA: Stabla</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+<link rel="stylesheet" href="css/prism-coy-all.css">
+<script src="css/prism-coy-all.js"></script>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="SPA_V-09-stabla-1"
+                  title="SPA: Stabla"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Uvod" duration="0">
+        <p>📌 Stabla</p>
+<p>📌 Binarna uređena stabla za pretraživanje</p>
+<p>📌 Operacije unosa i ispisa (obilaska) binarnog uređenog stabla</p>
+<h2 is-upgraded><strong>Osnovni pojmovi</strong></h2>
+<p>Često moramo opisati grupu objekata iz stvarnog svijeta koje su međusobno povezane, a to</p>
+<p>ne možemo napraviti linearnim strukturama koje smo radili do sad. Za takve situacije, pomažu <strong>razgranate strukture</strong>. Razgranatim strukturama podataka ovdje smatramo grafove i podvrste grafova (npr. stabla). Razgranata struktura <strong>stablo</strong> (eng. tree) sastoji se od <strong>čvorova</strong> (eng. nodes) koji mogu biti povezani s ostalim elementima. Stabla predstavljaju hijerarhijske strukture gdje je važno što je na kojoj razini, dok su grafovi općenitije strukture koje mogu predstavljati drugačije probleme (npr. mapa grada i sl.).</p>
+<p>Stablo u programiranju ima:</p>
+<ul>
+<li>Korijen</li>
+<li>Listove</li>
+<li>Čvorove</li>
+<li>Veze</li>
+</ul>
+<p>Vizualiziramo ga obrnuto u odnosu na prirodu jer korijen uvijek crtamo na vrhu.</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p><img src="img/b0eec0b2fe7c43e7.png">Stablo u prirodi</p>
+</td><td colspan="1" rowspan="1"><p><img src="img/6ab33148ac5e84b5.png">Stablo u programiranju</p>
+</td><td colspan="1" rowspan="1"><p class="image-container"><img src="img/e4f6bd24ff3790a7.png"></p>
+</td></tr>
+</table>
+<p><strong>Korijen</strong> predstavlja čvor koji nema <strong>roditelja</strong>. <strong>List</strong> je čvor koji nema djece. Sve ostale čvorove (koji nisu ni korijen ni list) nazivamo <strong>unutarnjim čvorovima</strong>.</p>
+<p><strong>Putanja</strong> (eng. path) predstavlja niz čvorova povezanih bridovima (vezama) bez ponavljanja. Duljina putanje je broj bridova koji povezuju te čvorove. Ponekad nam je u zadacima lakše prebrojati čvorove koje smo prošli.</p>
+<h2 is-upgraded><strong>Binarna stabla</strong></h2>
+<p>Binarno stablo je stablo u kojem čvorovi imaju <strong>najviše dvoje djece</strong>. Obzirom da postoji samo dvoje djece, onda ih zovemo <em>lijevo</em> i <em>desno</em> dijete. Ta djeca su korijeni lijevog i desnog podstabla. Neki čvorovi mogu imati samo lijevo ili samo desno dijete, a neki mogu biti bez djece, te se kao i kod općenitih stabala nazivaju <em>listovi</em>.</p>
+<aside class="special"><p>Čvor binarnog stabla je binarno stablo koje može imati lijevo i desno dijete, a ta djeca su također binarna stabla.</p>
+</aside>
+<p class="image-container"><img alt="dc27c7b489e74782.png" style="width: 566.60px" src="img/dc27c7b489e74782.png"></p>
+<p>Kod binarnih stabala, važno je razlikovati lijevu i desnu stranu. Binarna stabla sa slike su potpuno različita:</p>
+<p class="image-container"><img alt="b0be8a03db3abd6d.png" style="width: 306.00px" src="img/b0be8a03db3abd6d.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Binarno stablo za pretraživanje" duration="0">
+        <p>Binarno stablo za pretraživanje (eng. Binary Search Tree, <strong>BST</strong>) ili uređeno binarno stablo predstavlja stablo u kojem je jasno definiran uređaj, odnosno način rasporeda elemenata u stablu, ukratko:</p>
+<ul>
+<li>Korijen je prvi čvor koji nema roditelja,</li>
+<li>Stablo može imati 0, 1 ili 2 djece,</li>
+<li>Čvor (dijete) s lijeve strane ima vrijednost koja je <strong>manja</strong> od vrijednosti roditelja</li>
+<li>Čvor (dijete) s desne strane ima vrijednost koja je <strong>veća</strong> od vrijednosti roditelja</li>
+</ul>
+<p>Uređena binarna stabla mogu koristiti jedinstveni identifikacijski ključ u svakom čvoru. Važno svojstvo ključeva je da su usporedivi.</p>
+<aside class="special"><p>Za dva objekta A i B kažemo da su usporedivi ako vrijedi točno jedno od sljedećeg:</p>
+<ul>
+<li>A je manji od B</li>
+<li>A je veći od B</li>
+<li>A je jednak B.</li>
+</ul>
+</aside>
+<p>Čvorovi mogu sadržavati različite vrijednosti osim identifikacijskog ključa, ali ključ mora biti jedinstven kako bi mogli doći do traženog čvora.</p>
+<p>Na slici vidimo primjer takvog stabla.</p>
+<p class="image-container"><img alt="2f74e14bb8ff71b.png" style="width: 414.67px" src="img/2f74e14bb8ff71b.png"></p>
+<aside class="special"><p><strong>Definicija:</strong></p>
+<p>Uređeno binarno stablo (ili binarno stablo za pretraživanje) je binarno stablo u kojem svaki čvor ima jedinstveni ključ, svaka dva ključa su usporediva, a stablo je organizirano tako da za svaki čvor t vrijedi:</p>
+<ul>
+<li>Svi ključevi u lijevom podstablu čvora t su manji od njegovog ključa</li>
+<li>Svi ključevi u desnom podstablu čvora t su veći od njegovog ključa.</li>
+</ul>
+</aside>
+<p>Prema tome, vrlo lako možemo doći do najmanjeg ili najvećeg ključa. Ako stablo nije prazno, najmanja vrijednost ključa nalazi se u krajnjem lijevom čvoru (ako postoji), a ako takav ne postoji onda se nalazi u korijenu. Analogno, ako stablo nije prazno, najveća vrijednost ključa nalazi se u krajnjem desnom čvoru, a ako takav ne postoji onda je u korijenu.</p>
+<h2 is-upgraded><strong>Osnovne operacije</strong></h2>
+<p>Osnovne operacije u binarnom uređenom stablu su:</p>
+<ul>
+<li><strong>Dodavanje</strong> elemenata,</li>
+<li><strong>Traženje</strong> elemenata,</li>
+<li><strong>Brisanje</strong> elemenata.</li>
+</ul>
+<p>Dodavanje ili umetanje novog elementa u binarno uređeno stablo znači dodati novi element tako da stablo i dalje ostane <strong>uređeno</strong>. Prema tome, potrebno je pronaći poziciju na koju možemo smjestiti novi element.</p>
+<p>Dodavanje obavljamo u dvije faze:</p>
+<ol type="1">
+<li>Ako je stablo prazno, dodaj novi element na mjesto korijena.</li>
+<li>Ako stablo nije prazno, usporedi vrijednost ključa te ako je novi element manji, smjesti ga u lijevo podstablo, ako je veći u desno podstablo.</li>
+</ol>
+<p>Gore nedostaje opis što se događa ako je novi ključ jednak već postojećem. Najjednostavnije je takve situacije ignorirati, ali često želimo znati da su se dogodile.</p>
+<p>Iz gornjeg opisa dodavanje novih elemenata, možemo zaključiti kako je algoritam rekurzivan, no kod dodavanja nije nužno pisati rekurziju jer je često teže razumljiva početnicima pa ćemo češće u zadacima problem rješavati petljom.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Obilasci stabla" duration="0">
+        <p>Obilazak (eng. traversal) binarnog uređenog stabla je čest problem u programiranju. Ovdje ćemo koristiti jedan od tri načina obilaska koji kreću od korijena:</p>
+<ul>
+<li><strong>In-order (Lijevo - Korijen - Desno)</strong> - algoritam najprije obilazi lijevo podstablo, zatim korijen pa onda desno podstablo,</li>
+<li><strong>Pre-order (Korijen - Lijevo - Desno)</strong> - algoritam najprije obilazi korijen, zatim lijevo podstablo pa onda desno podstablo,</li>
+<li><strong>Post-order (Lijevo - Desno - Korijen)</strong> - algoritam najprije obilazi lijevo postablo, zatim desno podstablo pa korijen.</li>
+</ul>
+<p>Za primjer stabla sa slike:</p>
+<p class="image-container"><img alt="b6f0466367b074f8.png" style="width: 472.67px" src="img/b6f0466367b074f8.png"></p>
+<p>U prvom koraku algoritam promatra lijevo podstablo:</p>
+<p class="image-container"><img alt="9f50c0691131719b.png" style="width: 189.33px" src="img/9f50c0691131719b.png"></p>
+<p>Na njega primjenjujemo L-K-D: 15, 25, 30, čime je lijevo podstablo obrađeno.</p>
+<p>Nakon što je gotovo, onda se ispisuje glavni korijen s prethodne slike: 50 i prelazimo na desno podstablo te kako s lijeve strane nema ništa, ispisujemo 70 i 81, odnosno sve skupa je:</p>
+<p>15, 25, 30 50, 70, 81.</p>
+<p>Pokušajte sami na papiru riješiti ostala dva obilaska na ovom primjeru!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Čvor binarnog uređenog stabla" duration="0">
+        <p>Definiramo čvor binarnog uređenog stabla kao klasu koja sadrži polja (ili po potrebi svojstva):</p>
+<ul>
+<li>Vrijednost (informacije koje želimo spremiti)</li>
+<li>Ključ (podatak koji će biti jedinstven) - temelj za uređaj u stablu</li>
+<li>Reference na lijevo i desno dijete</li>
+</ul>
+<p>Vrijednost i ključ se mogu poklopiti (ako bi primjerice spremali samo jedinstvene realne brojeve), ali to je jako jednostavan slučaj.</p>
+<p>Klasu <strong>Cvor</strong> možemo i ne moramo pisati u zasebnoj datoteci:</p>
+<p><code>Cvor.cs</code></p>
+<pre><code language="language-cs" class="language-cs">class Cvor
+{
+    public int broj; //jedinstveni ključ
+    public Cvor lijevo, desno;
+    public Cvor(int br)
+    {
+        this.broj = br;
+        this.lijevo = null;
+        this.desno = null;
+    }
+}
+</code></pre>
+<p>U gornjoj implementaciji, imamo samo broj kao sadržaj. Napisan je i konstruktor koji prima vrijednost (odnosno broj).</p>
+<p>Zadane vrijednosti za polja koja su objekti je <strong>null</strong>, no ne smeta nam ako to napišemo eksplicitno jer nam je tako jasnije.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Klasa BinarnoStablo" duration="0">
+        <p>Definiramo posebnu klasu pod nazivom <strong>BinarnoStablo</strong>. Klasa se sastoji od polja koje predstavlja <strong>korijen</strong> te metoda koje ćemo koristiti za različite operacije.</p>
+<p><code>BinarnoStablo.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+namespace bibStablo
+{
+    class BinarnoStablo
+    {
+        public Cvor korijen;
+        public void Dodaj(int br)
+        {
+
+        }
+
+        public void Ispis()
+        {
+
+        }
+
+    }
+}
+</code></pre>
+<p>Korijen je u gornjem slučaju <strong>public</strong> tako da ga možemo pozvati i iz glavnog programa, no bilo bi bolje da je zapravo <em>private</em> kako bi se rad s podacima kontrolirao isključivo pomoću metoda koje pripadaju klasi.</p>
+<h2 is-upgraded><strong>Dodavanje elemenata u BST</strong></h2>
+<p>Dalje u tekstu ćemo BST kraće nazivati samo &#34;binarno stablo&#34;.</p>
+<p>Metodu za dodavanje elemenata u binarno stablo možemo pisati na dva načina:</p>
+<ul>
+<li>Pomoću petlje</li>
+<li>Pomoću rekurzije</li>
+</ul>
+<p>Ideja je slična kao kod vezane liste:</p>
+<ul>
+<li>Ako je prazno, novi čvor spremi kao korijen</li>
+<li>Ako nije prazno, traži prvo slobodno mjesto lijevo ili desno (prema pravilima).</li>
+</ul>
+<p>Metoda također može primati:</p>
+<ul>
+<li>Čvor</li>
+<li>Vrijednost</li>
+</ul>
+<p>Povratna vrijednost metode može biti:</p>
+<ul>
+<li>Ništa (void) - ako nije potrebna povratna informacija,</li>
+<li>Bool - npr. <strong>true</strong>, je dodavanje bilo uspješno ili <strong>false</strong> ako nije,</li>
+<li>String - npr. poruka zašto dodavanje nije uspjelo ili s koje strane je dodan element,</li>
+<li>Int - koliko koraka je bilo potrebno za dodati element i sl.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Dodavanje elemenata - while" duration="0">
+        <p>Napisat ćemo metodu za dodavanje koja radi s petljom.</p>
+<p><code>BinarnoStablo.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+namespace bibStablo
+{
+    class BinarnoStablo
+    {
+        public Cvor korijen;
+
+        public void Dodaj(int br)
+        {
+            Cvor novi = new Cvor(br);
+            // 1. ako je stablo prazno
+            if (korijen == null)
+            {
+                korijen = novi;
+                return;
+            }
+
+            // 2. ako nije prazno
+            Cvor temp = korijen;
+            while (true)
+            {
+                // provjeri sve tri mogućnosti
+                if (novi.broj &lt; temp.broj)
+                {
+                    // vidi je li lijevo prazno
+                    if (temp.lijevo == null)
+                    {
+                        temp.lijevo = novi;
+                        return; //gotovo
+                    }
+                    else
+                        temp = temp.lijevo; // idi dalje
+                }
+                else if (novi.broj &gt; temp.broj)
+                {
+                    // vidi je li desno prazno
+                    if (temp.desno == null)
+                    {
+                        temp.desno = novi;
+                        return; //gotovo
+                    }
+                    else
+                        temp = temp.desno; // idi dalje
+                }
+                else
+                {
+                    // ako su jednaki
+                    return;
+                }
+            }
+        }       
+    }
+}
+</code></pre>
+<p>U gornjem rješenju, petlja je beskonačna (uvjet <strong>true</strong>), ali je predviđeno da se petlja prestane izvršavati (pomoću naredbe <strong>break</strong> ili <strong>continue</strong>) kad se novi element uspješno smjesti ili ako novi element ima dupli ključ (u gornjem primjeru broj).</p>
+<aside class="warning"><p>📌</p>
+<p>Problem je što vrlo lako možete previdjeti jednu od mogućih &#34;grana&#34; u odlukama (if-ovima), a u tom slučaju petlja postaje beskonačna.</p>
+</aside>
+<p>Primjer: ako su ključevi jednaki, ne mora se raditi ništa.</p>
+<p>Možda se čini kako je lako uočiti beskonačnu petlju, ali u tom slučaju morate imati dobre testne podatke.</p>
+<h2 is-upgraded><strong>Ispis</strong></h2>
+<p>Kako bi mogli testirati gornji program (metodu za dodavanje), potrebna nam je posebna metoda kojom ćemo ispisati sadržaj. Obzirom da ne znamo koliko na kojoj grani može biti elemenata, onda moramo obići cijelo stablo, a to ćemo napraviti rekurzivno koristeći pristup <strong>inorder</strong>.</p>
+<p><code>BinarnoStablo.cs</code></p>
+<pre><code language="language-cs" class="language-cs">public void Inorder(Cvor k)
+{
+    if (k != null)
+    {
+        Inorder(k.lijevo);
+        Console.WriteLine(k.broj);
+        Inorder(k.desno);
+    }
+}
+</code></pre>
+<p>Svaka rekurzija ima: osnovni slučaj i korak. U gornjem primjeru, za osnovni slučaj (kad je k jednak <strong>null</strong>) ne treba raditi ništa već se rekurzija samo završava. U koraku rekurzije, mora se pozvati ponovo ista metoda, ali tako da se početni problem približi osnovnom slučaju (u gornjem primjeru - nakon cijelog stabla pozivamo rekurziju na lijevom i desnom podstablu). Prema tome, smanjujemo stablo sve dok ne dođemo na null.</p>
+<p>Primjena u glavnom programu:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using bibStablo;
+
+namespace primjer;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        int[] niz = {50, 70, 25, 30, 15, 25, 81};
+        BinarnoStablo bs = new BinarnoStablo();
+        foreach (int br in niz)
+        {
+            bs.Dodaj(br);
+        }
+
+        bs.Inorder(bs.korijen);
+    }
+}
+</code></pre>
+<p>Program će ispisati redom sve brojeve. Testni podaci sadrže i duplu vrijednost (25). Također, malo smeta što se u glavnom programu poziva metoda <strong>Inorder()</strong> kojoj moramo dati korijen kao parametar, a on već je dio klase. To je zato što smo izravno pozvali rekurzivnu metodu u glavnom programu.</p>
+<p>Razmislite kako bi to promijenili tako da se pozove samo bs.Inorder() bez parametara!</p>
+<h3 is-upgraded>🏠 <strong>Zadatak za domaći rad</strong></h3>
+<p>Riješite problem dodavanja u binarno stablo tako da metoda <strong>Dodaj()</strong> vraća <strong>bool</strong>:</p>
+<ul>
+<li>True - ako je uspješno dodano</li>
+<li>False - ako je bio dupli broj</li>
+</ul>
+<p>Kod unosa, ispisati u glavnom programu brojeve koji su bili duplikati:</p>
+<pre><code>Duplikat: 25
+15
+25
+30
+50
+70
+81
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Dodavanje elemenata - rekurzivno" duration="0">
+        <p>Za ispis smo koristili rekurziju, ali možemo i za dodavanje. Osnovna ideja je prolaziti na sličan način po stablu (lijevo ili desno) i tražiti praznu poziciju. Problem ćemo razdvojiti na dva slučaja:</p>
+<ul>
+<li>Ako je stablo prazno - ne mora ići u rekurziju,</li>
+<li>Ako nije prazno pozivamo rekurzivnu metodu.</li>
+</ul>
+<p><code>BinarnoStablo.cs</code></p>
+<pre><code language="language-cs" class="language-cs">public void Dodaj2(int br)
+{
+    Cvor novi = new Cvor(br);
+    if (korijen == null)
+        korijen = novi;
+    else
+        DodajRek(korijen, novi);
+}
+</code></pre>
+<p>Rekurzija mora imati informacije na kojem dijelu stabla se nalazi i što dodajemo pa u ovom primjeru ima dva parametra.</p>
+<ul>
+<li>Ako je novi broj <strong>manji</strong>, onda će provjeriti je li <strong>lijevo</strong> prazno te ga smjestiti, a u protivnom mora dalje na lijevo podstablo.</li>
+<li>Ako je novi broj <strong>veći</strong>, onda će provjeriti je li <strong>desno</strong> prazno te ga smjestiti, a u protivnom mora dalje na desno podstablo.</li>
+<li>Ako su jednaki, ne radi ništa</li>
+</ul>
+<p><code>BinarnoStablo.cs</code></p>
+<pre><code language="language-cs" class="language-cs">private void DodajRek(Cvor k, Cvor novi)
+{
+    if (novi.broj &lt; k.broj)
+    {
+        if (k.lijevo == null)
+            k.lijevo = novi;
+        else
+            DodajRek(k.lijevo, novi);
+    }
+    else if (novi.broj &gt; k.broj)
+    {
+        if (k.desno == null)
+            k.desno = novi;
+        else
+            DodajRek(k.desno, novi);
+    }
+    else
+    {
+        // ništa
+    }
+}
+</code></pre>
+<aside class="warning"><p>​​📌 Opet je jako važno paziti na sve grane programa kako ne bi zaboravili neku mogućnost.</p>
+</aside>
+<p>Ako gore ne napišemo ništa za slučaj kad su jednaki, rekurzija će završiti.</p>
+<p>🎯 <strong>Sad opet pokušajte riješiti zadatak s prethodne stranice, ali primjenom rekurzije!</strong></p>
+<h3 is-upgraded>🏠 Zadatak za domaći rad</h3>
+<p>Riješite problem dodavanja u binarno stablo tako da metoda <strong>Dodaj()</strong> vraća <strong>string</strong>:</p>
+<ul>
+<li>Poruka gdje je spremljen broj (npr. 50-korijen, 70 desno, 25 lijevo, 25 duplikat!, ...)</li>
+<li>Poruka ako nije spremljen (npr. 25 duplikat)</li>
+</ul>
+<p>Napomena: ne mora biti rekurzija.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Učitaj brojeve" duration="0">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Napisati konzolsku aplikaciju koja će učitati podatke iz datoteke <strong><em>brojevi1.txt</em></strong> i smjestiti ih u binarno stablo.</p>
+<ul>
+<li>Ispisati sadržaj stabla od najmanje do najveće vrijednosti.</li>
+<li>Ispisati sadržaj stabla na ostala 2 načina.</li>
+</ul>
+<p class="image-container"><img alt="slika1.jpg" style="width: 357.33px" src="img/d1def839e74c6741.jpeg"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Traži po broju" duration="0">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Nastavite rješavati u istom rješenju od prethodnog zadatka gdje je riješen unos podataka.</p>
+<ul>
+<li>Napisati metodu <strong>Trazi()</strong> koja prima <strong>cijeli broj</strong> kojeg treba pronaći.</li>
+<li>Metoda <strong>vraća čvor</strong> koji sadrži traženu vrijednost ili <strong>null</strong> ako ga nema.</li>
+<li>U glavnom programu korisnik unosi traženi broj, a program ispisuje je li pronađen.</li>
+</ul>
+<h3 is-upgraded><strong>🎯 Za one koji žele više</strong></h3>
+<p>a) Napišite metodu <strong>TraziPut()</strong> koja za razliku od prethodnog zadatka, vraća <strong>string</strong> koji sadrži put do traženog čvora i sam čvor ili &#34;nema&#34; ako ga nema.</p>
+<p>Primjer: za 489, ispisuje: &#34;500, 253, 494, 489&#34;, za 11 → &#34;nema&#34;</p>
+<p>b) Napišite metodu <strong>Udaljenost()</strong> koja vraća broj čvorova koje treba posjetiti do traženog čvora (brojati i sam čvor) ili 0 ako ga nema. Primjer: za 500 → put: 1, za 489 → put: 4, za 11 → 0.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Slučajni brojevi" duration="0">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Napisati program (konzolsku aplikaciju) koji će učitati u stablo slučajno odabrane brojeve iz intervala [10, 50].</p>
+<ul>
+<li>Korisnik upisuje koliko želi brojeva n,</li>
+<li>Paziti na ispravnost broja n! Koliki smije biti?</li>
+</ul>
+<p>Ispisati brojeve iz stabla od najvećeg do najmanjeg:</p>
+<ul>
+<li>koristiti rekurziju za ispis</li>
+<li>neka se metoda zove IspisMaxMin</li>
+<li>za svaki dupli broj (npr. 11), ispisati poruku oblika: <strong>dupli broj: 11</strong></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

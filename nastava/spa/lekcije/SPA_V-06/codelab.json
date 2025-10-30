@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-11-08T22:03:47+01:00",
+  "id": "SPA_V-06",
+  "duration": 0,
+  "title": "SPA: Vježbe 06",
+  "authors": "Divna Krpan",
+  "summary": "Strukture podataka i algoritmi",
+  "source": "SPA_V-06\\index.md",
+  "theme": "",
+  "status": [
+    "[draft]"
+  ],
+  "category": [
+    "web"
+  ],
+  "tags": [
+    "web"
+  ],
+  "url": "SPA_V-06"
+}

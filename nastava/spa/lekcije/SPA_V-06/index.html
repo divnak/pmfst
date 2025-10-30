@@ -1,0 +1,394 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>SPA: Vježbe 06</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+<link rel="stylesheet" href="css/prism-coy-all.css">
+<script src="css/prism-coy-all.js"></script>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="SPA_V-06"
+                  title="SPA: Vježbe 06"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Uvod" duration="0">
+        <p>📌 Riječnik - Dictionary</p>
+<p>📌 Raspršeno adresiranje - Hashtable</p>
+<h2 is-upgraded>Rječnici</h2>
+<p>Upoznat ćemo strukturu rječnika (eng. dictionary) koja je korisna i često se koristi kod programiranja, a u nastavku teksta ćemo češće koristiti termin na engleskom jeziku: <strong>dictionary</strong> jednostavno iz razloga jer se tako zove gotova klasa u C#-u koju ćemo koristiti. Svaki element u strukturi dictionary ima <strong>ključ</strong> (eng. key) koji je povezan s <strong>vrijednosti</strong> (eng. value) tog ključa. Ključ i vrijednost predstavljaju par.</p>
+<p>Analogija je s rječnikom stranih riječi gdje za svaku stranu riječ (ključ) imamo opis ili prijevod (vrijednost).</p>
+<aside class="special"><p>Ključevi se koriste za dohvaćanje vrijednosti.</p>
+</aside>
+<p>Drugi primjer (ilustracija) iz stvarnog života gdje se može vidjeti upotreba spomenute strukture je odlazak u kazalište gdje posjetitelji ostavljaju svoje kapute, a zaposlenik im daje broj. Kad predstava završi, posjetitelj vraća broj (ključ) kojeg zaposlenik koristi kako bi pronašao kaput (vrijednost koja pripada ključu).</p>
+<p>Prilikom upotrebe <strong>apstraktne strukture podataka</strong> (eng. abstract data type, ADT) <strong>dictionary</strong> ključ ne mora biti samo broj već može biti bilo koji drugi tip objekta. Ako za ključ koristimo cijeli broj onda implementacija podsjeća na strukturu običnog <strong>niza</strong> (eng. array) ili liste (List&lt;T&gt;). Međutim, kad koristimo niz ili listu, onda ne možemo koristiti proizvoljne indekse već unaprijed zadane koji počinju od 0 do n-1 (n predstavlja broj elemenata). Struktura <strong>Dictionary</strong> je prema tome fleksibilnija.</p>
+<h2 is-upgraded><strong>Raspršeno adresiranje</strong></h2>
+<p>Raspršeno adresiranje (eng. hashing) ili hash-iranje je postupak mapiranja većih objekata u manje pomoću <strong><em>hash</em></strong> funkcije. Hash funkcija vraća odgovarajuće <em>hash</em> vrijednosti ili kôdove (ključeve) koje odgovaraju lokaciji gdje se podatak mora spremiti. Taj postupak se koristi u strukturama podataka koje se nazivaju &#34;hash tablice&#34; (eng. hashtable). Ovdje ćemo zadržati engleski termin radi lakšeg razumijevanja i sličnosti s nazivom klase u C#-u.</p>
+<p>Hash tablice se koriste za brzo dohvaćanje podataka, a pomoću hash funkcija može se ubrzati otkrivanje duplih zapisa u velikim datotekama ili traženje sličnih zapisa (npr. pronalaženje sličnih uzoraka u DNK, sličnih podstringova, zapisa u audio datotekama i sl.).</p>
+<p>U C#-u koristimo gotovu klasu koje se naziva <strong>Hashtable</strong>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Rječnik / Dictionary" duration="0">
+        <p>Dictionary u C#-u predstavlja generičku kolekciju koja omogućava pohranjivanje podataka u obliku parova <strong>ključ-vrijednost</strong> (nalazi se u imenskom prostoru <strong>System.Collections.Generic</strong>). Ova struktura podataka je idealna kada želimo brz pristup podacima koristeći jedinstvene ključeve. Možemo ga zamisliti slično kao kod rječnika stranih riječi gdje je ključ pojam, a vrijednost njegova definicija. Struktura je vrlo fleksibilna i omogućava različite tipove podataka za ključeve i vrijednosti.</p>
+<p>Dictionary se u C# definira kao <strong>Dictionary&lt;TKey, TValue&gt;</strong>, gdje:</p>
+<ul>
+<li><strong>TKey</strong> predstavlja tip ključa (obično neki od osnovnih tipova kao što su int, string, char, ...),</li>
+<li><strong>TValue</strong> predstavlja tip vrijednosti (može biti bilo koji tip: osnovni tipovi, klase, strukture, itd.).</li>
+</ul>
+<p>Primjer za riječnik kojem su ključevi tipa string, a vrijednosti cijeli brojevi:</p>
+<pre><code>Dictionary&lt;string, int&gt; brojac = new Dictionary&lt;string, int&gt;();
+</code></pre>
+<p>Ovaj rječnik možemo koristiti za brojanje koliko puta se određene riječi pojavljuju u tekstu, pri čemu je ključ riječ koju želimo brojati, a cjelobrojna vrijednost broj ponavljanja.</p>
+<aside class="warning"><p><strong>Važno:</strong> Ključ mora biti jedinstven!</p>
+</aside>
+<h3 is-upgraded><strong>Primjeri</strong></h3>
+<p>Praćenje zaliha u skladištu:</p>
+<ul>
+<li>Zamislimo Dictionary u kojem ključevi predstavljaju šifru proizvoda (ili jedinstvena imena), a vrijednosti količine tih proizvoda.</li>
+<li>Npr. zalihe[&#34;Banane&#34;] = 150;</li>
+</ul>
+<p>Telefonski imenik:</p>
+<ul>
+<li>U ovom primjeru, ključ je ime i prezime, a vrijednost telefonski broj.</li>
+<li>Obzirom da telefonski broj može početi s nulom (što ne postoji za cijele brojeve), eventualno može sadržavati crtice ili razmake te nije podatak s kojim se moraju obavljati aritmetičke operacije, onda može također biti tipa string.</li>
+</ul>
+<p>Tečaj:</p>
+<ul>
+<li>Ključ je naziv valute (string, npr. USD, EUR), a vrijednost iznos tečaja (float ili double, npr. 7.53).</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Osnovne operacije s Dictionary" duration="0">
+        <p>Instanciranje, primjer:</p>
+<pre><code>Dictionary&lt;string, int&gt; popis = new Dictionary&lt;string, int&gt;();
+</code></pre>
+<h2 is-upgraded><strong>Dodavanje elemenata</strong></h2>
+<p>Dodavanje elemenata (unos u Dictionary) možemo obaviti na dva načina:</p>
+<ul>
+<li>Pomoću metode <strong>Add()</strong>,</li>
+<li>Pomoću uglatih zagrada.</li>
+</ul>
+<p>Primjenom metode <strong>Add()</strong> može se dogoditi iznimka (greška) ako pokušamo dodati par s ključem koji već postoji. Primjenom uglatih zagrada, neće se dogoditi greška, već će se &#34;pregaziti&#34; postojeća vrijednost (ako postoji) ili jednostavno spremiti novi par. Premda se to na prvu čini kao prednost, teže ćemo uočiti da vrijednost već postoji (jer nećemo dobiti nikakvo upozorenje pa je lako previdjeti duplikate).</p>
+<pre><code>// spremimo broj ECTS-ova za studente:
+popis.Add(&#34;Ana&#34;, 20);
+popis.Add(&#34;Pero&#34;, 19);
+
+// drugi način
+popis[&#34;Ivo&#34;] = 55;
+</code></pre>
+<h2 is-upgraded><strong>Pristupanje vrijednostima</strong></h2>
+<p>Vrijednosti dohvaćamo po ključu, npr.:</p>
+<pre><code>Console.WriteLine(popis[&#34;Ana&#34;]); // Ispisuje: 20
+</code></pre>
+<p>Za ispis svih elemenata rječnika možemo koristiti <strong>foreach</strong> petlju.</p>
+<aside class="warning"><p>Preporučuje se iteracija kroz ključeve, jer nam omogućava pristup i ključevima i vrijednostima!</p>
+</aside>
+<p>Primjer:</p>
+<pre><code>foreach (string k in popis.Keys)
+{
+    Console.WriteLine($&#34;Ključ: {k}, ECTS: {popis[k]}&#34;);
+}
+</code></pre>
+<h2 is-upgraded><strong>Provjera postojanja ključa</strong></h2>
+<p>Metoda <strong>ContainsKey()</strong> koristi se za provjeru postoji li određeni ključ u rječniku:</p>
+<pre><code>if (popis.ContainsKey(&#34;Ana&#34;))
+{
+    Console.WriteLine(&#34;Ključ Ana postoji u rječniku.&#34;);
+}
+else
+{
+    // Dodaj Anu
+}
+</code></pre>
+<aside class="special"><p>Provjera duplikata (sadrži li struktua ključ kojeg dodajemo) će biti važna kod unosa.</p>
+<p>Upravljanje duplikatima uključuje:</p>
+<p>✅ Provjeru kod unosa (hoće li se zadržati postojeća vrijednost ili pregaziti novom)</p>
+<p>✅ Brojanje ili ispis duplih podataka.</p>
+</aside>
+<h2 is-upgraded><strong>Brisanje elemenata</strong></h2>
+<p>Elemente iz rječnika brišemo pomoću metode <strong>Remove()</strong> i ključa:</p>
+<pre><code>popis.Remove(&#34;Ana&#34;);
+</code></pre>
+<p>Ako znamo koji ključ brišemo, onda je brisanje jednostavno i brzo.</p>
+<h2 is-upgraded><strong>Brisanje više elemenata iz strukture Dictionary</strong></h2>
+<p>Brisanje jedne vrijednosti po ključu je jednostavno, ali često se zna dogoditi da nam treba brisanje više vrijednosti. Taktika za brisanje provodi se u dva koraka (a ideju možemo koristiti i za druge strukture):</p>
+<ol type="1">
+<li>Proći kroz sve elemente te u poseban popis prikupiti ključeve od onih elemenata koji zadovoljavaju postavljeni uvjet (koje želimo brisati).</li>
+<li>Proći kroz popis za brisanje i pobrisati elemente koje smo spremili.</li>
+</ol>
+<p>Neka je zadana klasa <strong>Student</strong>:</p>
+<p><code>Student.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace dict
+{
+    class Student
+    {
+        public string imePrezime;
+        public string jmbag;
+        public Student(string ip, string jm)
+        {
+            this.imePrezime = ip;
+            this.jmbag = jm;
+        }
+    }
+}
+</code></pre>
+<p>U glavnom dijelu programa ćemo upisati par elemenata te pobrisati sve kojima ime počinje slovom ‘A&#39;. Inače, Jmbag je uvijek jedinstven za sve studente pa ćemo ga odabrati kao ključ, a kako može početi s nulom i nema računanja s njim, onda će isto biti string.</p>
+<p>Napravimo primjer s par podataka za unos i ispis:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace dict;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // deklaracija i inicijalizacija
+        Dictionary&lt;string, Student&gt; popis = new Dictionary&lt;string, Student&gt;();
+
+        // unos (pazite, ne provjeravamo postoji li!)
+        // inače je ovo praktičnije čitati iz datoteke
+        Student a = new Student(&#34;Ana&#34;, &#34;0123&#34;);
+        Student b = new Student(&#34;Pero&#34;, &#34;4567&#34;);
+        Student c = new Student(&#34;Ante&#34;, &#34;7890&#34;);
+        popis.Add(a.jmbag, a);
+        popis.Add(b.jmbag, b);
+        popis.Add(c.jmbag, c);
+
+        // ispis
+        foreach (string k in popis.Keys)
+        {
+            Console.WriteLine($&#34;Jmbag: {popis[k].jmbag}, {popis[k].imePrezime}&#34;);
+        }
+
+    }
+}
+</code></pre>
+<p>Zatim slijedi brisanje. U prvoj fazi koristimo <strong>List&lt;&gt;</strong> jer je dinamička i ne znamo koliko će biti kandidata za brisanje svoj koji zadovoljavaju uvjet:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">// brisanje
+// 1. faza - skupljanje ključeva
+List&lt;string&gt; brisanje = new List&lt;string&gt;();
+foreach (string k in popis.Keys)
+{
+    Student s = popis[k];
+    if (s.imePrezime[0] == &#39;A&#39;)
+        brisanje.Add(k);
+}
+
+// 2. faza - brisanje
+foreach (string k in brisanje)
+{
+    popis.Remove(k);
+}
+</code></pre>
+<aside class="warning"><p>​​📍 Ako se ne nađe ni jedan element koji zadovoljava uvjet, onda će lista ključeva za brisanje biti prazna tako da se druga faza neće nikad izvršiti.</p>
+<p>📍 Petlja <strong>foreach</strong> ne dozvoljava izmjene strukture po kojoj <em>iterira</em> tijekom izvršavanja, ali u gornjim fazama to nije slučaj.</p>
+</aside>
+<p>Ispišite stanje nakon brisanja kako bi provjerili je li stvarno pobrisano.</p>
+<h2 is-upgraded><strong>Slične strukture</strong></h2>
+<p>U C# programskom jeziku postoje različite implementacije strukture rječnika. Klasa <strong>SortedDictionary&lt;TKey, TValue&gt;</strong> je implementacija rječnika koja ima automatski sortirane ključeve, a inače elemente gotove klase Dictionary nije moguće sortirati. Tehnički je implementirana pomoću stabala (koje ćemo učiti kasnije), ali to nas trenutno ne zanima je je koristimo bez poznavanja unutarnje strukture. Praktičan problem kojeg možemo riješiti uz pomoć ove strukture je na primjer:</p>
+<p><strong>Zadatak</strong>: Pronađite sve različite riječi u tekstu. Ispišite ih bez ponavljanja poredane po abecedi. Ispišite koliko se puta svaka riječ pojavljuje u tekstu.</p>
+<p>Klasa <strong>SortedList&lt;TKey, TValue&gt;</strong> je slična prethodno spomenutoj klasi, ali za razliku od nje koristi niz (array) za implementaciju. <strong>SortedList</strong> teoretski zauzima manje memorije od SortedDictionary koja omogućuje brže umetanje i brisanje. Te razlike se neće previše</p>
+<p>primijetiti kod zadataka na vježbama.</p>
+<aside class="special"><p>✅ Probajte koristiti SortedList i/ili SortedDictionary!</p>
+<p>✅ U nekim situacijama ih je bolje koristiti u odnosu na obični Dictionary.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Hashtable klasa" duration="0">
+        <p>Klasa <strong>Hashtable</strong> nalazi se u imenskom prostoru <strong>System.Collections</strong>. Na prvi pogled se čini jako slična kod primjene kao <strong>Dictionary</strong>, ali ipak postoje neke sitne razlike. Općenito, iza raspršenog adresiranja postoji dosta teorije (pogotovo ako bi sami implementirali vlastitu klasu). Poseban problem je rješavanje kolizije. Kod primjene gotove <strong>Hashtable</strong> klase, vodimo samo računa o tome kako primijeniti osnovne operacije unosa, dohvaćanja podataka, brisanja i traženja.</p>
+<p>Ono što je ovdje važno jest primijetiti razliku u deklaraciji klasa:</p>
+<ul>
+<li>Dictionary&lt;TKey, TValue&gt;</li>
+<li>Hashtable</li>
+</ul>
+<p>Primjećujemo kako <strong>Hashtable</strong> nema tip, što znači da u tu klasu možemo spremati bilo kakve elemente i miješati podatke različitih tipova.</p>
+<aside class="warning"><p>📍 Svi elementi popisa tipa <strong>Hashtable</strong> su tipa <strong>object</strong>.</p>
+</aside>
+<h2 is-upgraded><strong>Tip object</strong></h2>
+<p>Tip <strong>object</strong> u predstavlja osnovni, generički tip podataka u .NET-u koji može prihvatiti vrijednosti bilo kojeg drugog tipa, jer su svi ostali tipovi zapravo izvedeni iz <strong>object</strong>. Kada koristimo <strong>object</strong> kao tip, to znači da varijabla može primiti bilo koji tip podatka, uključujući osnovne tipove kao što su int, string, bool, kao i složene tipove poput klasa i struktura.</p>
+<p>Kada koristiti object kao tip? Ima smisla u sljedećim situacijama:</p>
+<ul>
+<li>Podaci su raznovrsni - kad trebate pohraniti različite vrste podataka u jednoj strukturi</li>
+<li>Potrebna fleksibilnost - kad ne znate unaprijed sve vrste podataka koje će kolekcija sadržavati.</li>
+<li>Generička implementacija - kad sami pišete generičku strukturu ili vam treba funkcionalnost koja mora podržavati različite tipove podataka.</li>
+</ul>
+<p>Lako se može dogoditi greška pri izvršavanju programa ako tip podataka nije ono što očekujemo.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Osnovne operacije s Hashtable" duration="0">
+        <p>Za klasu <strong>Hashtable</strong> vrijedi kao za <strong>Dictionary</strong> u sljedećim situacijama (iz prethodnog dijela):</p>
+<ul>
+<li>Dodavanje elemenata</li>
+<li>Pristupanje vrijednostima pomoću uglatih zagrada</li>
+</ul>
+<p>U strukturu jednostavno možemo spremiti sve, no problem se javlja kad čitamo. Ako su podaci jednostavnog osnovnog tipa (kao što su string, int, double i sl.) i ako ih samo ispisujemo, onda će se dogoditi automatsko pretvaranje (konverzija) tipova u string tako da nećemi primijetiti razliku. Međutim, problem se javlja čim moramo obavljati operacije koje su definirane za konkretan tip (npr. Zbrajanje, oduzimanje, ...) ili ako se radi o složenim tipovima kao što su klase (jer ih nećemo moći ispisati).</p>
+<p>Pogledajmo na primjeru. Neka je zadana klasa <strong>Radnik</strong>:</p>
+<p><code>Radnik.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace HT_Primjer
+{
+    class Radnik
+    {
+        public string ime;
+        public double placa;
+
+        public Radnik(string im, double p)
+        {
+            this.ime = im;
+            this.placa = p;
+        }
+    }
+}
+</code></pre>
+<p>Pripremite tekstualnu datoteku s par radnika za probu, npr.:</p>
+<pre><code>pero;1250,15
+ana;4500,10
+maja;785,45
+</code></pre>
+<p>U glavnom dijelu programa ćemo upisati i ispisati podatke:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+using System.Collections;
+using System.IO;
+
+namespace HT_Primjer;
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.Write(&#34;Datoteka: &#34;);
+        string imeDat = Console.ReadLine();
+
+        if(!File.Exists(imeDat))
+        {
+            Console.WriteLine(&#34;Datoteka ne postoji!&#34;);
+            return;
+        }
+
+        Hashtable ht = new Hashtable();
+
+        using (StreamReader sr = new StreamReader(imeDat))
+        {
+            string linija;
+            while ((linija = sr.ReadLine()) != null)
+            {
+                // rastavi
+                string[] s = linija.Split(&#39;;&#39;);
+                //pero;1250,15
+                double p = double.Parse(s[1]);
+                Radnik novi = new Radnik(s[0], p);
+                if(!ht.ContainsKey(novi.ime))
+                {
+                    ht.Add(novi.ime, novi);
+                }
+            }
+            Console.WriteLine(&#34;Upisano: &#34; + ht.Count);
+            // ispis
+            foreach (string k in ht.Keys)
+            {
+                Radnik r = (Radnik)ht[k]; // OVO JE VAŽNO!
+                Console.WriteLine($&#34;Ime: {r.ime}, Plaća: {r.placa}&#34;);
+            }
+        }
+    }
+}
+</code></pre>
+<p>Premda ima više načina za pretvorbu, ono što uvijek radi u ovim situacijama je <strong>cast</strong> operator.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Alice - brojanje riječi" duration="0">
+        <p>Napisati konzolsku aplikaciju koja će pročitati tekstualnu datoteku <strong>alice.txt</strong>, prebrojati i ispisati koliko puta se svaka riječ pojavljuje u tekstu. Upute:</p>
+<ul>
+<li>Koristiti dictionary ili hash tablice</li>
+<li>Ispisati koja se riječ najčešće pojavljuje (Rješenje: the se pojavljuje 1643 puta).</li>
+<li>Ispisati koliko puta se pojavljuje riječ <strong>and</strong> (Rješenje: and se pojavljuje 872 puta).</li>
+</ul>
+<p>Važno je pretvoriti sve linije teksta koje pročitate iz datoteke u velika ili mala slova primjenom metode <strong>ToLower()</strong> ili <strong>ToUpper()</strong>.</p>
+<pre><code>string[] rijeci = linija.ToLower().Split();
+</code></pre>
+<p>Nakon što se linija teksta pretvori u mala slova, potrebno je tu liniju rastaviti na riječi. Ako ostavimo kao u gornjem primjeru, metoda <strong>Split()</strong> će rastaviti liniju na riječi koristeći samo razmake (zadana vrijednost). Međutim, znamo da to nije ni približno dovoljno jer ima više drugih znakova koje ne smatramo dijelom riječi. Ako ćemo koristiti englesku abecedu (jer je Alice datoteka pisana na engleskom jeziku), onda ćemo za potrebe ovog zadatka zanemariti sve znakove osim slova.</p>
+<p>Ukupno znamo da imamo ASCII tablicu od 256 znakova. Unicode ima i više, ali kako nemamo nikakve druge posebne znakove, onda nam je ova tablica dovoljna. Napravit ćemo novi niz znakova (char) od 256 elemenata (da, malo je više od potrebnog, ali elementi koji nam ostanu nula će se svakako ignorirati). Iteracijom po tim znakovima provjerit ćemo koji od njih je slovo te sve ostale znakove spremiti u niz separatora.</p>
+<p class="image-container"><img alt="img\\\\cc04e665fbee2f77.png" style="width: 293.40px" src="img\\cc04e665fbee2f77.png"></p>
+<p>U gornjem primjeru, u liniji gdje je naredba <strong>if</strong> opet vidimo <strong>cast</strong> operator. Koristimo ga jer nam je (po navici) iterator (varijabla <strong>a</strong>) tipa <strong>int</strong> pa je moramo pretvoriti u <strong>char</strong>.</p>
+<p>Mogli smo koristiti listu tako da nam ne bude viška elemenata niza, ali u tom slučaju bi morali u nekom trenutku pozvati metodu <strong>ToArray()</strong> jer <strong>Split()</strong> prima niz.</p>
+<aside class="warning"><p><strong>Napomena:</strong> U kolokvijima i ispitima neće biti potrebno tražiti sve moguće separatore.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Rječnik pojmova" duration="0">
+        <p>Napisati aplikaciju koja će učitati podatke iz tekstualne datoteke:</p>
+<ul>
+<li>tipovi_podataka.csv</li>
+<li>Datoteka se sastoji od parova odvojenih točka-zarezom ;</li>
+</ul>
+<p>Podaci:</p>
+<ul>
+<li>Naziv tipa</li>
+<li>Opis tipa</li>
+</ul>
+<p>Potrebno je ispisati sve nazive tipova koji su u datoteci. Zatim korisnik unosi naziv nekog od tipova za koji želi znati dodatne informacije.</p>
+<ul>
+<li>Ako tip postoji, ispisat će se opis, a</li>
+<li>Ako ne postoji, onda će se ispisati poruka &#34;Ne postoji!&#34;</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Rješavanje kolizije *" duration="0">
+        <p>Napraviti program koji će pročitati iz datoteke:</p>
+<ul>
+<li>Ime studenta</li>
+<li>Studijsku grupu (MI, INF, MAT, IT, FI) = 5 grupa</li>
+<li>Godinu studija (1-3)</li>
+</ul>
+<p>Korisnik unosi studijsku grupu i godinu studija, a program ispisuje sve studente za odabrane podatke.</p>
+<p>Ovdje ćemo napraviti vlastitu strukturu podataka koja radi po principu <em>hash</em> tablice s rješavanjem kolizije (postupkom ulančavanja). U ovom slučaju namjerno radimo kolizije kako bi svi podaci koji pripadaju istom ključu bili na istom mjestu.</p>
+<ul>
+<li>Napraviti svoju strukturu podataka koja će imati 15 polja.</li>
+<li>Ključ za svako od tih polja je napravljen na temelju grupe i godine (npr. može se spojiti INF2).</li>
+<li>Dozvoljene su kolizije (više studenata na INF2), koje možete riješiti kako želite.</li>
+</ul>
+<p>(kao što je bilo na predavanjima)</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,483 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>SPA-Vježbe 02: Stog i red</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+<link rel="stylesheet" href="css/prism-coy-all.css">
+<script src="css/prism-coy-all.js"></script>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="SPA_V-02"
+                  title="SPA-Vježbe 02: Stog i red"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Stog i red" duration="0">
+        <p>📌 Definiranje čvora</p>
+<p>📌 Definiranje struktura (klasa) stog i red</p>
+<p>📌 Primjena definiranih struktura za unos podataka</p>
+<p>Strukture podataka razlikuju se po načinu kako su elementi raspoređeni, kako su povezani, na koji način se pristupa pojedinim elementima i sl. Ovdje ćemo se zajedno pokušati prisjetiti načina kako se stvara C# dotnet aplikacija te kako napisati klasu.</p>
+<p>Premda strukture podataka <strong>stog</strong> i <strong>red</strong> postoje u C# bibliotekama, ovdje ćemo implementirati vlastite koje se temelje na osnovnim principima:</p>
+<ul>
+<li><strong>Stog</strong> (eng. stack) funkcionira po principu <strong>Last-In-First-Out</strong> (LIFO)</li>
+<li><strong>Red</strong> (eng. queue) funkcionira po principu <strong>First-In-First-Out</strong> (FIFO</li>
+</ul>
+<p>Pojednostavljeno rečeno, elementi stoga se spremaju tako da se zadnji sprema na vrh (kao da slažemo knjige jednu na drugu). Osnovna ideja je da ne možemo pristupiti bilo kojem elementu već moram uzeti onaj koji je na vrhu.</p>
+<p>Elementi reda spremaju se tako da onaj koji se prvi sprema, također prvi i izlazi iz reda (slično kao kad čekamo red za plaćanje ili ručak u menzi). Nema ubacivanja preko reda!</p>
+<p>Općenito, osnove operacije za strukturu podataka uključuju:</p>
+<ul>
+<li>Dodavanje</li>
+<li>Traženje</li>
+<li>Brisanje</li>
+<li>Umetanje</li>
+</ul>
+<p>Za klase stog i red, zbog gore navedenih pravila, očito nećemo implementirati operacije traženja i umetanja jer nam nisu dozvoljene. Prema tome, implementirat ćemo operacije dodavanja i brisanja u obliku odgovarajućih metoda.</p>
+<p>Kako bi mogli implementirati spomenute klase, spremanje podataka i ponašanje, treba nam neka vrsta objekta koja ima mogućnost spremanja podataka, veza i ponašanja. Podaci su u ovom slučaju varijable, veze će nam biti <em>reference</em>, a ponašanje su metode.</p>
+<p>Definirat ćemo klasu <strong>Cvor</strong>. Nazivamo je <strong>čvor</strong> (eng. node) jer ćemo taj pojam često koristiti u budućim strukturama podataka.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Priprema projekta i pokretanje" duration="0">
+        <p>Ponovimo!!!</p>
+<aside class="warning"><p>📍 Moramo ponoviti kako se stvara novi projekt u C#-u te kako se pokreće!</p>
+</aside>
+<p>Kad radimo novu konzolsku aplikaciju, imamo par koraka:</p>
+<ol type="1">
+<li>Napraviti novu mapu (folder)</li>
+<li>Otvoriti novu mapu u VS Code-u</li>
+<li>Otvoriti terminal u VS Code-u</li>
+<li>Stvoriti novu konzolsku aplikaciju s predloškom (tako da ima main)</li>
+<li>Pokrenuti aplikaciju</li>
+</ol>
+<p>Prva tri koraka su dosta jednostavna te se već s tim snalazite.</p>
+<p>Napravite novu mapu s nazivom <strong>zadatakStog</strong> i otvorite je u VS Code.</p>
+<aside class="warning"><p>📍 Izbjegavamo korištenje naziva datoteka koji se mogu kasnije pojaviti u programu!</p>
+</aside>
+<p>Novu konzolsku aplikaciju stvaramo naredbom: <strong>dotnet new console</strong>. Međutim, to nam nije dovoljno jer želimo predložak koji sadrži metodu <strong>Main</strong> pa stoga pišemo:</p>
+<p><code>Terminal</code></p>
+<pre><code>dotnet new console --use-program-main
+</code></pre>
+<p>Nakon toga, stvara se predložak koji izgleda ovako (ver. 7 ili 8).</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace zadatakStog;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine(&#34;Hello, World!&#34;);
+    }
+}
+</code></pre>
+<p>Primijetimo da se <strong>namespace</strong> zove <em>zadatakStog</em>. Nismo smjeli koristiti naziv <strong>Stog</strong> jer će nam to trebati kasnije za klasu Stog.</p>
+<p>Program pokrećemo naredbom u terminalu:</p>
+<p><code>Terminal</code></p>
+<pre><code>dotnet run
+</code></pre>
+<p>Nakon pokretanja, naš projekt će dobiti mape <strong>bin</strong> i <strong>debug</strong>.</p>
+<p class="image-container"><img alt="img\\\\7b8e3359918861f2.png" style="width: 212.67px" src="img\\7b8e3359918861f2.png"></p>
+<aside class="warning"><p>📍Program nećemo pokretati pomoću tipke <strong>F5</strong> iako je moguće jer nam <strong>dotnet run</strong> daje pregledniji način izvršavanja te ne zahtijeva nikakve dodatne postavke za VS Code.</p>
+</aside>
+<p>Inače, ako želite pokrenuti program pomoću F5, potrebno je odabrati koji kompajler želite koristiti.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Klasa Cvor" duration="0">
+        <p>📌 Izbjegavamo pisanje slova &#34;s kvačicama&#34; kod definiranja naziva metoda, klasa, varijabli i sl.</p>
+<p>Dodajemo novu datoteku u naš projekt koju ćemo nazvati prema klasi koju sadrži: <strong>Cvor.cs</strong>.</p>
+<aside class="special"><p>✅ Svaki naziv datoteke sastoji se od dva glavna dijela:</p>
+<ul>
+<li><strong>Ime</strong> - predstavlja ime koje sami dajemo datoteci,</li>
+<li><strong>Ekstenzija</strong> - predstavlja <strong>dio naziva iza točke</strong> koji označava tip datoteke</li>
+</ul>
+</aside>
+<p>Tip datoteke predstavlja uputu operacijskom sustavu i aplikacijama na računalu o kakvoj datoteci se radi, kako se otvara i sl. Na primjer:</p>
+<ul>
+<li><strong>.cs</strong> - tekstualna datoteka koja sadrži program pisan u C# jeziku</li>
+<li><strong>.txt</strong> - tekstualna datoteka koju možemo otvoriti u bilo kojem uređivaču teksta</li>
+<li><strong>.zip</strong> - komprimirana datoteka koju možemo otvoriti pomoću odgovarajuće aplikacije za komprimiranje ili samog operacijskog sustava (u principu većina operacijskih sustava ima već ugrađenu mogućnost rada sa zip datotekama)</li>
+<li><strong>.rar</strong> - komprimirana datoteka s kojom najčešće može raditi samo WinRar (<strong>ne postoji instalacija za sve operacijske sustave</strong>)</li>
+<li><strong>.7z</strong> - komprimiranja datoteka s kojom najčešće može raditi samo <strong>7-zip</strong>.</li>
+</ul>
+<p>Kad dodamo novu datoteku u projekt, onda je u početku prazna.</p>
+<p class="image-container"><img alt="img\\\\79285c96b29eb4b7.png" style="width: 257.00px" src="img\\79285c96b29eb4b7.png"></p>
+<p>Moramo poznavati strukturu C# programa kako bi je mogli početi pisati. <strong>Imenski prostor</strong> (eng. namespace) se mora poklapati s onim u <strong>Program.cs</strong>.</p>
+<p>Imenski prostor se može pisati na isti način kao i u predlošku ili ga možete pisati u obliku kojeg će vam dati VS Code (code snippet, nakon što počnete tipkati):</p>
+<p class="image-container"><img alt="img\\\\abfe80147d1afec6.png" style="width: 309.00px" src="img\\abfe80147d1afec6.png"></p>
+<p><code>Cvor.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace zadatakStog
+{
+    
+}
+</code></pre>
+<p>Gore je naveden &#34;klasični&#34; način pisanja koji zapravo odgovara strukturi C# programa gdje su klase grupirane u imenske prostore. Način kojeg vidite u <strong>Program.cs</strong> predstavlja skraćeni način koji vrijedi samo u .NET verzijama 7+ te nije podržan u bilo kojem C# okruženju.</p>
+<p>Unutar <em>namespace</em> pišemo klasu:</p>
+<p><code>Cvor.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace zadatakStog
+{
+    class Cvor
+    {
+        
+    }
+}
+</code></pre>
+<p>Neka klasa <strong>Cvor</strong> ima:</p>
+<ul>
+<li>Podatak koji je cijeli broj</li>
+<li>Referencu na sljedeći čvor</li>
+<li>Konstruktor</li>
+</ul>
+<p><code>Cvor.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace zadatakStog
+{
+    class Cvor
+    {
+        // sadržaj čvora
+        public int broj;
+        // referenca na sljedeći čvor
+        public Cvor next;
+        // konstruktor
+        public Cvor(int br)
+        {
+            this.broj = br;
+            this.next = null;
+        }
+    }
+}
+</code></pre>
+<p>Sadržaj čvora je predstavljen običnom varijablom, odnosno <strong>poljem</strong> (eng. field) koje je tipa <strong>int</strong>. Varijabla <strong>next</strong> predstavlja <strong>referencu</strong> na sljedeći čvor.</p>
+<p>😳 Kako znamo da je referenca, a ne vrijednost?</p>
+<p>Konstruktor će inicijalizirati vrijednosti na ono što mi želimo.</p>
+<p>😳 Što bi se dogodilo kad ga ne bi napisali?</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Klasa Stog (1)" duration="0">
+        <p>📌 Definiramo klasu, podatke i metode koje sadrži</p>
+<p>📌 Stog mora imati referencu na vrh</p>
+<p>📌 Operacije dodavanja na stog i uklanjanja sa stoga</p>
+<h2 is-upgraded>Polja</h2>
+<p>Treba nam jedno polje (varijabla) tipa Cvor. Opet ćemo napisati novu <strong>.cs</strong> datoteku s nazivom: <strong>Stog.cs</strong>.</p>
+<aside class="special"><p>✅ Dobro je razdvojiti dijelove programa koji imaju posebne funkcionalnosti u posebne datoteke kako bi ih lakše mogli koristiti kasnije.</p>
+</aside>
+<p>Klasa <strong>Cvor</strong> će nam trebati kasnije za red.</p>
+<p><code>Stog.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace zadatakStog
+{
+    class Stog
+    {
+        public Cvor vrh;
+    }
+}
+</code></pre>
+<p>Vrh stoga čak ne mora biti <strong>public</strong>, ali ćemo ga za sad ostaviti.</p>
+<h2 is-upgraded><strong>Metode</strong></h2>
+<p>Metode za dodavanje i uklanjanje elemenata kod strukture stoga imaju svoje uobičajene nazive:</p>
+<ul>
+<li><strong>Push()</strong> - dodavanje</li>
+<li><strong>Pop()</strong> - uklanjanje</li>
+</ul>
+<p>Preostaje odrediti što metode primaju ili vraćaju:</p>
+<ul>
+<li>Neka metoda Push() <strong>prima cijeli broj</strong>, a ne vraća ništa.</li>
+<li>Neka metoda Pop() ne prima ništa, a <strong>vraća čvor</strong> koji je izbačen sa stoga.</li>
+</ul>
+<p>Trenutno stanje:</p>
+<p><code>Stog.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace zadatakStog
+{
+    class Stog
+    {
+        public Cvor vrh;
+
+        public void Push(int br)
+        {
+
+        }
+
+        public Cvor Pop()
+        {
+            // ovo pišemo jer nismo implementirali metodu
+            return null;
+        }
+    }
+}
+</code></pre>
+<aside class="warning"><p>📍 Nismo definirali konstruktor za <strong>Stog</strong> tako da će vrijednost varijable <strong>vrh</strong> biti <strong>null</strong>.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Kako radi stog?" duration="0">
+        <h2 is-upgraded><strong>Dodavanje - ideja</strong></h2>
+<p>Dodavanje na stog možemo podijeliti u dvije faze:</p>
+<ul>
+<li>Dodavanje ako je stog prazan</li>
+<li>Dodavanje ako nije prazan</li>
+</ul>
+<h3 is-upgraded><strong>Dodavanje ako je stog prazan</strong></h3>
+<p>U početku varijabla <strong>vrh</strong> nema referencu (jer je null). Kako ne bi pomiješali varijable i null, vrijednost null ćemo zamijeniti simbolom praznog kruga na slici:</p>
+<p class="image-container"><img alt="img\\\\620fe175f9757e14.png" style="width: 123.00px" src="img\\620fe175f9757e14.png"></p>
+<p>Čvor će nam biti predstavljen pravokutnikom. Unutar pravokutnika će pisati vrijednost, a strelica predstavlja referencu.</p>
+<p>Metoda <strong>Push()</strong> prima cijeli broj, a to znači da mora stvoriti novi čvor te spremiti referencu na njega. Dodajmo broj 3.</p>
+<p class="image-container"><img alt="img\\\\df6295024334967c.png" style="width: 314.00px" src="img\\df6295024334967c.png"></p>
+<p>Na slici vidimo varijable:</p>
+<ul>
+<li><strong>vrh</strong> koja ne pokazuje nigdje (ima vrijednost null)</li>
+<li><strong>novi</strong> koja sadrži referencu na čvor u kojeg smo spremili cijeli broj 3 i opet referencu na null</li>
+</ul>
+<p>Obzirom da je stog bio prazan, dovoljno je spremiti referencu na novi čvor u <strong>vrh</strong>:</p>
+<p class="image-container"><img alt="img\\\\bf5987d5808cae81.png" style="width: 314.00px" src="img\\bf5987d5808cae81.png"></p>
+<p>Više nam varijabla novi ne treba pa je konačno stanje stoga:</p>
+<p class="image-container"><img alt="img\\\\29810c5d4211573e.png" style="width: 314.00px" src="img\\29810c5d4211573e.png"></p>
+<h3 is-upgraded><strong>Dodavanje ako stog nije prazan</strong></h3>
+<p>Sad stog više nije prazan pa moramo dodati novi čvor, neka je to broj 5.</p>
+<p class="image-container"><img alt="img\\\\39612a4d3afc55d7.png" style="width: 490.00px" src="img\\39612a4d3afc55d7.png"></p>
+<p>Novog moramo dodati na vrh, ali ovdje moramo paziti na redoslijed:</p>
+<ul>
+<li>Najprije moramo <em>zakačiti</em> referencu od 5 na 3</li>
+<li>Zatim moramo premjestiti vrh</li>
+</ul>
+<p class="image-container"><img alt="img\\\\a5e0f1b4d73d7b12.png" style="width: 624.00px" src="img\\a5e0f1b4d73d7b12.png"></p>
+<p>Novo stanje:</p>
+<p class="image-container"><img alt="img\\\\be7153967c4889ac.png" style="width: 466.50px" src="img\\be7153967c4889ac.png"></p>
+<h2 is-upgraded><strong>Izbacivanje čvora s vrha</strong></h2>
+<p>Čvor izbacujemo s vrha jednostavno pomicanjem vrha na sljedeći element. Pogledajmo sliku prije izbacivanja:</p>
+<p class="image-container"><img alt="img\\\\2bbfbd3aeba266ea.png" style="width: 527.50px" src="img\\2bbfbd3aeba266ea.png"></p>
+<p>Nakon izbacivanja:</p>
+<p class="image-container"><img alt="img\\\\955309c63ea230a5.png" style="width: 477.50px" src="img\\955309c63ea230a5.png"></p>
+<p>Svi čvorovi na koje ne &#34;pokazuje&#34; niti jedna varijabla će se pobrisati iz radne memorije.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Metoda Push()" duration="0">
+        <p>Pratit ćemo korake sa slika te najprije provjeriti je li stog prazan. Ako to prevedemo u C#, to znači sljedeće:</p>
+<p><code>Stog.cs</code></p>
+<pre><code language="language-cs" class="language-cs">public void Push(int br)
+{
+    // metoda prima broj, treba nam objekt
+    Cvor novi = new Cvor(br);
+    // provjerimo stanje stoga:
+    if(this.vrh == null)
+    {
+        // stog je prazan
+    }
+    else
+    {
+        // stog nije prazan
+    }
+}
+</code></pre>
+<p>Prevedimo sliku u C#:</p>
+<p class="image-container"><img alt="img\\\\bf5987d5808cae81.png" style="width: 314.00px" src="img\\bf5987d5808cae81.png"></p>
+<pre><code>this.vrh = novi;
+</code></pre>
+<p>Ako nije prazan, onda imamo dva koraka (a i b sa slike):</p>
+<p class="image-container"><img alt="img\\\\a5e0f1b4d73d7b12.png" style="width: 624.00px" src="img\\a5e0f1b4d73d7b12.png"></p>
+<pre><code>novi.next = this.vrh;
+this.vrh = novi;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Metoda Pop()" duration="0">
+        <p>Metoda Pop() je nešto jednostavnija. Ako je stog prazan, ne moramo ništa raditi već vraća null, a ako nije, mora pomaknuti referencu vrh na sljedeći.</p>
+<p><code>Stog.cs</code></p>
+<pre><code language="language-cs" class="language-cs">public Cvor Pop()
+{
+    Cvor temp = this.vrh;
+    if (this.vrh != null)
+    {
+        this.vrh = this.vrh.next;
+    }
+
+    return temp;
+}
+</code></pre>
+<p>Privremena varijabla <strong>temp</strong> nam treba kako bi mogli vratiti čvor kojeg smo izbacili. Ako je stog bio prazan, onda će vrh biti null, a temp također te će metoda vratiti null.</p>
+<p class="image-container"><img alt="img\\\\4c9ab9abd20dbff4.png" style="width: 504.50px" src="img\\4c9ab9abd20dbff4.png"></p>
+<p>Nakon što se izvrši metoda <strong>Pop()</strong>, lokalna varijabla <strong>temp</strong> će se izbrisati, ali naredbom <strong>return</strong> vraćamo čvor u metodu koja je pozvala Pop().</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Klasa Stog (2)" duration="0">
+        <p>Pogledajmo konačno rješenje:</p>
+<p><code>Stog.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace zadatakStog
+{
+    class Stog
+    {
+        public Cvor vrh;
+
+        public void Push(int br)
+        {
+            // metoda prima broj, treba nam objekt
+            Cvor novi = new Cvor(br);
+            // provjerimo stanje stoga:
+            if (this.vrh == null)
+            {
+                // stog je prazan
+                this.vrh = novi;
+            }
+            else
+            {
+                // stog nije prazan
+                novi.next = this.vrh;
+                this.vrh = novi;
+            }
+        }
+
+        public Cvor Pop()
+        {
+            Cvor temp = this.vrh;
+            if (this.vrh != null)
+            {
+                this.vrh = this.vrh.next;
+            }
+
+            return temp;
+        }
+    }
+}
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Primjena klase Stog" duration="0">
+        <p>Naravno, moramo primijeniti klasu u glavnom programu:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace zadatakStog;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // dodavanje
+        Stog s = new Stog();
+        s.Push(3);
+        s.Push(5);
+        s.Push(6);
+
+        // izbacivanje
+        while (s.vrh != null)
+        {
+            Cvor t = s.Pop();
+            Console.WriteLine(&#34;Izbacujem: &#34; + t.broj);
+        }
+    }
+}
+</code></pre>
+<p>Ispis:</p>
+<p><code>Terminal</code></p>
+<pre><code>Izbacujem: 6
+Izbacujem: 5
+Izbacujem: 3
+</code></pre>
+<p><strong>Zadatak 1:</strong> Promijenite program tako da korisnik može unositi brojeve sve dok ne unese 0.</p>
+<p><strong>Zadatak 2:</strong> Promijenite program tako da korisnik može unositi brojeve sve dok ne unese prazan string.</p>
+<p><strong>Zadatak 3:</strong> Napravite metodu <strong>Peek()</strong> koja će vraćati vrh. U tom slučaju, morate postaviti vrh da bude privatan.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Red" duration="0">
+        <p>Za red ćemo također koristiti klasu <strong>Cvor</strong> jer je čvor isti. Razlika je u načinu implementacije dodavanja - jer se novi čvor dodaje na kraj. Skicirajmo opet cijeli postupak.</p>
+<h3 is-upgraded><strong>Dodavanje ako je red prazan</strong></h3>
+<p>Ako je red prazan, onda je način dodavanja isti.</p>
+<p class="image-container"><img alt="img\\\\22b08bbe796b8385.png" style="width: 435.50px" src="img\\22b08bbe796b8385.png"></p>
+<p>Varijablu <strong>pocetak</strong> postavljamo na <strong>novi</strong>.</p>
+<p class="image-container"><img alt="img\\\\f5d0f4dcfe09e2ee.png" style="width: 273.50px" src="img\\f5d0f4dcfe09e2ee.png"></p>
+<h3 is-upgraded><strong>Dodavanje ako red nije prazan</strong></h3>
+<p>Neka red izgleda ovako:</p>
+<p class="image-container"><img alt="img\\\\768c89e2d4ddcc57.png" style="width: 516.50px" src="img\\768c89e2d4ddcc57.png"></p>
+<p>Dodajmo čvor 4. Moramo ga dodati na kraj, ali <strong>pocetak ne smijemo pomicati!</strong> Da bi to napravili, moramo dodati pomoćnu varijablu koja može &#34;šetati&#34; po redu.</p>
+<p class="image-container"><img alt="img\\\\a8b3d7a8efd7840a.png" style="width: 535.50px" src="img\\a8b3d7a8efd7840a.png"></p>
+<p>Temp ćemo pomicati sve dok ne dođe do zadnjeg elementa kao na slici:</p>
+<p class="image-container"><img alt="img\\\\d23e6cae33700562.png" style="width: 529.50px" src="img\\d23e6cae33700562.png"></p>
+<p>Pazite kako ćete ga prepoznati kad budete pisali program.</p>
+<p>Postupak izbacivanja iz reda je isti kao za stog.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Klasa Red" duration="0">
+        <p>Opet napravite sljedeće:</p>
+<ul>
+<li>Novu mapu s odgovarajućim nazivom</li>
+<li>Novi projekt s metodom <strong>Main()</strong></li>
+<li>Kopirajte gotovu <strong>Cvor.cs</strong> datoteku (pazite na <strong>namespace</strong>)</li>
+</ul>
+<p>Klasa red ima također jednu varijablu koju sad možemo nazvati <strong>pocetak</strong> kako bi je razlikovali od stoga.</p>
+<p>Metode za dodavanje i uklanjanje elemenata kod strukture redaimaju svoje uobičajene nazive:</p>
+<ul>
+<li><strong>Enqueue()</strong> - dodavanje</li>
+<li><strong>Dequeue()</strong> - uklanjanje</li>
+</ul>
+<p>Preostaje odrediti što metode primaju ili vraćaju:</p>
+<ul>
+<li>Neka metoda Enqueue() <strong>prima cijeli broj</strong>, a ne vraća ništa.</li>
+<li>Neka metoda Dequeue() ne prima ništa, a <strong>vraća čvor</strong> koji je izbačen iz reda.</li>
+</ul>
+<p><strong>Zadatak:</strong> Napišite program koji radi s klasom Red prema gore navedenim uputama.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Zadaci za vježbu/domaći" duration="0">
+        <h3 is-upgraded><strong>Zadatak 1. - Palindrom</strong></h3>
+<p>Napisati C# program koji provjerava je li uneseni string <strong>palindom</strong>.</p>
+<p>Korisnik u glavnom programu unosi riječ, program ispisuje je li palindrom ili ne.</p>
+<p>Primjer:</p>
+<pre><code>ulaz: oko
+izlaz: DA
+
+ulaz: ratar
+izlaz: DA
+
+ulaz: pero
+izlaz: NE
+</code></pre>
+<h3 is-upgraded><strong>Zadatak 2. - Obrni rečenicu</strong></h3>
+<p>Napiši program koji će obrnuti riječi u rečenici. Na primjer, &#34;Pozdrav, svima! &#34; će postati &#34;svima! Pozdrav, &#34;. Riječi su odvojene razmacima.</p>
+<pre><code>ulaz: pozdrav, svijetu!
+svijetu! pozdrav, 
+</code></pre>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

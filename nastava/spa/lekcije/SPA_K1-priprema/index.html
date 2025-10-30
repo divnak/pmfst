@@ -1,0 +1,542 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Ponavljanje za K1</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+<link rel="stylesheet" href="css/prism-coy-all.css">
+<script src="css/prism-coy-all.js"></script>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="SPA_K1-priprema"
+                  title="Ponavljanje za K1"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Uvod" duration="0">
+        <p>📌 Primjer kolokvija iz prethodnih godina</p>
+<h2 is-upgraded><strong>Opis</strong></h2>
+<ul>
+<li>Dobit ćete predložak konzolske aplikacije koji će sadržavati izbornik i kratke upute gdje se što piše.</li>
+<li>U predložak će biti uključena i tekstualna datoteka s podacima.</li>
+</ul>
+<h2 is-upgraded><strong>Sadržaj kolokvija</strong></h2>
+<h3 is-upgraded><strong>Strukture podataka</strong></h3>
+<p>Prvi kolokvij sastoji se od linearnih struktura koje smo radili u prvom dijelu semestra:</p>
+<ul>
+<li>LinkedList&lt;&gt;</li>
+<li>Dictionary&lt;&gt;</li>
+<li>Hashtable</li>
+</ul>
+<p>Strukture stoga i reda nisu uključene jer će biti uključene kasnije (kao dio algoritma pretrage grafova). Vezana lista nema ključeve, a ostale dvije strukture imaju. Hashtable nema fiksne tipove vrijednosti (sve je <em>object</em>) dok ostale dvije imaju tipove definirane kod deklaracije.</p>
+<h3 is-upgraded><strong>Zadaci</strong></h3>
+<p>Kolokvij se sastoji od 5 zadataka, okvirno:</p>
+<ol type="1">
+<li>Učitavanje i ispis podataka u neku od navedenih gotovih struktura, upravljanje duplikatima (ako je podržano).</li>
+<li>Brisanje podataka iz strukture pod određenim uvjetom.</li>
+<li><em>Nadogradnja</em> klase - dodavanje metoda u postojeću klasu pomoću <em>nasljeđivanja</em>.</li>
+<li>Implementacija vlastite strukture (klase) hash-tablice s kolizijom. Rješavanje kolizije metodom ulančavanja ili bucket.</li>
+<li>Prepoznavanje i primjena odgovarajuće strukture podataka na zadani problem.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📖 Predlošci" duration="0">
+        <h2 is-upgraded><strong>Predložak izbornika</strong></h2>
+<p>Za vježbu napravite novi projekt i kopirajte odgovarajući kôd u <strong>Program.cs</strong>. Pazite na namespace!</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System.Collections;
+
+// pazite na namespace!
+namespace SPA_K1_priprema_B;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // globalne varijable
+
+        string izbor;
+        do
+        {
+            Console.WriteLine(&#34;\nIZBORNIK:\n1. Učitavanje podataka\n2a. Ispis\n2b. Brisanje\n3. Traži\n4. Razvrstaj\n5. Zbrajanje\n0. Kraj rada&#34;);
+            izbor = Console.ReadLine();
+
+            switch (izbor)
+            {
+                case &#34;1&#34;:
+                    Console.WriteLine(&#34;Unos&#34;);
+                    break;
+                case &#34;2a&#34;:
+                    Console.WriteLine(&#34;Ispis&#34;);
+                    break;
+                case &#34;2b&#34;:
+                    Console.WriteLine(&#34;Brisanje&#34;);
+                    break;
+                case &#34;3&#34;:
+                    Console.WriteLine(&#34;Traženje&#34;);
+                    Console.Write(&#34;Unesi iznos: &#34;);
+                    break;
+                case &#34;4&#34;:
+                    Console.WriteLine(&#34;Razvrstaj&#34;);
+                    break;
+                case &#34;5&#34;:
+                    Console.WriteLine(&#34;Zbrajanje&#34;);
+                    break;
+                case &#34;0&#34;:
+                    Console.WriteLine(&#34;Kraj&#34;);
+                    break;
+                default:
+                    Console.WriteLine(&#34;Greška!&#34;);
+                    break;
+            }
+        } while (izbor != &#34;0&#34;);
+
+    }
+
+}
+</code></pre>
+<h2 is-upgraded><strong>Primjer podataka</strong></h2>
+<p>Dodajte tekstualnu datoteku sa sljedećim testnim podacima:</p>
+<p><code>podaci.txt</code></p>
+<pre><code>Roxanne Cliett;68;5946,74
+Dominique Mulvaney;49;8756,48
+Letitia Letchworth;10;1595,74
+Alex Brass;55;4099,07
+Joycelyn Woolwine;70;8748,58
+Letitia Letchworth2;10;1595,74
+Laree Cavins;13;3586,83
+Anna Alday;23;6413,08
+Tommy Click;57;2292,24
+Quinton Clever;32;7934,07
+Albert Jetter;48;3721,3
+Tommy Click2;57;2292,24
+Letitia Letchworth3;10;1595,74
+</code></pre>
+<aside class="warning"><p><strong>Napomena:</strong> Ako vježbate na računalu gdje su regionalne postavke drugačije (npr. US gdje se za decimale koristi <strong>točka</strong>, a ne <strong>zarez</strong>, onda prilagodite podatke. Na računalima u učionici se koristi zarez za <strong>double</strong>.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak 1: Unos" duration="10">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Pročitati iz datoteke sve podatke o gostima hostela. Svaki <strong>gost</strong> ima:</p>
+<ul>
+<li>ime (ne treba razdvajati, npr. „Roxanne Cliett&#34; se može spremiti u ime),</li>
+<li>broj sobe,</li>
+<li>iznos računa.</li>
+</ul>
+<p>Broj sobe mora biti <strong>jedinstven</strong>, a tijekom rezervacije su se dogodile pogreške. Prednost će u toj situaciji imati gosti koji su <strong>prvi rezervirali</strong>.</p>
+<p>Učitati podatke u strukturu Hashtable i ispisati tko je sve ostao bez rezervacije (ispisati ime i broj sobe) te koliko je gostiju uspješno upisano.</p>
+<p>Neka korisnik unosi naziv datoteke.</p>
+<h2 is-upgraded><strong>Prijedlog rješenja</strong></h2>
+<p>Obzirom na navedene podatke, potrebno je definirati klasu <strong>Gost</strong>. Možete pisati jedan ili više konstruktora (ili ne).</p>
+<p><code>Gost.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace pomocna
+{
+    class Gost
+    {
+        //Roxanne Cliett;68;5946,74
+        public string ime;
+        public int brojSobe;
+        public double racun;
+
+        // 4.
+        public Gost next;
+        public Gost(string imep, int brojSobep, double racunp)
+        {
+            this.ime = imep;
+            this.brojSobe = brojSobep;
+            this.racun = racunp;
+        }
+        public Gost()
+        {}
+    }
+}
+</code></pre>
+<p>Gore se koristi <strong>namespace</strong> pod nazivom <strong>pomocna</strong>, što se ne poklapa s imenskim prostorom u <strong>Program.cs</strong>. Ne morate tako raditi, možete jednostavno kopirati isti namespace.</p>
+<h3 is-upgraded><strong>Glavni dio</strong></h3>
+<p>U ovom primjeru, rješeno je tako da je napisana posebna metoda <strong>Unos()</strong>, premda se to nije tražilo u zadatku pa prema tome <strong>nije bilo obavezno</strong>. Napisano je tako samo zbog preglednosti.</p>
+<aside class="special"><p>✅ Nakon unosa, nije loše provjeriti u glavnom programu broj upisanih elemenata (čak i ako ne piše u zadatku) kako nam se ne bi potkrala pogreška da struktura ostane zapravo prazna.</p>
+</aside>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">case &#34;1&#34;:
+    Console.WriteLine(&#34;Unos&#34;);
+    Unos(ht);
+    // obavezno ispisati nakon unosa, za provjeru!
+    Console.WriteLine(&#34;Upisano: &#34; + ht.Count);
+    break;
+</code></pre>
+<p>Ne zaboravite deklarirati varijablu tipa <strong>Hashtable</strong> u glavnom dijelu programa (negdje van izbornika):</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">// globalne varijable
+Hashtable ht = new Hashtable();
+</code></pre>
+<p>Metoda za unos:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">private static void Unos(Hashtable ht)
+{
+    // za čišćenje postojećih elemenata preporuka je napraviti Clear()
+    ht.Clear();
+    Console.Write(&#34;Unesite ime datoteke: &#34;);
+    string imeDat = Console.ReadLine();
+    if (!File.Exists(imeDat))
+    {
+        Console.WriteLine(&#34;Datoteka ne postoji!&#34;);
+        return;
+    }
+    using (StreamReader sr = new StreamReader(imeDat))
+    {
+        string linija;
+        while ((linija = sr.ReadLine()) != null)
+        {
+            //Roxanne Cliett;68;5946,74
+            string[] s = linija.Split(&#39;;&#39;);
+            Gost novi = new Gost();
+            novi.ime = s[0];
+            novi.brojSobe = int.Parse(s[1]);
+            novi.racun = double.Parse(s[2]);
+
+            if (ht.ContainsKey(novi.brojSobe))
+            {
+                Console.WriteLine($&#34;Dupli: {novi.ime} / {novi.brojSobe}&#34;);
+            }
+            else
+            {
+                ht.Add(novi.brojSobe, novi);
+            }
+        }
+    }
+
+}
+</code></pre>
+<p>Ovdje treba malo pripaziti! Naime, ako na početku metode za unos instancirate novi objekt tipa <strong>Hashtable</strong>, a već ste poslali <strong>referencu</strong> kao parametar, onda će se uništiti postojeća referenca te se podaci <strong>neće spremiti</strong> u glavnu varijablu <strong>ht</strong>.</p>
+<p>Zato nam je dobra kontrola - ispis broja elemenata. Rješenje je kao gore, koristiti <strong>Clear()</strong> na istoj referenci (objektu) ili proslijediti ht pomoću ključne riječi <strong>ref</strong>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak 2: Ispis &#43; brisanje" duration="10">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p><strong>a) Ispis</strong></p>
+<p>Ispisati sve podatke iz <strong>Hashtable</strong> strukture na konzolu.</p>
+<p><strong>b) Brisanje</strong></p>
+<p>Korisnik unosi veliko početno slovo imena. Ako postoje gosti s tim početnim slovom, izbrisati ih. Ispisati koliko je gostiju izbrisano.</p>
+<p>Provjeriti ponovnim pozivanjem ispisa jesu li izbrisani!</p>
+<h2 is-upgraded><strong>Prijedlog rješenja</strong></h2>
+<h3 is-upgraded><strong>Ispis</strong></h3>
+<p>Za ispis opet možemo (i ne moramo) koristiti metodu. Primjer:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">private static void Ispis(Hashtable ht)
+{
+    foreach (int kljuc in ht.Keys)
+    {
+        Gost g = (Gost)ht[kljuc];
+        Console.WriteLine($&#34;{g.ime} {g.brojSobe} {g.racun} eur&#34;);
+    }
+}
+</code></pre>
+<p>Metoda je opet <strong>statička</strong>, kao što je to i <strong>Main</strong>. Šaljemo joj objekt tipa <strong>Hashtable</strong> te pomoću <strong>foreach</strong> petlje ispisujemo sadržaj.</p>
+<aside class="special"><p>✅ Sve što se nalazi u <strong>Hashtable</strong> je tipa <strong>object</strong> pa moramo raditi pretvorbu pomoću <strong>cast</strong> operatora.</p>
+</aside>
+<h3 is-upgraded><strong>Brisanje</strong></h3>
+<p>Za brisanje je potrebno upisati što želimo brisati te brisanje provodimo u dvije faze:</p>
+<ul>
+<li>Prikupljanje ključeva po kriteriju iz zadatka (jer hashtable ima ključeve i briše po njima)</li>
+<li>Brisanje po prikupljenim ključevima</li>
+</ul>
+<p>Opet je napisana metoda (iako se nije tražila).</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">private static void Brisanje(Hashtable ht)
+{
+    Console.Write(&#34;Upišite veliko slovo: &#34;);
+    // može biti greška, kad?
+    char slovo = char.Parse(Console.ReadLine());
+    List&lt;int&gt; brisi = new List&lt;int&gt;();
+    foreach (int kljuc in ht.Keys)
+    {
+        Gost g = (Gost)ht[kljuc];
+        if (g.ime[0] == slovo)
+            brisi.Add(g.brojSobe);
+    }
+    foreach (int br in brisi)
+    {
+        ht.Remove(br);
+    }
+    Console.WriteLine(&#34;Pobrisano: &#34; + brisi.Count);
+}
+</code></pre>
+<p>Pogledajmo u glavnom dijelu za oba problema iz ove točke:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">case &#34;2a&#34;:
+    Console.WriteLine(&#34;Ispis&#34;);
+    Ispis(ht);
+    break;
+case &#34;2b&#34;:
+    Console.WriteLine(&#34;Brisanje&#34;);
+    Brisanje(ht);
+    break;
+</code></pre>
+<p>U gornjem pristupu pitamo korisnika što želi brisati unutar same metode (kako bi glavni dio programa bio još pregledniji).</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak 3: Nadogradnja" duration="10">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p><strong>Nadograditi</strong> klasu iz prethodnih točaka (misli se na <strong>Hashtable</strong>) tako da joj dodate metodu:</p>
+<ul>
+<li><strong>TraziGoste()</strong> koja <strong>prima broj</strong>, a <strong>vraća popis gostiju</strong> koji imaju iznos računa manji od unesenog.</li>
+<li>Korisnik unosi iznos u glavnom programu, na konzolu se ispisuje ukupan broj pronađenih, imena i iznos za svakoga.</li>
+</ul>
+<h2 is-upgraded><strong>Prijedlog rješenja</strong></h2>
+<aside class="warning"><p><strong>Važno!</strong> Ovdje morate shvatiti da metoda <strong>mora biti nadograđena</strong> (koristi se nasljeđivanje) te se <strong>neće priznati</strong> statička metoda napisana na isti način kao gornje metode za ispis i brisanje.</p>
+</aside>
+<p>Dakle, pišemo <strong>novu klasu!</strong> Nazovimo je <strong>MojaHT</strong>.</p>
+<p><code>MojaHT.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System.Collections;
+
+namespace pomocna
+{
+    class MojaHT : Hashtable
+    {
+    }
+}
+</code></pre>
+<p>Dvotočka iza naziva <strong>MojaHT</strong> znači da ta klasa nasljeđuje <strong>sve</strong> što <strong>Hashtable</strong> ima te samo dodajemo novu metodu.</p>
+<p>Već nakon ovog možemo zamijeniti našu deklaraciju:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">// globalne varijable
+MojaHT ht = new MojaHT();
+</code></pre>
+<p>Rješenje:</p>
+<p><code>MojaHT.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System.Collections;
+
+namespace pomocna
+{
+    class MojaHT : Hashtable
+    {
+        public List&lt;Gost&gt; TraziGoste(double iznos)
+        {
+            List&lt;Gost&gt; tr = new List&lt;Gost&gt;();
+
+            foreach (int kljuc in this.Keys)
+            {
+                Gost g = (Gost)this[kljuc];
+                if (g.racun &lt; iznos)
+                {
+                    tr.Add(g);
+                }
+            }
+
+            return tr;
+        }
+    }
+}
+</code></pre>
+<aside class="warning"><p><strong>Važno!</strong> Uočite gdje se koristi ključna riječ <strong>this</strong>. Ponovite čemu ona služi!</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak 4: Hashtable s kolizijom" duration="10">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Napravite <strong>strukturu podataka</strong> (posebnu klasu) po principu <strong>hashtablice s kolizijom</strong> koja će razvrstavati goste po duljini imena.</p>
+<ul>
+<li>Klasa mora imati hash funkciju koja se koristi za razvrstavanje po duljini imena.</li>
+<li>Maksimalni broj džepova (kategorija) je 11.</li>
+<li>Ispisati podatke iz te strukture ih tako da se ispiše broj džepa, te ispod svakog broja imena koja su tu spremljena.</li>
+</ul>
+<h2 is-upgraded><strong>Prijedlog rješenja</strong></h2>
+<p>Ovdje je potrebno napisati cijelu novu klasu, nazovimo je <strong>PosebnaHT</strong> koja radi po pravilima.</p>
+<p><code>PosebnaHT.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace pomocna
+{
+    class PosebnaHT
+    {
+        private Gost[] popis;
+        public PosebnaHT()
+        {
+            popis = new Gost[11];
+        }
+
+        public void Dodaj(Gost novi)
+        {
+            
+        }
+
+        public string Ispis()
+        {
+            string s = &#34;&#34;;
+
+            return s;
+        }
+
+    }
+}
+</code></pre>
+<p>Klasa ima <strong>public</strong> metode za dodavanje i ispis te polje <strong>popis</strong> koje je niz. Niz će imati 11 elemenata prema uputama u zadatku.</p>
+<h3 is-upgraded><strong>Hash metoda</strong></h3>
+<p>Klasa ima hash metodu (funkciju) koja računa poziciju:</p>
+<p><code>PosebnaHT.cs</code></p>
+<pre><code language="language-cs" class="language-cs">private int Hash(Gost g)
+{
+    int poz = g.ime.Length % 11;
+    return poz;
+}
+</code></pre>
+<p>Može biti <strong>private</strong> jer nije potrebna van klase, ali ništa se neće dogoditi i ako ostane <strong>public</strong>.</p>
+<h3 is-upgraded><strong>Metoda za dodavanje elemenata</strong></h3>
+<p>Metoda <strong>Dodaj()</strong> prima gosta te na temelju podataka računa poziciju (prema uputama iz zadatka). Instanciranjem niza <strong>popis</strong>, zadane vrijednosti svih elemenata niza su <strong>null</strong>. Ako je element null, onda znači da tu nismo još ništa dodali te ćemo spremiti novi element.</p>
+<p>Ako nije null, onda se dogodila <strong>kolizija</strong> koju ćemo u ovom primjeru riješiti na način s <strong>ulančavanjem</strong> tako da:</p>
+<ul>
+<li>Dodamo novo polje <strong>next</strong> u klasu <strong>Gost</strong>,</li>
+<li>Zatim &#34;zakačimo&#34; novi element (koji je došao u koliziju) na kraj (kao što smo to radili kod redova i naših vezanih listi na ranijim vježbama).</li>
+</ul>
+<p><code>PosebnaHT.cs</code></p>
+<pre><code language="language-cs" class="language-cs">public void Dodaj(Gost novi)
+{
+    int i = Hash(novi);
+    if (popis[i] == null)
+    {
+        popis[i] = novi;
+    }
+    else
+    {
+        Gost temp = popis[i];
+        while (temp.next != null)
+            temp = temp.next;
+        temp.next = novi;
+    }
+}
+</code></pre>
+<p>Ispis u ovom slučaju pišemo kako smo navikli na vježbama, bez spominjanja konzole već spremanjem u string kako naša klasa ne bi ovisila o sučelju u kojem radimo aplikaciju (nije nužno za kolokvij!):</p>
+<p><code>PosebnaHT.cs</code></p>
+<pre><code language="language-cs" class="language-cs">public string Ispis()
+{
+    string s = &#34;&#34;;
+
+    for (int i = 0; i &lt; popis.Length; i++)
+    {
+        s += &#34;Duljina: &#34; + i + &#34;\n&#34;;
+        Gost temp = popis[i];
+        while (temp != null)
+        {
+            s += &#34; &#34; + temp.ime + &#34;\n&#34;;
+            temp = temp.next;
+        }
+    }
+
+    return s;
+}
+</code></pre>
+<p>Ovdje umjesto ovog pristupa jednostruke vezane liste možete koristiti niz listi ili niz redova ili...</p>
+<p>U glavnom dijelu programa pišemo:</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">case &#34;4&#34;:
+    Console.WriteLine(&#34;Razvrstaj&#34;);
+    PosebnaHT pht = new PosebnaHT();
+    // prošetamo se po postojećoj ht
+    foreach (int k in ht.Keys)
+    {
+        // dodajemo u novu
+        pht.Dodaj((Gost)ht[k]);
+    }
+    Console.WriteLine(pht.Ispis());
+    break;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak 5: Primjena" duration="10">
+        <h2 is-upgraded><strong>Opis zadatka</strong></h2>
+<p>Za svako početno slovo imena gosta koje postoji u hashtable strukturi ispisati koliko je ukupno potrošeno (sve račune).</p>
+<ul>
+<li>Za rješenje iskoristite bilo koju od struktura podataka koju smo radili na SPA.</li>
+<li>Neka se slova koja postoje u datoteci ispisuju poredana po abecedi.</li>
+</ul>
+<h2 is-upgraded><strong>Prijedlog rješenja</strong></h2>
+<p>Ovdje moramo prepoznati sljedeće:</p>
+<ul>
+<li>Traži se brojanje po stvarima za koje ne znamo koliko ih ima, ne može biti niz niti lista ⇒ Dictionary.</li>
+<li>Nećemo koristiti <strong>Hashtable</strong> jer želimo izbjeći stalnu pretvorbu tipova.</li>
+<li>Traži se nešto sortirano ⇒ klasa koja je sortirana, a to je <strong>SortedDictionary&lt;&gt;</strong> koji također ima tipove jer znamo da se Dictionary <strong>ne može sortirati</strong>.</li>
+<li>Možemo i ne moramo raditi posebnu metodu (ovdje nismo, ali je glavni <strong>case</strong> malo nepregledan).</li>
+</ul>
+<p>Koristimo parove:</p>
+<ul>
+<li>Ključ je slovo</li>
+<li>Vrijednost je <strong>double</strong> tj. ukupan zbroj vrijednosti koje pripadaju tom slovu.</li>
+</ul>
+<p>Kad prvi put naiđemo na neko slovo, samo spremimo par (slovo i iznos). Svaki sljedeći put, dodajemo novi iznos računa na postojeće stanje.</p>
+<p>Na kraju, napravimo iteraciju po dodanim slovima i ispišemo vrijednosti.</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">case &#34;5&#34;:
+    Console.WriteLine(&#34;Zbrajanje&#34;);
+    SortedDictionary&lt;char, double&gt; z = new SortedDictionary&lt;char, double&gt;();
+    foreach (int kljuc in ht.Keys)
+    {
+        Gost g = (Gost)ht[kljuc];
+        char slovo = g.ime[0];
+        if (z.ContainsKey(slovo))
+        {
+            // dodaj na postojeće
+            z[slovo] += g.racun;
+        }
+        else
+        {
+            // prvi put
+            z.Add(slovo, g.racun);
+        }
+    }
+
+    foreach (char k in z.Keys)
+    {
+        Console.WriteLine($&#34;{k}: {z[k]} eur&#34;);
+    }
+
+    break;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Za kraj" duration="0">
+        <p>Nemojte naučiti ovo rješenje napamet jer ima više načina na koje se to može riješiti te isto tako više oblika zadataka.</p>
+<p>Planirano vrijeme pisanja: 60 minuta.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

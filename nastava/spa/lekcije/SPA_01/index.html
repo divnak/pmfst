@@ -1,0 +1,143 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>SPA: Uvod</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="SPA_01"
+                  title="SPA: Uvod"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Uvod" duration="0">
+        <p>📌 Ponovimo što su strukture podataka</p>
+<p>📌 Nizovi i liste</p>
+<p>📌 Podjela struktura podataka</p>
+<h2 is-upgraded><strong>Osnovni pojmovi</strong></h2>
+<ul>
+<li><strong>strukture podataka</strong> - &#34;statički&#34; aspekt nekog programa (ono s čime se radi)</li>
+<li><strong>algoritmi</strong> - &#34;dinamički&#34; aspekt programa (ono što se radi)</li>
+</ul>
+<p>Prisjetimo se:</p>
+<ul>
+<li><strong>tip podataka</strong> - skup vrijednosti koje neki podatak može poprimiti</li>
+<li><strong>struktura podataka</strong> - skup varijabli u nekom programu koje su međusobno povezane (npr. niz, lista)</li>
+<li><strong>algoritam </strong>- predstavlja konačni niz precizno definiranih koraka koji jednoznačno vode do rješenja problema</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Ponovimo nizove i liste" duration="0">
+        <p>U računarstvu, struktura podataka predstavlja format za organiziranje, upravljanje i pohranu podataka na način koji omogućuje učinkovit pristup i promjene. Struktura podataka je zbirka vrijednosti podataka, odnosi među njima i funkcije ili operacije koje se mogu primijeniti na te podatke.</p>
+<p>Do sad ste već koristili strukture podataka (npr. nizove, liste i objekte). </p>
+<p>C# ima <em>ugrađene</em> (eng. built-in) strukture podataka te one koje pišu sami korisnici (ono kad pišemo vlastite klase). </p>
+<p>Različite strukture podataka postoje jer imamo razne vrste problema koje moramo riješiti tako da u skladu s tim biramo koju strukturu ćemo koristiti.</p>
+<h2 is-upgraded><strong>Nizovi</strong></h2>
+<p><strong>Niz</strong> (eng. array) je kolekcija podataka spremljenih na kontinuiranoj lokaciji u radnoj memoriji (što znači da su spremljeni jedan pored drugog). Svi elementi niza <strong>moraju biti istog tipa</strong>.</p>
+<pre><code>int[] niz = new int[5];
+niz[0] = 2;</code></pre>
+<p>Svojstvo <strong>Length</strong> vraća informaciju o <em>duljini</em> odnosno broju elemenata niza. </p>
+<aside class="warning"><p>📍 Niz je struktura podataka koja tijekom izvršavanja programa ne može mijenjati svoj oblik, odnosno ne može se dodavati, brisati niti umetati elemente. Svakom pojedinom elementu može se promijeniti sadržaj.</p>
+</aside>
+<h2 is-upgraded><strong>Liste</strong></h2>
+<p>Struktura podataka <strong>List&lt;T&gt;</strong> predstavlja <em>generičku</em> strukturu podataka koja se tijekom izvršavanja programa može mijenjati.</p>
+<pre><code>// deklaracija i inicijalizacija liste cijelih brojeva
+List&lt;int&gt; a = new List&lt;int&gt;();
+// dodavanje elementa u listu
+a.Add(5);
+a.Add(3);
+// brisanje elementa iz liste na mjestu 0
+a.RemoveAt(0);</code></pre>
+<aside class="special"><p>✅ Preporuka je brisati elemente liste pomoću <strong>RemoveAt()</strong> metode, a ne pomoću <strong>Remove()</strong> jer Remove() koristi referencu objekta za brisanje, a RemoveAt() indeks elementa.</p>
+</aside>
+<p>Kažemo da su liste <em>generičke</em> zbog toga što stvarati liste različitih tipova podataka. Tip se upisuje između znakova <strong>&lt;&gt;</strong>. Međutim, nakon što upišemo tip kod deklaracije, onda to više ne možemo mijenjati tako da lista može sadržavati samo elemente istog tipa.</p>
+<p>Pristup elementima niza i liste obavlja se pisanjem indeksa u uglatim zagradama (npr. a[0]).</p>
+<p>Broj elemenata liste možemo dobiti pomoću svojstva <strong>Count</strong>. </p>
+<p>Primjer koda:</p>
+<pre><code>List&lt;string&gt; gradovi = new List&lt;string&gt;();
+gradovi.Add(&#34;Zagreb&#34;);
+gradovi.Add(&#34;Split&#34;);
+gradovi.Insert(1, &#34;Rijeka&#34;); // umetanje na poziciju
+
+Console.WriteLine(&#34;Broj gradova: &#34; + gradovi.Count);
+Console.WriteLine(&#34;Drugi grad: &#34; + gradovi[1]);
+
+gradovi.Remove(&#34;Split&#34;);
+
+foreach (string grad in gradovi)
+{
+    Console.WriteLine(grad);
+}</code></pre>
+<p>U gornjem primjeru koristi se nareba <em>gradovi.Remove(&#34;Split&#34;);</em> koja briše element po vrijednosti jer je string <strong>vrijednosni tip podatka</strong>. Međutim, ako budemo koristili listu s elementima koji su <strong>referentnog tipa</strong>, onda će metoda Remove() brisati <strong>po referenci</strong>. </p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Zašto su strukture podataka važne?" duration="0">
+        <p>Možda se pitate zašto pridajemo toliko pažnje strukturama podataka i zašto ih tako detaljno proučavamo. Razlog je taj što morate biti programeri koji razmišljaju o stvarima koje koriste. Bez dobrog poznavanja osnovnih struktura podataka i računalnih algoritama, ne možete postati dobri programeri. Programer koji dobro poznaje strukture podataka i algoritme te razmišlja o njihovoj ispravnoj primjeni će bolje analizirati probleme i doći do učinkovitijih rješenja.</p>
+<p>Napisane su stotine knjiga na ovu temu. Donald Knuth objašnjava strukture podataka i algoritme na više od 2500 stranica. Drugi autor, Niklaus Wirth, nazvao je svoju knjigu prema odgovoru na pitanje &#34;zašto su strukture podataka tako važne&#34;, a taj je odgovor &#34;Algoritmi + Strukture podataka = Programi&#34;. Glavna tema knjige opet su temeljni algoritmi i strukture podataka u programiranju.</p>
+<p><a href="https://en.wikipedia.org/wiki/Algorithms_%2B_Data_Structures_%3D_Programs" target="_blank">Algorithms + Data Structures = Programs (Wikipedia)</a></p>
+<p>Često dok pišemo programe moramo raditi s velikim brojem objekata (elemenata). Kako bi to mogli raditi, trebaju nam strukture podataka - skup podataka organiziran prema određenim pravilima. Odabir odgovarajuće strukture podataka će često rezultirati učinkovitijim programom (manja potrošnja radne memorije i brže izvršavanje). Ponekad će se dogoditi i da pišemo manje linija koda. </p>
+<p>Struktura podataka se sastoji od manjih cjelina koje se udružuju u veće i međusobno povezuju. </p>
+<h3 is-upgraded><strong>Podjela struktura podataka</strong></h3>
+<p>Strukture podataka možemo podijeliti prema tipu veza između podataka na:</p>
+<ul>
+<li>Linearne</li>
+<li>Razgranate</li>
+<li>Ostale</li>
+</ul>
+<p>Postoji mnogo različitih podjela struktura podataka. Mogli smo ih globalno podijeliti na linearne i ne-linearne čime bi dobili samo dvije kategorije, one koje jesu linearne i sve ostale. Za potrebe ovog kolegija, koristit ćemo gore navedenu podjelu s tim da ćemo rječnike i hash-tablice obraditi u prvom dijelu semestra.</p>
+<p>Primjeri linearnih struktura:</p>
+<ul>
+<li>Nizovi</li>
+<li>Vezane liste</li>
+<li>Stogovi</li>
+<li>Redovi</li>
+</ul>
+<p>Primjeri razgranatih struktura:</p>
+<ul>
+<li>Stabla</li>
+<li>Grafovi</li>
+</ul>
+<p>Primjeri ostalih (koje nisu dio linearnih ili razgranatih):</p>
+<ul>
+<li>Rječnici</li>
+<li>Hash-tablice</li>
+<li>Skupovi</li>
+</ul>
+<p>Stabla predstavljaju strukturu podataka gdje je bitna i hijerarhija, dok toga kod grafova nema. Rječnici i hash-tablice donekle podsjećaju na dvodimenzionalne nizove (ako ih pokušamo skicirati na papir), ali razlikuju se jer pristup elementima nije linearan (sekvencijalan). Možemo koristiti nizove kao način implementacije rječnika i hash-tablica (ako ih implementiramo sami) tako da je to razlog zašto ih obrađujemo u prvom dijelu semestra pored ostalih linearnih struktura.</p>
+<p>Nastavit će se...</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

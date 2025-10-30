@@ -1,0 +1,335 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>SPA: Uvod</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+<link rel="stylesheet" href="css/prism-coy-all.css">
+<script src="css/prism-coy-all.js"></script>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="SPA_V-04"
+                  title="SPA: Uvod"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Uvod" duration="0">
+        <p>📌 Primjena gotovih klasa Stack/Queue</p>
+<p>📌 Vezane liste - unos</p>
+<p>📌 Vezane liste - brisanje</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Ugrađene klase Stack i Queue" duration="0">
+        <h2 is-upgraded><strong>Queue</strong></h2>
+<p><strong>Red</strong> (eng. Queue) je struktura podataka koja radi na principu &#34;prvi došao, prvi izašao&#34; (FIFO - First In, First Out). Ovaj koncept je nalik redu u stvarnom svijetu, gdje se prvi klijent uvijek prvi poslužuje. Red omogućuje dodavanje elemenata na kraj strukture, dok se uklanjanje uvijek odvija na početku. Na taj način, red osigurava da se podaci obrađuju u istom redoslijedu u kojem su primljeni.</p>
+<p>U C#-u, red se može implementirati korištenjem klase Queue, koja se nalazi u imenskom prostoru <strong>System.Collections</strong>. Korištenjem Queue klase, moguće je lako implementirati osnovne operacije, uključujući dodavanje elemenata (metoda <strong>Enqueue</strong>) i uklanjanje elemenata (metoda Dequeue). Također, metoda <strong>Peek</strong> omogućuje pregled prvog elementa bez njegovog uklanjanja, što je korisno kada želimo provjeriti sljedeći element bez izmjena u strukturi.</p>
+<p>Korištenje klase <strong>Queue&lt;T&gt;</strong> koja se nalazi u <strong>System.Collections.Generic</strong> omogućuje primjenu konkretnog tipa.</p>
+<p class="image-container"><img alt="4815160669b03d57.png" style="width: 558.00px" src="img/4815160669b03d57.png"></p>
+<p>Ako koristimo klasu Queue, onda moramo voditi računa o pretvorbi tipova svaki put kad nešto moramo napraviti s tim podacima. Pogledajmo unos podataka:</p>
+<pre><code>Queue q1 = new Queue();
+
+// primjer unosa konstantnih vrijednosti
+q1.Enqueue(&#34;tekst&#34;);
+q1.Enqueue(122);
+q1.Enqueue(3);
+</code></pre>
+<p>Implementacija gotove klase <strong>Queue</strong> dozvoljava &#34;šetanje&#34; po redu primjerice pomoću <strong>foreach</strong> petlje čak po svim elementima bez izbacivanja. Ako želimo koristiti klasično ponašanje reda, odnosno izbacivanje prvog elementa, onda će trebati postaviti varijablu na prvi element.</p>
+<aside class="warning"><p>📍<strong>Važno:</strong> Izbacujemo dok ima elemenata, a to nam vraća <strong>svojstvo Count</strong>.</p>
+</aside>
+<pre><code>object t = q1.Peek();
+while (q1.Count &gt; 0)
+{
+    Console.WriteLine(q1.Dequeue());
+}
+</code></pre>
+<p>U gornjem primjeru koristimo varijablu tipa <strong>object</strong> u koju možemo spremiti bilo što. Međutim, problem je što ne znamo što smo spremili. Kod ispisa, metoda <strong>WriteLine()</strong> implicitno pretvara što god se nalazi u redu u string. Ako bi u redu unosili brojeve s kojima želimo nešto računati ili spremamo složeni tip (primjerak klase ili struct-a), onda implicitna pretvorba nije moguća.</p>
+<p>U sljedećem primjeru možemo vidjeti postupak unosa brojeva u red.</p>
+<ul>
+<li>Korisnik unosi brojeve sve dok ne unese nešto što se ne može parsirati.</li>
+<li>Nakon završetka unosa, program izbacuje sve elemente redom te za svakog od njih ispisuje sljedbenika.</li>
+</ul>
+<p>Na ovaj način smo &#34;prisilili&#34; korisnika da unosi cijele brojeve, ali svejedno kod izbacivanja moramo raditi eksplicitnu pretvorbu da bi broj stvarno mogli koristiti kao broj.</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">using System;
+using System.Collections;
+
+namespace test;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Queue q1 = new Queue();
+
+        // unosimo brojeve
+        bool ok = true;
+        do
+        {
+            Console.WriteLine(&#34;Unesi broj: &#34;);
+            int br;
+            ok = int.TryParse(Console.ReadLine(), out br);
+
+            if (ok) q1.Enqueue(br);
+        } while (ok);
+
+        // izbacimo brojeve i ispišimo kvadrate svakog
+        object t = q1.Peek();
+        while (q1.Count &gt; 0)
+        {
+            // cast operator za pretvorbu
+            int br = (int)q1.Dequeue();
+            Console.WriteLine($&#34;Sljedbenik: {br + 1}&#34;);
+        }
+    }
+}
+</code></pre>
+<p>Ako promijenimo tip u generički, onda nećemo morati raditi pretvorbu, a ostatak ostaje isti.</p>
+<pre><code>//...
+Queue&lt;int&gt; q1 = new Queue&lt;int&gt;();
+//...
+int br = q1.Dequeue();
+//...
+</code></pre>
+<p>Red ima različite primjene, kao što su upravljanje procesima u operacijskom sustavu, simulacije stvarnih redova ili čak osnovni sustavi za komunikaciju i razmjenu poruka. Učenje o redovima i njihovim operacijama pruža važne osnove za rad s podacima koji zahtijevaju obradu u specifičnom redoslijedu. Na primjer, redovi se mogu koristiti za raspoređivanje zadataka u programiranju gdje je važno da se zadaci izvršavaju točno onim redoslijedom kojim su stigli.</p>
+<h2 is-upgraded><strong>Stack</strong></h2>
+<p>Sve što je gore navedeno za <strong>red</strong> zapravo vrijedi i za <strong>stog</strong>, a jedina je razlika u tome što <strong>Stack</strong> ima metode <strong>Push()</strong> za dodavanje te <strong>Pop()</strong> za uklanjanje iz stoga te će se redoslijed ispisa promijeniti u skladu s definicijom stoga.</p>
+<p>Prednost gotovih klasa je jednostavna implementacija svih metoda, ali nedostatak je kršenje principa (FIFO/LIFO) jer se <em>foreach</em> petljom ipak može pristupiti svim elementima.</p>
+<p>Generički tipovi omogućuju bržu obradu podataka jer kompajler unaprijed zna tip podataka koji će biti korišten, što omogućuje optimizaciju koda. Razumijevanje instanciranja i konfiguriranja reda prema specifičnim potrebama programa presudno je za učinkovit rad sa složenim strukturama podataka.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Radix sort" duration="0">
+        <p>Radix sort je algoritam sortiranja koji grupira brojeve prema njihovim znamenkama počevši od najmanje značajne znamenke (jedinice) do najveće. Učinkovit je za sortiranje ključeva koji su iste duljine.</p>
+<p>Može se implementirati i bez uspoređivanja već raspoređivanjem svih elemenata u &#34;spremnike&#34; (eng. buckets) ovisno o vrijednosti znamenke. Ponavljanjem tog raspoređivanja, Radix Sort na kraju ostvaruje konačan poredak. Ako ga implementiramo na ovaj način, onda moramo voditi računa kako ćemo zauzeti dodatan prostor u radnoj memoriji za pomoćne nizove.</p>
+<p>Ako imamo niz podataka s različitim brojem znamenki, onda bi trebalo pronaći najvećeg jer o njemu (njegovom broju znamenki) ovisi broj koliko puta će se proći kroz sve elemente niza.</p>
+<p>U sljedećem primjeru najveći broj je troznamenkast te će biti tri prolaza kroz algoritam. Za sve brojeve koji imaju manje znamenki, smatra se da su na početku nule.</p>
+<p class="image-container"><img alt="5d1fe42401314093.png" style="width: 326.67px" src="img/5d1fe42401314093.png"></p>
+<p>Za našu implementaciju, koristit ćemo također ideju spremnika (eng. buckets) bez operacije uspoređivanja koji je veći. Svaki spremnk ćemo označiti znamenkom od 0 do 9 te ćemo samo razmjestiti brojeve ovisno o tome koju znamenku promatramo.</p>
+<p>Radi jednostavnosti, uzet ćemo samo dvoznamenkaste brojeve kako bi na njima ilustrirali da algoritam radi. Naravno, vodite računa kako ovaj način implementacije nije nužno učinkovit jer u ovom zadatku imamo drugačije ciljeve:</p>
+<aside class="special"><p>✅ Razumijevanje algoritma sortiranja <strong>Radix sort</strong>.</p>
+<p>✅ Primjena strukture <strong>red</strong> (klasa <strong>Queue&lt;int&gt;</strong>).</p>
+</aside>
+<p>Par ideja:</p>
+<ul>
+<li>Ovdje će spremnike (ili kutije) glumiti <strong>redovi</strong> zato što će brojevi ulaziti i izlaziti iz kutija po principu FIFO.</li>
+<li>Koristit ćemo tip <strong>Queue</strong> samo zato što je malo kompliciraniji kako bi uočili trenutak kad je potrebno napraviti pretvorbu.</li>
+<li>Obzirom da imamo 10 znamenki, definirat ćemo i 10 kutija s odgovarajućim oznakama.</li>
+<li>Broj kutija je fiksan i unaprijed poznat pa ćemo koristiti <strong>niz</strong>.</li>
+<li>Ograničenje primjera na dvoznamenkaste brojeve znači da ćemo imati samo dva prolaza: po jedinicama pa po deseticama.</li>
+</ul>
+<p>Pogledajmo na slici:</p>
+<p class="image-container"><img alt="8b3a34890e2c096f.png" style="width: 624.00px" src="img/8b3a34890e2c096f.png"></p>
+<p>Krećemo od crveno obojanog niza, ubacimo ga u kutije po <strong>jedinicama</strong> te vratimo elemente natrag u niz (plavi) i ubacimo ih ponovo prema <strong>deseticama</strong>. Na kraju ćemo dobiti niz koji je sortiran (zeleni).</p>
+<h2 is-upgraded><strong>Korak 1: Napraviti niz od 10 redova</strong></h2>
+<pre><code>Queue[] redZnam = new Queue[10];
+</code></pre>
+<p>Obzirom da će konstruktor svaki od 10 redova u početku postaviti na <strong>null</strong> (to je zadana vrijednost), onda svaki moramo posebno instancirati (stvoriti objekt):</p>
+<pre><code>for (int i = 0; i &lt; 10; i++)
+    redZnam[i] = new Queue();
+</code></pre>
+<h2 is-upgraded><strong>Korak 2: Generirati n slučajno odabranih dvoznamenkastih brojeva</strong></h2>
+<p>Sortiramo slučajno odabrane dvoznamenkaste brojeve pa je potrebno generirati i taj niz. Neka korisnik unese broj koliko brojeva želi sortirati.</p>
+<pre><code>Console.Write(&#34;Unesi broj elemenata: &#34;);
+int x = int.Parse(Console.ReadLine());
+Random r = new Random();
+int[] brojevi = new int[x];
+for (int i = 0; i &lt; x; i++)
+    brojevi[i] = r.Next(10, 100);
+</code></pre>
+<h2 is-upgraded><strong>Korak 3: Rasporediti brojeve po znamenkama</strong></h2>
+<p>Ovaj korak se ponavlja dva puta, ali se postupak razlikuje minimalno pa možemo napraviti metodu koja će to obaviti. Napišimo metodu <strong>RSort</strong> koja prima &#34;kutije&#34;, niz i koja znamenka je u pitanju.</p>
+<pre><code>static void RSort(Queue[] q, int[] niz, int vrstaZ)
+{}
+</code></pre>
+<p>Metoda će proći kroz sve elemente niza i uzimati znamenku ovisno o vrsti. Svaka znamenka odgovara indeksu kutije tako da je jednostavno ubaciti element u red koji pripada toj znamenki.</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">static void RSort(Queue[] q, int[] niz, int vrstaZ)
+{
+    int n = niz.Length;
+    for (int i = 0; i &lt; n; i++)
+    {
+        int z;
+        if (vrstaZ == 1) //ako su jedinice
+            z = niz[i] % 10;
+        else //ako su desetice
+            z = niz[i] / 10;
+        q[z].Enqueue(niz[i]); //stavi u odgovarajući red
+    }
+    //vrati natrag u niz
+}
+</code></pre>
+<p>Dio s vraćanjem natrag u niz možemo, a ne morao odvojiti u posebnu metodu. Ipak ćemo odvojiti radi preglednosti kôda.</p>
+<p>Osnovna ideja je:</p>
+<ul>
+<li>Proći kroz svih 10 &#34;kutija&#34; pa izbacivati elemente iz svake redom kako smo ih ubacili.</li>
+</ul>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">static void Vrati_uNiz(Queue[] q, int[] niz)
+{
+    int j = 0;
+    for (int i = 0; i &lt; 10; i++)
+        while (q[i].Count &gt; 0)
+        {
+            niz[j] = (int)q[i].Dequeue();
+            j++;
+        }
+}
+</code></pre>
+<p>Gornja metoda se može riješiti i bez <strong>cast</strong> operatora (ako ste navikli na <em>parsiranje</em>):</p>
+<pre><code>niz[j] = int.Parse(q[i].Dequeue().ToString());
+</code></pre>
+<p>Međutim taj postupak nije optimalan jer:</p>
+<ul>
+<li>Element reda je tipa <strong>object</strong> koji se ne može parsirati (parsiraju se <strong>samo stringovi</strong>).</li>
+<li>Kako bi mogli parsirati, radimo pretvorbu u string pomoću <strong>ToString()</strong> metode.</li>
+<li>Nakon toga ide parsiranje.</li>
+</ul>
+<p>Ukupno imamo <strong>dvije</strong> pretvorbe za razliku od <strong>cast</strong> operatora koji izravno pretvara <strong>object</strong> u <strong>int</strong>.</p>
+<p>Metodu za ispis također možemo napisati jer se ponavlja više puta.</p>
+<p><code>Program.cs</code></p>
+<pre><code language="language-cs" class="language-cs">static void IspisNiza(int[] niz)
+{
+    for (int i = 0; i &lt; niz.Length; i++)
+        Console.Write(niz[i] + &#34; &#34;);
+    Console.WriteLine();
+}
+</code></pre>
+<p>Sad kad imate sve dijelove, napišite kompletno rješenje koje ima sljedeći ispis:</p>
+<p><code>Ispis:</code></p>
+<pre><code>Unesi broj elemenata: 10
+
+Prvi prolaz: 
+40 90 61 44 54 54 26 77 27 38 
+
+Drugi prolaz(konacno): 
+26 27 38 40 44 54 54 61 77 90
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Vezane liste" duration="0">
+        <p>Vezana lista je apstraktna struktura podataka koja povezuje elemente kroz veze (<strong>reference</strong>), slično kao što su vagoni povezani u vlak.</p>
+<p class="image-container"><img alt="8c60cfe8cea8de58.png" style="width: 386.67px" src="img/8c60cfe8cea8de58.png"></p>
+<p>Svaki element u vezanoj listi naziva se čvor, a svaki čvor ima vezu s drugim čvorovima, što omogućava lako dodavanje ili uklanjanje elemenata bez potrebe za pomicanjem podataka.</p>
+<p>Postoje tri osnovne vrste vezanih lista:</p>
+<ul>
+<li>Jednostruke</li>
+<li>Dvostruke</li>
+<li>Cirkularne</li>
+</ul>
+<p>U jednostrukoj vezanoj listi svaki čvor ima pokazivač na sljedeći čvor, dok dvostruka lista omogućuje pristup u oba smjera, jer svaki čvor ima dodatni pokazivač na prethodni čvor. Kod cirkularnih lista, zadnji čvor je povezan s prvim. Ove karakteristike čine vezane liste izuzetno fleksibilnima za manipulaciju podacima.</p>
+<p>Razumijevanje vezanih lista važno je jer omogućuje stvaranje učinkovitijih struktura za pohranu podataka u slučajevima kada je potrebno često mijenjati veličinu ili strukturu nekog popisa.</p>
+<h2 is-upgraded><strong>Pokazivač na listu</strong></h2>
+<p><em>Pokazivač</em> na listu, odnosno na prvi element liste često se naziva <strong>head</strong>, ali u strukturi koja je implementirana u C# biblioteci naziva se <strong>First</strong>.</p>
+<ul>
+<li>Pokazuje na prvi element</li>
+<li>Mora biti inicijaliziran (pokazuje na čvor ili je null)</li>
+</ul>
+<p><strong>Head</strong> osigurava sekvencijalni pristup svakom čvoru u listi tako da svaki čvor poznaje samo svog sljedećeg susjeda. Ako je postavljen na null, lista je prazna, što je korisno za provjeru postojanja elemenata prije izvršavanja operacija poput pretraživanja ili brisanja.</p>
+<p>Također, <strong>head</strong> služi kao ulazna točka za sve operacije nad listom. Razumijevanje uloge pokazivača pomaže shavaćanju kako se odvija organizacija podataka unutar liste i kako se učinkovito upravlja elementima pomoću jednostavnih veza.</p>
+<h2 is-upgraded>Čvorovi</h2>
+<p><strong>Čvor</strong> (eng. node) u vezanoj listi sastoji se od:</p>
+<ul>
+<li>podatkovnog polja i</li>
+<li>pokazivačkog polja (reference)</li>
+</ul>
+<p>Podatkovno polje sadrži vrijednost ili podatak koji čvor predstavlja, dok pokazivačko polje sadrži referencu prema sljedećem čvoru. U jednostrukim listama ovo pokazivačko polje se često naziva <strong>Next</strong>, dok dvostruke liste imaju dodatno polje <strong>previous</strong> za vezu prema prethodnom čvoru.</p>
+<p>Pokazivačko polje <strong>next</strong> omogućava prijelaz kroz listu čvor po čvor, dok u dvostrukim listama polje <strong>previous</strong> olakšava kretanje u oba smjera. Ova struktura omogućuje fleksibilno i učinkovito dodavanje i uklanjanje čvorova unutar liste, posebno u situacijama gdje je važno zadržati točan redoslijed. Razumijevanje strukture čvora ključno je za rad s vezanim listama.</p>
+<p>Ako radimo vlastitu strukturu vezane liste s posebnim čvorovima, onda se ne moramo nužno držati navedenih naziva niti strukture. Međutim, ako koristimo gotovu klasu, onda je to upravo oblik čvora.</p>
+<p>Primjer klase <strong>Student</strong> koja ima oblik čvora (jer sadrži referencu <strong>next</strong>):</p>
+<p><code>Student.cs</code></p>
+<pre><code language="language-cs" class="language-cs">namespace UnosVL
+{
+    class Student
+    {
+        // ne moramo pisati svojstva
+        public string ime;
+        public int dob, mb;
+        public Student next;
+
+        public Student(string imeS, int dobS, int mbS)
+        {
+            this.ime = imeS;
+            this.dob = dobS;
+            this.mb = mbS;
+            this.next = null;
+        }
+
+        public Student()
+        {
+            this.ime = &#34;&#34;;
+            this.dob = 0;
+            this.mb = 0;
+            this.next = null;
+        }
+
+    }
+}
+</code></pre>
+<h2 is-upgraded><strong>Temeljne operacije</strong></h2>
+<ul>
+<li><strong>Unos</strong> u listu - na početak, kraj, iza ili prije nekog drugog elementa.</li>
+<li><strong>Ispis</strong> elemenata liste - svih ili dijela.</li>
+<li><strong>Pretraživanje</strong> liste - traženje elementa u listi po zadanom kriteriju.</li>
+<li><strong>Brisanje</strong> jednog ili više elemenata iz liste.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Napraviti metode za rad s vezanom listom" duration="0">
+        <p>Implementirajte sljedeće metode:</p>
+<ul>
+<li>public void DodajNaPocetak(Student novi) ⇒ dodaje novi čvor na početak</li>
+<li>public void DodajNaKraj(Student novi) ⇒ dodaje novi čvor na kraj</li>
+<li>public string Ispis() ⇒ vraća string za ispis</li>
+<li>public Student Trazi(int br) ⇒ vraća čvor koji je prvi pronađen ili null, ako ga nema.</li>
+</ul>
+<p>Napomena: ova vezana lista se ne brine oko duplikata.</p>
+<p>Neka klasa <strong>VezanaLista</strong> ima polje <strong>pocetak</strong>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📗 Zadatak: Za one koji žele nešto više" duration="0">
+        <p>Implementirajte metode za brisanje elemenata vezane liste:</p>
+<ul>
+<li>Brisanje prvog</li>
+<li>Brisanje zadnjeg</li>
+<li>Brisanje po matičnom broju ⇒ Neka briše prvog kojeg nađe.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
