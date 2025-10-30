@@ -1,0 +1,194 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>UPZ-PDP: Orange</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="UPZ_PDP-02-Orange"
+                  title="UPZ-PDP: Orange"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Uvod" duration="0">
+        <p>📌 Instalacija</p>
+<p>📌 Widgets</p>
+<p>📌 Workflow</p>
+<h2 is-upgraded><strong>Instalacija</strong></h2>
+<p>Program možete preuzeti sa stranice:</p>
+<p><a href="https://orangedatamining.com/download/" target="_blank"><paper-button class="colored" raised>Orange Data Mining - Download</paper-button></a></p>
+<p>Trenutna verzija u kojoj rade primjeri iz ovih uputa je 3.37 (ak. God. 2024/25).</p>
+<p>Za Windows OS postoje dva načina preuzimanja:</p>
+<ul>
+<li>Standalone installer (default) <strong>Orange3-3.37.0-Miniconda-x86_64.exe ⇒</strong>Može se instalirati i bez administratorskih prava, ali instalira dodatno i <em>minicondu</em></li>
+<li>Portable Orange <strong>Orange3-3.37.0.zip</strong> ⇒ Nije potrebna instalacija već se raspakira na disk.</li>
+</ul>
+<h2 is-upgraded><strong>Widgets &amp; workflow</strong></h2>
+<p><em>Workflow</em> možemo zamisliti kao dijagram izvršavanja obrade podataka, a sastoji se od komponenti pomoću kojih učitavamo, obrađujemo i vizualiziramo podatke. Svaku od komponenti nazivamo <em>widget</em>.</p>
+<p>Widget-e dodajemo iz alatne trake s lijeve strane ili jednostavno desnim klikom miša na radnom prostoru:</p>
+<p class="image-container"><img style="width: 260.00px" src="img/36d1577fd089a111.png"></p>
+<p>Linija s lijeve strane svakog widget-a predstavlja <strong>ulazne podatke</strong>, a s desne strane <strong>izlaz</strong>. Na primjer, <strong>File</strong> šalje podatke u <strong>Data Table</strong>:</p>
+<p class="image-container"><img style="width: 208.00px" src="img/121a272965e8b751.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Načini učitavanja podataka" duration="0">
+        <h2 is-upgraded><strong>File</strong></h2>
+<p>Za učitavanje podataka koristimo widget <strong>File</strong>.</p>
+<p class="image-container"><img style="width: 411.00px" src="img/9aa8d231018c2e42.png"></p>
+<p>Podatke možemo učitati iz datoteka (npr. csv, tab) ili putem URL-a.</p>
+<h2 is-upgraded><strong>Datasets</strong></h2>
+<p>Dataset učitava podatke iz online <em>skladišta</em>.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/98b9baa446380a79.png"></p>
+<h2 is-upgraded><strong>Google Sheets</strong></h2>
+<p>Widget <strong>Google Sheets</strong> omogućuje učitavanje podataka iz Google tablice. </p>
+<p class="image-container"><img style="width: 82.05px" src="img/cae2afc0c9f538ac.png"></p>
+<p>Potrebno je podijeliti link tako da je dostupan svima (share, anyone with the link) te ga &#34;zalijepiti&#34; u polje URL:</p>
+<p class="image-container"><img style="width: 621.00px" src="img/af940d5bc9efef53.png"></p>
+<h2 is-upgraded><strong>Data Table</strong></h2>
+<p>Widget <strong>Data Table</strong> omogućuje pregled i odabir podataka.</p>
+<p class="image-container"><img style="width: 512.50px" src="img/ea4ca40fa1c00ec0.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Spremanje podataka" duration="0">
+        <p>Ako želimo spremiti podatke nakon obrade u Orange-u, koristimo widget <strong>Save Data</strong>.</p>
+<p>Na primjer, učitajmo podatke iz <strong>titanic.tab</strong>:</p>
+<p class="image-container"><img style="width: 601.00px" src="img/ab1d0bf8ea51c35c.png"></p>
+<p>Klikom na widget i <strong>Save As</strong> možemo odabrati spremanje u csv obliku:</p>
+<p class="image-container"><img style="width: 421.00px" src="img/bddbb97db45ed492.png"></p>
+<p>Cijeli <em>workflow</em> pogledajte ovdje:</p>
+<p class="image-container"><img style="width: 373.00px" src="img/598aca82289e215a.png"></p>
+<p>U ovom primjeru nije bilo nikakve obrade podataka već smo samo podatke koji su bili odvojeni tab-om spremili u csv oblik.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Osnovna statistika" duration="0">
+        <p>Za ovaj primjer koristit ćemo skup podataka <strong>iris</strong> kojeg možete preuzeti sa stranice kolegija ili koristiti lokalni <strong>iris.tab</strong> kojeg ste dobili s instalacijom.</p>
+<p class="image-container"><img alt="sepal_petal" style="width: 469.50px" src="img/f0dea5b9e6f1060.png"></p>
+<p><strong>Zadatak:</strong> Za svaku vrstu cvijeta i podatak <em>petal length</em> potrebno je izračunati:</p>
+<ul>
+<li>Srednju vrijednost (mean)</li>
+<li>Medijan</li>
+<li>Min/Max</li>
+<li>Standardnu devijaciju</li>
+<li>Varijancu</li>
+</ul>
+<p>Najprije ćemo učitati podatke te ih prikazati u <strong>Data Table</strong>.</p>
+<p class="image-container"><img style="width: 257.00px" src="img/82e9a2cb8d184b3b.png"></p>
+<p>Primjer:</p>
+<p class="image-container"><img style="width: 624.00px" src="img/5b02f893aed76dc4.png"></p>
+<p>Nisu nam potrebni svi stupci već samo:</p>
+<ul>
+<li>Vrsta (iris)</li>
+<li>Duljina latice (petal length)</li>
+</ul>
+<p>Stoga ćemo izdvojiti samo one stupce koji su nam potrebni pomoću <strong>Select Columns</strong> widget-a.</p>
+<p class="image-container"><img style="width: 403.50px" src="img/751c639dd190a451.png"></p>
+<p>Opet ćemo dodati <strong>Data Table</strong> kako bi mogli vidjeti što smo dobili.</p>
+<p class="image-container"><img style="width: 361.00px" src="img/2d51511acda90a07.png"></p>
+<p>Obzirom da je potrebno izračunati srednju vrijednost za svaku vrstu (grupu), moramo napraviti grupiranje pomoću <strong>Group By</strong>.</p>
+<p class="image-container"><img style="width: 238.00px" src="img/43754599551531b3.png"></p>
+<p>Zadana je samo srednja vrijednost (mean). Biramo što nam je potrebno od ostalih opcija (aggregations).</p>
+<p class="image-container"><img style="width: 526.50px" src="img/50d755781bbf3bba.png"></p>
+<aside class="warning"><p>​📍 Dvoklikom na widget <strong>Group By</strong> dobijemo izbornik kao na gornjoj slici, ali ne vidimo rezultat! Zato će nam opet trebati <strong>Data Table</strong>.</p>
+</aside>
+<p class="image-container"><img style="width: 593.00px" src="img/e2c1d4442d78a97d.png"></p>
+<p>Pogledajte što ste dobili kao rezultat.</p>
+<p>Možemo primijetiti kako iz naziva tipa &#34;Data Table (1)&#34; ne možemo zaključiti o čemu se točno radi, tako da je dobro promijeniti nazive widget-a u nešto smisleno, npr.:</p>
+<p class="image-container"><img style="width: 624.00px" src="img/9e6d9e45f4c18142.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Korelacija" duration="0">
+        <p>Za ovaj primjer ćemo također učitati zadane podatke <strong>iris.tab</strong>. </p>
+<p><strong>Zadatak:</strong> Izračunati korelaciju varijable <em>petal length</em> za sve vrste zajedno.</p>
+<h2 is-upgraded><strong>Učitavanje podataka</strong></h2>
+<p class="image-container"><img style="width: 241.00px" src="img/2b90e00729f1a0b1.png"></p>
+<p>Primjer:</p>
+<p class="image-container"><img style="width: 371.00px" src="img/1b77302f89880f3a.png"></p>
+<p>Za računanje korelacije koristimo widget <strong>Correlations</strong>.</p>
+<p class="image-container"><img style="width: 110.00px" src="img/f4f2ae195f512c7.png"></p>
+<aside class="special"><p>✅ Dvoklikom na bilo koji <em>widget</em> možemo ili urediti opcije ili pogledati rezultat (ili oboje).</p>
+<p>✅ Dvoklikom na liniju koja povezuje widget-e, možemo urediti detalje <em>kanala podataka</em>.</p>
+</aside>
+<p>Biramo zadanu <strong>Pearson</strong> korelaciju (za sad nas ne zanimaju detalji jer se učimo raditi s widget-ima). Također biramo <em>petal length</em> umjesto svih kombinacija.</p>
+<p class="image-container"><img style="width: 479.00px" src="img/1c4e961d31c039b8.png"></p>
+<p>Ako ne želimo prikaz iz samog widget-a, onda možemo preusmjeriti rezultat na <strong>Data Table</strong>.</p>
+<p class="image-container"><img style="width: 278.00px" src="img/c2f7d15897a83860.png"></p>
+<p>Kod povezivanja widget-a <strong>Correlations</strong> i <strong>Data Table</strong>, zadana opcija je prijenos podataka (<strong>Data</strong>), ali u ovom slučaju želimo prikazati vrijednosti korelacija, a ne sve podatke.</p>
+<p class="image-container"><img style="width: 370.20px" src="img/d533eb782e0e8f0c.png"></p>
+<p class="image-container"><img style="width: 344.00px" src="img/6f6c5bc97509b410.png"></p>
+<h2 is-upgraded><strong>Odabir redaka</strong></h2>
+<p><strong>Zadatak</strong>: Potrebno je izračunati korelaciju, ali samo za vrstu <em>iris virginica</em>. </p>
+<p>U ovom slučaju, moramo odabrati odgovarajuće retke koji pripadaju toj vrsti. Koristit ćemo widget <strong> Select Rows</strong>.</p>
+<p class="image-container"><img style="width: 89.00px" src="img/f870ee5e04f0a6e.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/5ae463c5c8363ba8.png"></p>
+<p>Ovaj problem je bio dosta jednostavan, tako da smo morali dodati samo jedan uvjet. Inače, moguće je dodati više uvjeta za filtriranje podataka.</p>
+<p class="image-container"><img style="width: 341.00px" src="img/b6b1035d53772e08.png"></p>
+<h2 is-upgraded><strong>Rješenje</strong></h2>
+<p class="image-container"><img style="width: 561.00px" src="img/395b8dfdedc70b53.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Histogram" duration="0">
+        <p>Učitajmo podatke iz <strong>iris.tab</strong>. Potrebno je nacrtati histogram za <em>petal length</em>.</p>
+<p>Za tu namjenu koristimo widget <strong>Distributions</strong>. Možda se malo teže sjetiti kako se zove widget, ali može se u tražilicu početi pisati histogram, pa će ga svakako naći.</p>
+<p class="image-container"><img style="width: 359.00px" src="img/b37174bdbc7b3505.png"></p>
+<p class="image-container"><img style="width: 455.00px" src="img/7f4aefc7fd8758df.png"></p>
+<p>Na slici su prikazani histogrami za sve tri vrste cvjetova. Bilo je potrebno prilagoditi <strong><em>bin width</em></strong> kako bi se prikazali podaci kao na slici (slično kako ćemo raditi u Pythonu). </p>
+<p class="image-container"><img style="width: 329.00px" src="img/904e92d784adaf40.png"></p>
+<p>Za prikaz samo jedne vrste, potrebno je izdvojiti podatke kao u prethodnom slučaju pomoću <strong>Select Rows</strong> widget-a.</p>
+<p class="image-container"><img style="width: 519.00px" src="img/8d3503e286ccac30.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Scatter plot" duration="0">
+        <p>Učitajmo podatke iz <strong>iris.tab</strong>. </p>
+<p class="image-container"><img style="width: 298.00px" src="img/ca4b222e4cb48060.png"></p>
+<p>Najveću korelaciju imaju:</p>
+<p class="image-container"><img style="width: 442.00px" src="img/a40e7ce400bfd8ae.png"></p>
+<p>Pokušajmo nacrtati raspršeni grafikon, odnosno <strong>Scatter Plot</strong> upravo u kombinaciji s tim varijablama.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/3986cb984ff07f10.png"></p>
+<p>Prema slici vidimo kako su se vrste prilično razdvojile. S druge strane, ako pogledamo korelaciju:</p>
+<p class="image-container"><img style="width: 446.00px" src="img/17ea2347b8d9006e.png"></p>
+<p>Onda će grafikon izgledati ovako:</p>
+<p class="image-container"><img style="width: 624.00px" src="img/670220fd8ae8b1b6.png"></p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,262 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>UPZ-PDP: Web Scraping</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+<link rel="stylesheet" href="css/prism-coy-all.css">
+<script src="css/prism-coy-all.js"></script>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="UPZ_PDP-scraping"
+                  title="UPZ-PDP: Web Scraping"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Uvod" duration="0">
+        <p>📌 Što je <strong>Web scraping</strong>?</p>
+<p>📌 Osnovni pojmovi</p>
+<h2 is-upgraded>Prikupljanje podataka</h2>
+<p>Podatke možemo prikupljati izravno s web stranica tehnikom pod nazivom <strong>Web scraping</strong>.</p>
+<p>To je postupak izdvajanja podataka s web stranice koji je puno brži i učinkovitiji od samostalnog</p>
+<p>prikupljanja podataka. Međutim, ako vam je potrebna samo relativno mala količina podataka ili ih ne morate ih stalno ažurirati onda može biti jednostavnije samostalno prikupiti podatke.</p>
+<p>Zašto Web Scraping?</p>
+<ul>
+<li>Omogućuje prikupljanje podataka koji nisu lako dostupni u strukturiranim formatima,</li>
+<li>Postojeće skupove podataka možete nadopuniti dodatnim informacijama s weba, kao što su recenzije proizvoda ili vijesti u stvarnom vremenu,</li>
+<li>Potencijalno bogat izvor neobrađenih podataka za strojno učenje,</li>
+<li>Upotreba u znanstvenim radovima i istraživanjima.</li>
+</ul>
+<h2 is-upgraded><strong>Važni pojmovi</strong></h2>
+<p>Za učinkovito prikupljanje podataka s web stranica potrebno je razumjeti sljedeće pojmove:</p>
+<ul>
+<li><strong>HTML</strong> - zbog definicije strukture stranice,</li>
+<li><strong>CSS</strong> - prepoznavanje stilova,</li>
+<li><strong>HTTP zahtjevi</strong> - metode za dohvaćanje podataka (npr. <strong>GET</strong>),</li>
+<li><strong>Kôdovi odgovora</strong> - oznake uspjeha ili neuspjeha zahtjeva (npr. 200 OK, 404 Not Found, 403 forbidden),</li>
+<li><strong>Content</strong> - sadržaj kojeg dobijemo GET zahtjevom.</li>
+</ul>
+<h2 is-upgraded><strong>Etika prikupljanja podataka</strong></h2>
+<p>Web scraping, općenito je legalan ako prikupljate podatke s interneta koji su <strong>javno dostupni</strong>. Ako su informacije javno dostupne bez potrebe za prijavom ili zaobilaženjem sigurnosnih mjera, onda to ne bi trebao biti problem. No, za svaki slučaj, uvijek trebali bi uzeti u obzir uvjete internetske stranice, čije podatke želite dohvatiti. Često se na stranicama izričito zabranjuje izvlačenje podataka premda su javno dostupne. Kod zabrane se može raditi o zaštiti intelektualnog vlasništva (eng. copyright) koja se odnosi na tekst i slike. Posebno treba biti oprezan kad se radi o osobnim podacima. Čak i ako su dijelovi stranice javno dostupni, ne znači da slobodno možete raspolagati s tim informacijama.</p>
+<p>Ako na stranici ništa ne piše, onda možete provjeriti informacije u datoteci <strong>robots.txt</strong>. Sadržaj datoteke upućuje razne automatske alate na dijelove kojima smije ili ne smije pristupiti. Poštivanjem tih uputa sprječava se preopterećenje poslužitelja i potencijalno blokiranje pristupa stranici. Sadržaj datoteke možete jednostavno provjeriti dodavanjem robots.txt na kraju URL-a.</p>
+<p>Primjer za pmfst stranicu:</p>
+<pre><code>https://www.pmfst.unist.hr/robots.txt
+</code></pre>
+<p>Rezultat:</p>
+<pre><code>User-agent: Scrapy
+Allow: /
+
+sitemap: https://www.pmfst.unist.hr/sitemap.xml
+
+User-agent:  *
+# disallow all files in these directories
+Disallow: /cgi-bin/
+Disallow: /wp-admin/
+Disallow: /archives/
+Disallow: /comments/feed/
+</code></pre>
+<p>Prvi redak (<em>User-agent...</em>) služi za identificiranje <em>bot</em>-a, a drugi (<em>Allow: /</em>) kaže kako smije pristupiti svim stranicama. Za stranice ili dijelove koji nisu dozvoljeni treba pisati <em>Disallow</em>.</p>
+<p>Pri prikupljanju podataka morate paziti i rasporediti vaše zahtjeve u neku razumnu frekvenciju kako ne bi preopteretili poslužitelj i kako bi bilo dovoljno vremena da obradi vaš zahtjev.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Biblioteke za Web scraping" duration="0">
+        <p>Za prikupljanje podataka možete koristiti razne alate i Python biblioteke. Primjeri:</p>
+<ul>
+<li><strong>Beautiful Soup</strong> - koristi se za parsiranje HTML i XML dokumenata, omogućuje &#34;kretanje&#34; po DOM-u (Document Object Model) i izvlačenje pojedinih dijelova kao što su <strong>text</strong> ili atributi,</li>
+<li><strong>Requests</strong> - biblioteka za slanje HTTP zahtjeva koja omogućuje slanje GET i POST zahtjeva te primanje odgovora,</li>
+<li><strong>Scrapy</strong> - okvir (eng. framework) za izvlačenje velikih količina podataka.</li>
+</ul>
+<p>Scrapy ne radi dobro s Google Colab bilježnicama.</p>
+<h2 is-upgraded><strong>Beautiful Soup</strong></h2>
+<p>U novijim verzijama Google Colab bilježnica nije potrebno dodatno instalirati Beautiful Soup ako vam nije potrebna neka druga verzija:</p>
+<pre><code>!pip install beautifulsoup4
+</code></pre>
+<p>Aktualna verzija je 4, a detalje možete pronaći na poveznici:</p>
+<p><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/" target="_blank"><paper-button class="colored" raised>Beautiful Soup 4 Documentation</paper-button></a></p>
+<p>Za početak rada potrebno je uključiti biblioteke:</p>
+<p><code>.py</code></p>
+<pre><code language="language-py" class="language-py">import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+</code></pre>
+<p>Kako bi mogli izvući podatke sa stranice, potrebno je pogledati kako izgleda HTML kôd te stranice te identificirati elemente koji sadrže informacije. Primjer:</p>
+<p><code>.py</code></p>
+<pre><code language="language-py" class="language-py">url = &#34;https://medium.com/tag/web-scraping&#34;
+content = requests.get(url).content
+</code></pre>
+<p>U gornjem primjeru smo preuzeli sadržaj sa stranice u varijablu <em>content</em>.</p>
+<p>Ispod, u prvom koraku stvaramo BeautifulSoup objekt parsiranjem sadržaja iz varijable <em>content</em>. Obzirom da znamo da se radi o HTML sadržaju, onda pišemo &#34;<em>html.parser</em>&#34;.</p>
+<p>U drugom koraku iteriramo po svim <strong>div</strong> elementima koji imaju atribut <strong>title</strong>. To ćemo utvrditi pomoću našeg web preglednika (npr. Chrome, desni klik ⇒ Inspect). Zatim pronalazimo element <strong>h2</strong> koji ima klasu <em>bf</em> gdje prolazimo kroz tekstualni sadržaj elementa <strong>h2</strong>.</p>
+<p>Na kraju rezultat spremamo u stupac &#34;Naslovi&#34;. Tu smo prikupili samo jedan niz (stupac) koji se zove <em>titles</em>.</p>
+<p><code>.py</code></p>
+<pre><code language="language-py" class="language-py"># 1. stvaranje BeautifulSoup objekta
+soup = BeautifulSoup(content,&#34;html.parser&#34;)
+
+# 2. Iteriranje po HTML elementima:
+titles = []
+
+for a in soup.findAll(&#39;div&#39;, attrs={&#39;title&#39;:True}):
+    h = a.find(&#39;h2&#39;, attrs={&#39;class&#39;:&#39;bf&#39;})
+    for t in h:
+      print(t.text)
+      titles.append(t.text)
+
+df = pd.DataFrame({&#34;Naslovi&#34;: titles})
+df
+</code></pre>
+<p>Primjer kako može izgledati izlaz (ovisno o trenutnom sadržaju stranice):</p>
+<p class="image-container"><img alt="bb588fb00a92d195.png" style="width: 410.00px" src="img/bb588fb00a92d195.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Primjer: Primjena biblioteke Beautiful Soup" duration="0">
+        <p>Opis:</p>
+<ul>
+<li>Uvoz biblioteka za HTTP zahtjev i parsiranje</li>
+<li>Definiranje URL adrese</li>
+<li>Slanje GET zahtjeva</li>
+<li>Parsiranje</li>
+</ul>
+<p>Zadatak je pronaći 10 naslova pomoću <strong>find_all()</strong> funkcije. Uvidom u kod možemo vidjeti da naslovi izgledaju ovako:</p>
+<p><code>.html</code></p>
+<pre><code language="language-html" class="language-html">&lt;h2 data-testid=&#34;card-headline&#34; class=&#34;sc-8ea7699c-3 dhclWg&#34;&gt;Naslov&lt;!-- --&gt;&lt;/h2&gt;
+</code></pre>
+<p>Klasa nam u ovom slučaju ne odgovara već ćemo tražiti element <strong>h2</strong> koji ima atribut <strong>data-testid</strong> s vrijednosti <strong>card-headline</strong>.</p>
+<p>Rješenje (napomena: ako se promijeni stranica, primjer neće raditi):</p>
+<p><code>.py</code></p>
+<pre><code language="language-py" class="language-py">import requests
+from bs4 import BeautifulSoup
+
+# URL za izvlačenje podataka
+url = &#34;http://www.bbc.com/news&#34;
+
+# Slanje GET zahtjeva
+response = requests.get(url)
+
+# Parsiranje sadržaja kojeg smo dobili u odgovoru
+soup = BeautifulSoup(response.content, &#34;html.parser&#34;)
+
+# Tražimo h2 element s atributom, ali samo prvih 10
+headlines = soup.find_all(&#34;h2&#34;, attrs={&#34;data-testid&#34;: &#34;card-headline&#34;})[:10]
+
+# Ispis
+for h in headlines:
+    print(h.text)
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Primjer: Prikupljanje više podataka" duration="0">
+        <p>U prethodnom primjeru prikupili smo samo naslove (<em>headlines</em>), ali to najčešće nije slučaj. Kako bi prikupili ostale podatke potrebno je pogledati nadređeni element u DOM hijerarhiji:</p>
+<p><code>.html</code></p>
+<pre><code language="language-html" class="language-html">&lt;div data-testid=&#34;card-text-wrapper&#34;&gt;
+    &lt;div&gt;
+        &lt;div&gt;
+            &lt;h2 data-testid=&#34;card-headline&#34;&gt;TITLE&lt;/h2&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;p data-testid=&#34;card-description&#34;&gt;DESCRIPTION
+    &lt;div&gt;
+        &lt;span data-testid=&#34;card-metadata-lastupdated&#34;&gt;41 mins ago&lt;/span&gt;
+        &lt;div data-testid=&#34;card-metadata-separator&#34;&gt;&lt;/div&gt;
+        &lt;span data-testid=&#34;card-metadata-tag&#34;&gt;TOPIC&lt;/span&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>U gornjem primjeru izostavljene su klase koje su inače dio stvarne stranice te su zamijenjene stvarne vrijednosti s:</p>
+<ul>
+<li>TITLE</li>
+<li>DESCRIPTION</li>
+<li>TOPIC</li>
+</ul>
+<p>Vrijeme nećemo koristiti jer se zapisuje na razne načine. Možemo identificirati atribute:</p>
+<ul>
+<li><strong>Cijela kartica</strong>: &lt;div data-testid=&#34;card-text-wrapper&#34;&gt;</li>
+<li><strong>Naslov</strong>: &lt;h2 data-testid=&#34;card-headline&#34;&gt;</li>
+<li><strong>Opis</strong>: &lt;p data-testid=&#34;card-description&#34;&gt;</li>
+<li><strong>Tema</strong>: &lt;span data-testid=&#34;card-metadata-tag&#34;&gt;</li>
+</ul>
+<p>Odvojimo učitavanje biblioteka i slanje zahtjeva tako da ne moramo svaki put ponovo slati zahtjev dok testiramo:</p>
+<p><code>.py</code></p>
+<pre><code language="language-py" class="language-py">import requests
+from bs4 import BeautifulSoup
+
+url = &#34;http://www.bbc.com/news&#34;
+
+response = requests.get(url)
+</code></pre>
+<p>Parsiranje:</p>
+<p><code>.py</code></p>
+<pre><code language="language-py" class="language-py">soup = BeautifulSoup(response.content, &#34;html.parser&#34;)
+
+card_wrappers = soup.find_all(&#34;div&#34;, attrs={&#34;data-testid&#34;: &#34;card-text-wrapper&#34;})[:10]
+
+# title, description, topic
+for wrapper in card_wrappers:
+    title = wrapper.find(&#34;h2&#34;, attrs={&#34;data-testid&#34;: &#34;card-headline&#34;}).text
+    description = wrapper.find(&#34;p&#34;, attrs={&#34;data-testid&#34;: &#34;card-description&#34;}).text
+    topic_element = wrapper.find(&#34;span&#34;, attrs={&#34;data-testid&#34;: &#34;card-metadata-tag&#34;}).text
+    print(f&#34;Title: {title}&#34;)
+    print(f&#34;Description: {description}&#34;)
+    print(f&#34;Topic: {topic}&#34;)
+    print()
+</code></pre>
+<p>Nakon što to izvršimo, moguće je da ćemo dobiti grešku ako neke od kartica nemaju &#34;topic&#34;.</p>
+<p>Konačno rješenje:</p>
+<p><code>.py</code></p>
+<pre><code language="language-py" class="language-py">soup = BeautifulSoup(response.content, &#34;html.parser&#34;)
+
+card_wrappers = soup.find_all(&#34;div&#34;, attrs={&#34;data-testid&#34;: &#34;card-text-wrapper&#34;})[:10]
+
+for wrapper in card_wrappers:
+    title = wrapper.find(&#34;h2&#34;, attrs={&#34;data-testid&#34;: &#34;card-headline&#34;}).text
+    description = wrapper.find(&#34;p&#34;, attrs={&#34;data-testid&#34;: &#34;card-description&#34;}).text
+    topic_element = wrapper.find(&#34;span&#34;, attrs={&#34;data-testid&#34;: &#34;card-metadata-tag&#34;})
+    if topic_element:
+        topic = topic_element.text
+    else:
+        topic = &#34;N/A&#34;
+    print(f&#34;Title: {title}&#34;)
+    print(f&#34;Description: {description}&#34;)
+    print(f&#34;Topic: {topic}&#34;)
+    print()
+</code></pre>
+<p>Ako želite spremiti podatke u <strong>dataframe</strong>, onda je potrebno prije <strong>for</strong> petlje koja prolazi kroz kartice (<em>card_wrappers</em>) dodati varijablu: <em>data = []</em>.</p>
+<p>Unutar petlje pišemo: <strong>data.append({&#34;title&#34;: title, &#34;description&#34;: description, &#34;topic&#34;: topic})</strong></p>
+<p>Dataframe ćemo dobiti naredbom: <strong>df = pd.DataFrame(data)</strong></p>
+<p>Spremanje obavljamo naredbom: <strong>df.to_csv(&#34;bbc_news.csv&#34;, index=False)</strong></p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

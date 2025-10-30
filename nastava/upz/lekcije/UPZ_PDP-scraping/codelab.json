@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-11-04T18:38:04+01:00",
+  "id": "UPZ_PDP-scraping",
+  "duration": 0,
+  "title": "UPZ-PDP: Web Scraping",
+  "authors": "Divna Krpan",
+  "summary": "Web Scraping",
+  "source": "UPZ_PDP-scraping/index.md",
+  "theme": "",
+  "status": [
+    "[draft]"
+  ],
+  "category": [
+    "web"
+  ],
+  "tags": [
+    "web"
+  ],
+  "url": "UPZ_PDP-scraping"
+}

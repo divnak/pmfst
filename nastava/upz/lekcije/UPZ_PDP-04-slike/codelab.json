@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-10-21T13:39:31Z",
+  "id": "UPZ_PDP-04-slike",
+  "duration": 0,
+  "title": "UPZ-PDP: Orange",
+  "authors": "Divna Krpan",
+  "summary": "Uvod u podatkovnu znanost - Orange",
+  "source": "1DI7TL5W-aIfFzasPqovYQSM-1YGOA5EgnbGLqmKgqdA",
+  "theme": "web",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "web"
+  ],
+  "tags": [
+    "web"
+  ],
+  "url": "UPZ_PDP-04-slike"
+}

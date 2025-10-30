@@ -1,0 +1,186 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>UPZ-PDP: Orange</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="UPZ_PDP-04-slike"
+                  title="UPZ-PDP: Orange"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Uvod" duration="0">
+        <p>📌 Analiza slika</p>
+<p>📌 Image embedding</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Instalacija dodatka" duration="0">
+        <ul>
+<li>Options → Add-ons</li>
+</ul>
+<p class="image-container"><img style="width: 624.00px" src="img/80f224c358c7b1ef.png"></p>
+<p>Nakon instalacije, možemo vidjeti dostupne <em>widget</em>-e. </p>
+<p class="image-container"><img style="width: 291.00px" src="img/bbc641a2cdd878dc.png"></p>
+<h2 is-upgraded><strong>Učitavanje slika</strong></h2>
+<p>Za učitavanje slika koristimo <strong>Import images</strong>.</p>
+<p class="image-container"><img style="width: 129.00px" src="img/b3fc8f52aa135910.png"></p>
+<p>Ako budemo dodavali nove slike u folder, treba kliknuti na <strong>Reload</strong>. Učitajmo slike 17 domaćih životinja:</p>
+<p class="image-container"><img style="width: 219.33px" src="img/994f145957301d4b.png"></p>
+<p>Kod učitavanja slika biramo <strong>folder</strong> kojeg želimo učitati:</p>
+<p class="image-container"><img style="width: 350.67px" src="img/5857bae0b2e57611.png"></p>
+<p>Slike možemo vidjeti pomoću <strong>Image Viewer</strong>, a pomoću <strong>Data Table</strong> možemo vidjeti osnovne informacije o slikama.</p>
+<p class="image-container"><img style="width: 235.33px" src="img/a38d7d2f5699732c.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Image embedding" duration="0">
+        <p><strong>Image embedding</strong> je proces pretvaranja slike koja je zapravo niz piksela u numerički vektor. Taj vektor sadrži informacije o sadržaju slike na način koji je razumljiv modelima strojnog učenja. </p>
+<p>Modeli strojnog učenja koji se temelje na neuronskim mrežama najbolje rade s numeričkim podacima. </p>
+<p>U sljedećem koraku moramo pretvoriti slike u numerički zapis upotrebom modela <em>dubokog učenja </em>(eng. Deep learning). Možemo koristiti primjerice <strong>Inception V3</strong> model koji generira vektor od <strong>2048</strong> dimenzija za svaku sliku. Takav način <em>vektorizacije</em> slike omogućuje modelima strojnog učenja <em>grupiranje</em> (eng. clustering) i klasifikaciju.</p>
+<p><strong>Inception V3</strong> je konvolucijska neuronska mreža (Convolutional Neural Network, CNN) koja pripada vrsti <strong>Inception</strong>. Cijela obitelj CNN-ova pod nazivom <em>Inception</em> pripada Google-u, a koristi se za računalni vid. Modeli poput Inception V3 su zapravo velike neuronske mreže koje su prethodno uvježbane na ogromnim skupovima slika (npr. ImageNet).</p>
+<p class="image-container"><img style="width: 252.67px" src="img/350c39d5c2516da0.png"></p>
+<p>Kad <em>provučemo</em> sliku kroz takvu mrežu, na kraju dobijemo vektor koji predstavlja najvažnije značajke (eng. features) te slike. </p>
+<p>Primjeri primjene:</p>
+<ul>
+<li>Pretraživanje sličnih slika u velikim bazama podataka</li>
+<li>Klasifikacija slika (npr. mačka, pas, ...)</li>
+<li>Generiranje sličnih slika</li>
+<li>Prepoznavanje objekata na slici (lica, prometni znakovi, ...)</li>
+</ul>
+<p>Osim Inception V3, Orange ima na raspolaganju i nekoliko ostalih:</p>
+<p class="image-container"><img style="width: 158.00px" src="img/6fba915e77e4c00.png"></p>
+<p>Widget šalje podatke na poslužitelj te računa vrijednosti.</p>
+<p><em>Workflow</em> u ovom koraku izgleda ovako:</p>
+<p class="image-container"><img style="width: 230.23px" src="img/5f51e075d0757a6b.png"></p>
+<p>Pregled vrijednosti možemo vidjeti pomoću <strong>DataTable</strong>:</p>
+<p class="image-container"><img style="width: 624.00px" src="img/21a9d645f090a134.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Udaljenost i grupiranje" duration="0">
+        <p>U prethodnom koraku smo dobili novih 2048 stupaca s numeričkim vrijednostima. Na te stupce možemo primijeniti neku od tehnika strojnog učenja, primjerice <em>klasteriranje</em>. Ovdje ćemo koristiti <em>widget </em><strong>Distances</strong> za mjerenje udaljenosti. </p>
+<p class="image-container"><img style="width: 282.00px" src="img/975e0fd1b6290cf3.png"></p>
+<p>Preporuka za slike je <strong>Cosine</strong>, ali možete probati i neke druge. </p>
+<p class="image-container"><img style="width: 226.00px" src="img/e732de4cb095f427.png"></p>
+<p>Matricu udaljenosti šaljemo na <strong>Hierarchical Clustering</strong> kako bi vizualizirali slične parove u obliku <em>dendagrama</em>.</p>
+<p class="image-container"><img style="width: 460.53px" src="img/b3b7ec23e0c47106.png"></p>
+<p>Ako odaberemo neku od grana, možemo vidjeti da su neke od sličnih životinja grupirane zajedno (npr. ox, cow, calf):</p>
+<p class="image-container"><img style="width: 624.00px" src="img/702ae6948dc8531d.png"></p>
+<p>Zbog jako malog skupa podataka neće sve životinje dobro grupirati. No, možemo provjeriti dodavanjem još jedne krave s web-a:</p>
+<p class="image-container"><img style="width: 152.00px" src="img/b5a7039029214b5f.jpeg"></p>
+<p>Premda je nova slika prilično drugačija od ostalih (npr. nema niti bijelu pozadinu, dijelom je stvarna, ali ipak obrađena), raspoređena je skupa s ostalima:</p>
+<p class="image-container"><img style="width: 624.00px" src="img/7891d0e96994ad04.png"></p>
+<h2 is-upgraded><strong>Rješenje</strong></h2>
+<p class="image-container"><img style="width: 624.00px" src="img/71adf059bf67db6c.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Klasifikacija cvijeća" duration="0">
+        <p>Koristit ćemo model strojnog učenja za predviđanje kojoj vrsti pripada cvijeće. Preuzmite podatke sa stranice kolegija. U tom skupu slika nalazi se jako malo slika (po 10 za svaku kategoriju/vrstu). Svaka vrsta je raspoređena u svoj folder - to je također način kako će Orange &#34;znati&#34; kojoj vrsti pripada svaka slika.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/a9e5feb104324131.png"></p>
+<p><a href="https://www.kaggle.com/datasets/imsparsh/flowers-dataset" target="_blank"><paper-button class="colored" raised>Flowers Dataset</paper-button></a></p>
+<p>Potrebno je odabrati folder u kojem se nalazi pet podfoldera s nazivima vrste cvijeća (kategorija).</p>
+<p class="image-container"><img style="width: 318.67px" src="img/23c54384ed9cbc6c.png"></p>
+<h2 is-upgraded><strong>Test and Score</strong></h2>
+<p>Widget <strong>Test and Score</strong> testira algoritme učenja (learning algorithms) na podacima.</p>
+<p>Ulaz:</p>
+<ul>
+<li><strong>Data</strong> - ulazni skup podataka</li>
+<li><strong>Test Data</strong> - odvojeni skup podataka za testiranje</li>
+<li><strong>Learner</strong> - algoritmi</li>
+</ul>
+<p>Izlaz:</p>
+<ul>
+<li>Rezulati evaluacije</li>
+</ul>
+<p>Widget sadrži i opcije za odabir uzorka (eng. sample). U tablici koja se prikazuje možemo vidjeti metrike kao što su <em>classification accuracy</em> i <em>area under the curve</em> (AUC). Izlaz se može poslati u <em>matricu konfuzije</em>.</p>
+<aside class="warning"><p>📌Ovaj widget je poseban jer se na njega kao ulaz može spojiti više drugih widgeta.</p>
+</aside>
+<p class="image-container"><img style="width: 296.67px" src="img/9a69b88af7d082d7.png"></p>
+<p>Widget podržava nekoliko načina odabira uzorka:</p>
+<ul>
+<li><strong>Cross-validation</strong> - dijeli podatke na nekoliko podskupova (eng. folds), najčešće 5 ili 10. Model se testira tako da se svaki put izostavi jedan <em>fold</em> te se model uvježba na preostalima i testira na onome koji je bio izostavljen.</li>
+<li>Random sampling - dijeli podatke na skup za uvježbavanje u odabranom omjeru.</li>
+<li>Leave one out - slično, samo što izostavlja jednu instancu (sporo).</li>
+<li>Test on train data - koristi cijeli skup za uvježbavanje te zatim za testiranje.</li>
+<li>Test on test data - prethodne metode koriste <strong>Data</strong> iz podatkovnog kanala, a za upotrebu ove opcije moramo dovesti još jedan poseban kanal <strong>Separate Test Data</strong>.</li>
+</ul>
+<p class="image-container"><img style="width: 624.00px" src="img/b04382c88ee1ee0d.png"></p>
+<p>Podaci iz tablice:</p>
+<ul>
+<li>AUC (<a href="https://darwin.unmc.edu/dxtests/roc3.htm" target="_blank">Area Under Curve</a>) - točnost se mjeri površinom ispod ROC krivulje (receiver-operating curve).</li>
+<li>CA (Classification Accuracy) - omjer točno klasificiranih primjera.</li>
+<li>Prec (Precision) - omjer točnih pozitivnih (<strong>true positive</strong>) među onima koji su klasificirani kao pozitivni (npr. omjer maslačaka koji su točno indentificirani kao maslačci).</li>
+<li>Recall - omjer točnih pozitivnih među svim pozitivnim podacima (npr. broj bolesnih među svima koji su dijagnosticirani kao bolesni).</li>
+<li>...</li>
+</ul>
+<p>Detaljnije upute i primjere pogledajte na stranici:</p>
+<p><a href="https://orangedatamining.com/widget-catalog/evaluate/testandscore/" target="_blank"><paper-button class="colored" raised>Test and Score Widget</paper-button></a></p>
+<h2 is-upgraded><strong>Matrica konfuzije</strong></h2>
+<p>Izlazni kanal iz <strong>Test and Score</strong> ćemo spojiti na <strong>Confusion Matrix</strong> kako bi provjerili:</p>
+<ul>
+<li>Stvarne klase</li>
+<li>Klase koje su predviđene</li>
+<li>Koliko ih je točno klasificirano</li>
+</ul>
+<p class="image-container"><img style="width: 356.67px" src="img/ec859f8a14ed220f.png"></p>
+<p>Nadalje, nakon odabira u matrici, možemo provjeriti koji su to konkretni primjerci pogrešno klasificirani (jer smo stavili mali broj slika).</p>
+<p class="image-container"><img style="width: 379.33px" src="img/fcf625e4406ca3e0.png"></p>
+<p>U matrici smo odabrali 2 slučaja gdje je predviđen suncokret, a stvarna vrsta je maslača:</p>
+<p class="image-container"><img style="width: 280.00px" src="img/6bdd02dc520bc183.png"></p>
+<p>Zašto se to dogodilo?</p>
+<h2 is-upgraded><strong>Rješenje</strong></h2>
+<p class="image-container"><img style="width: 624.00px" src="img/f4b2289606ac51fa.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Ponovimo" duration="0">
+        <p>Postupak za klasifikaciju slika cvijeća:</p>
+<ul>
+<li>Pripremiti skup podataka: prikupiti različite slike cvijeća, razdvojiti ih u posebne folder (svaka vrsta u svoj folder).</li>
+<li>Učitati slike: widget <strong>Import Images</strong>, otvoriti folder s podfolderima.</li>
+<li>Napraviti <strong>image embedding</strong> pomoću widgeta <strong>Image Embedding</strong> - odabrati odgovarajući već uvježbani model (kao što je <strong>Inception V3</strong>).</li>
+<li>Uvježbavanje klasifikacijskog modela: odabrati model (npr. <strong>Logistic regression</strong>).</li>
+<li>Vizualizacija rezultata: npr. matrica konfuzije, tablica i sl.</li>
+<li>Interaktivna analiza: u matrici konfuzije možemo odabrati slučajeve koji su pogrešno klasificirani kako bi pokušali vidjeti što se dogodilo primjerice pomoću <strong>Image Viewer</strong>.</li>
+</ul>
+<p>Orange nudi mogućnosti analize slika gdje se na prilično jednostavan način mogu obaviti jako složeni zadaci i to bez poznavanja programiranja. Korisnici mogu analizirati i interpretirati podatke.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

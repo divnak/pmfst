@@ -1,0 +1,204 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>UPZ-PDP: Orange</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="UPZ_PDP-04-tekst"
+                  title="UPZ-PDP: Orange"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Uvod" duration="0">
+        <p>📌 Analiza teksta</p>
+<p>📌 Sentiment analysis</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Dodatak za rad s tekstom" duration="0">
+        <h2 is-upgraded><strong>Instalacija</strong></h2>
+<p>Za rad s tekstom potrebno je instalirati dodatak (Options - Install Add-on) za tekst:</p>
+<p class="image-container"><img style="width: 352.00px" src="img/8390128ce426590b.png"></p>
+<p>Dodatak nam omogućuje pristup javno dostupnim skupovima podataka, ali također i rad s našim podacima.</p>
+<h2 is-upgraded><strong>Učitavanje podataka</strong></h2>
+<p>Podatke možemo učitati pomoću novog widget-a koji se instalirao u <strong>Text Mining</strong> alatnoj traci: <strong>Import Documents</strong>.</p>
+<p>Desni klik mišem vam uvijek može dati dodatne informacije o nekom widgetu:</p>
+<p class="image-container"><img style="width: 206.00px" src="img/1246eda97eea5d9e.png"></p>
+<p>Widget <strong>Import Documents</strong> omogućuje učitavanje dokumenata iz <strong>foldera</strong>.</p>
+<p>Izlaz widget-a je:</p>
+<ul>
+<li><strong>Corpus</strong>: Kolekcija dokumenata</li>
+<li>Skipped documents: dokumenti koji se nisu mogli učitati.</li>
+</ul>
+<p>Widget može pročitati: .txt, .docx, .odt, .pdf, .xml, and .conllu datoteke. Ako folder  sadrži podfoldere, onda će se nazivi koristiti kao kategorije ili oznake klasa (kao i sa slikama).</p>
+<p>Možemo učitati <strong>alice.txt</strong> (preuzmite sa stranice kolegija i spremite u poseban folder).</p>
+<p class="image-container"><img style="width: 593.00px" src="img/6ed86c9d4f147232.png"></p>
+<p>Svaki dokument koji se učita ima sljedeće podatke koje vidimo u <strong>Data Table</strong>:</p>
+<p class="image-container"><img style="width: 488.00px" src="img/593a303aaab501ed.png"></p>
+<p>Obzirom da je izlaz <strong>corpus</strong>, onda ćemo ga spojiti na istoimeni widget.</p>
+<p class="image-container"><img style="width: 321.33px" src="img/a0c20b47068deecb.png"></p>
+<p class="image-container"><img style="width: 260.00px" src="img/6be34c2df2cd948.png"></p>
+<p><strong>Corpus</strong> učitava tekstualne dokumente. Može raditi na dva načina:</p>
+<ul>
+<li>Ako nema podataka na ulazu, onda omogućuje učitavanje teksta iz datoteka (<em>corpus file</em>) ili iz postojećih primjera (npr. bajke)</li>
+<li>Ako postoji ulaz, onda pretvara podatke u <em>corpus</em>. Pri tome korisnici mogu birati koje značajke (eng. features) žele koristiti.</li>
+</ul>
+<p class="image-container"><img style="width: 419.00px" src="img/d38da88d0e7a43f2.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Rastavljanje teksta na riječi" duration="0">
+        <p>Widget <strong>Preprocess Text</strong> obavlja obradu teksta. Ulaz mora biti tipa <em>corpus</em>, a izlaz je &#34;obrađeni&#34; <em>corpus</em>. Obrada podrazumijeva rastavljanje teksta na manje jedinice <strong>tokens</strong>, filtriranje, normalizacija, stvaranje <strong>n-grama</strong>, ...</p>
+<p>Dostupni alati:</p>
+<p class="image-container"><img style="width: 223.00px" src="img/b9d9bce6afe79285.png"></p>
+<ul>
+<li><strong>Transformation</strong> - pretvara ulazne podatke (npr. Sva slova u mala), uklanja naglaske (oznake iznad slova, kôd ⇒ kod), parsira HTML (ignorira tag-ove te uzima samo stvarni tekst), uklanja URL-ove.</li>
+<li><strong>Tokenization</strong> - metoda rastavljanja teksta na manje jedinice (riječi), možemo odabrati način (po razmacima, sa/bez zadržavanja znakova interpunkcije i sl.).</li>
+<li><strong>Normalization</strong> - obavlja <em>stemming</em> i <em>lemmatization</em>. To su dvije tehnike obrade prirodnog jezika (NLP) koje prevode riječi u njihove osnovne oblike (korijenske). Pri tome <em>stemming</em> uklanja nastavke (cats ⇒ cat, loved ⇒ love). <em>Lemmatization</em> je precizniji postupak od prethodnog jer koristi morfološke oblike riječi (npr. better ⇒ good).</li>
+<li><strong>Filtering</strong> - uklanja ili zadržava skup riječi, kao što su <strong>stopwords</strong> (npr. and, or, a, in, ... u engleskom jeziku).</li>
+<li>... </li>
+</ul>
+<p>Ostalo pogledajte na stranici: (<a href="https://orangedatamining.com/widget-catalog/text-mining/preprocesstext/" target="_blank">https://orangedatamining.com/widget-catalog/text-mining/preprocesstext/</a> ).</p>
+<p>Nakon što smo rastavili tekst na riječi i uklonili &#34;stop words&#34;, rezultat možemo jednostavno vizualizirati pomoću <strong>Word Cloud</strong> widget-a:</p>
+<p class="image-container"><img style="width: 466.67px" src="img/df253836094ae625.png"></p>
+<p>Ako pogledate pomoć za <strong>Word Cloud</strong>, vidjet ćete kako postoji više vrsta izlaza te da nije samo za vizualizaciju:</p>
+<p class="image-container"><img style="width: 403.33px" src="img/93071218d0ddf75b.png"></p>
+<p>Prema tome, možemo napraviti i stupčasti grafikon za prikaz najčešćih riječi (pazimo na postavke kanala):</p>
+<p class="image-container"><img style="width: 366.67px" src="img/de5ee399dca2e7d0.png"></p>
+<p>Rezultat (odabran samo dio za prikaz):</p>
+<p class="image-container"><img style="width: 393.33px" src="img/fa8561d29c3652d8.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Sentiment analysis" duration="0">
+        <p><strong>Sentiment analysis (SA) </strong>(okvirni prijevod: &#34;analiza sentimenta&#34;) je područje obrade prirodnog jezika (NLP) koja se koristi za određivanje emocionalnog tona izraženog u tekstu, odnosno pokušava se utvrditi je li tekst pozitivan, negativan ili neutralan. Ponekad se naziva <strong>&#34;opinion mining</strong>&#34;.</p>
+<p>Primjena:</p>
+<ul>
+<li>Marketing - praćenje mišljenja kupaca o proizvodima i uslugama</li>
+<li>Društvene mreže - praćenje javnog mišljenja o temama ili događajima</li>
+<li>Politika - praćenje mišljenja o političarima</li>
+<li>...</li>
+</ul>
+<p>Pristup SA možemo podijeliti na:</p>
+<ul>
+<li>SA temeljena na pravilima (eng. rule-based)</li>
+<li>SA temeljena na strojnom učenju (naive bayes, logistička regresija, SVM)</li>
+<li>Hibridni pristup</li>
+</ul>
+<p>Nedostaci SA:</p>
+<ul>
+<li>Nedostatak konteksta - posebno kad se radi o malom bloku teksta</li>
+<li>Ironija ili sarkazam</li>
+<li>Negacija (npr. Ne bih rekla da su te cipele bile skupe)</li>
+<li>Posebni izrazi (npr. Break a leg)</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Analiza mišljenja kupaca" duration="0">
+        <p>Podaci:</p>
+<ul>
+<li>Amazon Earphones Reviews</li>
+<li><a href="https://www.kaggle.com/datasets/shitalkat/amazonearphonesreviews/" target="_blank">https://www.kaggle.com/datasets/shitalkat/amazonearphonesreviews/</a></li>
+<li>AllProductReviews.csv </li>
+<li>Oko 14.000 redaka</li>
+<li>Preuzmite sa stranice kolegija</li>
+</ul>
+<p>Tablica sadrži ocjenu proizvoda, naslov mišljenja te samo mišljenje (review).</p>
+<p>Za učitavanje podataka koristimo widget <strong>CSV File Import</strong>. Učitat ćemo podatke u <strong>Data Table</strong> kako bi vidjeli što je u tablici.</p>
+<p>Nakon toga učitavamo podatke u <strong>Corpus</strong>, a za pregled dalje možemo koristiti <strong>Corpus Viewer</strong>.</p>
+<p class="image-container"><img style="width: 405.00px" src="img/a487d7ac21a2fe79.png"></p>
+<p>Izlaz iz <strong>Corpus</strong> šaljemo u <strong>Preprocess Text</strong>. Ovdje morate pripaziti na <em>kanal</em>. Naime, ako ostavite zadanu opciju <strong>Matching Docs</strong>, onda je potrebno u <strong>Corpus Viewer</strong> widget-u označiti sve retke koje želite promatrati (često ostane samo jedan odabran). Inače, možete promijeniti tako da budu odabrani svi podaci (Corpus).</p>
+<p class="image-container"><img style="width: 624.00px" src="img/43baa6cf03bd9831.png"></p>
+<p>Ovdje nam <strong>Word Cloud </strong>može poslužiti za provjeru je li sve odabrano:</p>
+<p class="image-container"><img style="width: 492.00px" src="img/3a78ba3998dd355a.png"></p>
+<p>Widget <strong>Sentiment Analysis</strong> sadrži nekoliko metoda, a ovdje ćemo odabrati VADER:</p>
+<p class="image-container"><img style="width: 270.67px" src="img/6d6a2e375c583cbe.png"></p>
+<p>Provjerite za koje jezike je prikladna odgovarajuća metoda. Naravno, možete i sami definirati vlastite rječnike (<strong>custum dictionary</strong>).</p>
+<aside class="warning"><p><strong>Pitanje:</strong> Postoji li korelacija između ocjene (Review Star) i sentimenta u tekstu?</p>
+</aside>
+<h2 is-upgraded><strong>Korelacija</strong></h2>
+<p>Računanje korelacije je korisna statistička metoda koja nam daje informacije o povezanosti dviju varijabli. Često se koriste:</p>
+<ul>
+<li>Spearman</li>
+<li>Pearson</li>
+</ul>
+<h3 is-upgraded><strong>Pearson</strong></h3>
+<p>Pearson-ova korelacija se naziva i <em>linearna</em> jer mjeri linearnu povezanost između dvije kontinuirane varijable. Prije računanja, potrebno je provjeriti prepostavke (eng. assumptions):</p>
+<ul>
+<li>Slučajan odabir uzorka</li>
+<li>Kvantitativne varijable (continuous)</li>
+<li>Podaci su upareni (svaka x vrijednost je povezana s y vrijednosti)</li>
+<li>Podaci su normalno distribuirani</li>
+<li>Varijable su linearno povezane</li>
+<li>Nema odstupajućih vrijednosti (eng. outliers)</li>
+</ul>
+<p>Vrijednost koeficijenta je između -1 i 1.</p>
+<h3 is-upgraded><strong>Spearman</strong></h3>
+<p>Spearman-ova korelacija mjeri monotonu povezanost između dvije varijable na temelju ranga (eng. rank). U kontekstu statistike i analize podataka, monotona veza između dvije varijable znači da se vrijednosti jedne varijable općenito povećavaju ili smanjuju s povećanjem ili smanjenjem vrijednosti druge varijable. To ne znači nužno da postoji savršena linearna veza, već samo da postoji opći trend.</p>
+<p>Pretpostavke:</p>
+<ul>
+<li>Slučajan odabir uzorka</li>
+<li>Monotona povezanost među varijablama</li>
+<li>Podaci su upareni</li>
+<li>Nezavisni podaci</li>
+<li>Varijable su ordinalne ili kontinuirane</li>
+</ul>
+<p>Prikazom podataka o ocjenama kupaca možemo odmah utvrditi da nisu normalno distribuirani tako da ne možemo primijeniti Pearson-ovu korelaciju.</p>
+<p class="image-container"><img style="width: 314.67px" src="img/3e7abab2c43a9003.png"></p>
+<p>Prema tome, možemo vidjeti rezultat:</p>
+<p class="image-container"><img style="width: 374.67px" src="img/4370565896ab2403.png"></p>
+<p>Prema tablici, postoji umjerena (eng. moderate) pozitivna korelacija između ocjene i teksta koje je klasificirano kao pozitivno, umjerena negativna između ocjene i negativnog teksta te slaba korelacija između ocjene i neutralnog mišljenja. Kad se računa korelacija, dobro je dodati i <strong>Data Table</strong> kako bi mogli provjeriti i ostale vrijednosti koje nisu vidljive u samom widget-u:</p>
+<p class="image-container"><img style="width: 228.00px" src="img/f9b5ab6a9e70d926.png"></p>
+<p class="image-container"><img style="width: 513.33px" src="img/b9756dbe6d4127c9.png"></p>
+<p>Kao izlaz iz <strong>Sentiment Analysis </strong>možemo postaviti i <strong>Heat Map</strong> te pogledati kako se mišljenja grupiraju. </p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Sažetak" duration="0">
+        <p>U ovom dijelu smo istražili kako koristiti alat Orange za analizu teksta. Naučili smo kako:</p>
+<ul>
+<li><strong>Učitavati tekstualne podatke:</strong> Uvezli smo različite formate datoteka i stvorili korpus (zbirku dokumenata).</li>
+<li><strong>Preprocesirati tekst:</strong> Rastavili smo tekst na riječi, uklonili stop riječi i normalizirali tekst kako bismo ga pripremili za daljnju analizu.</li>
+<li><strong>Vizualizirati tekst:</strong> Koristili smo Word Cloud i druge vizualizacije kako bismo dobili uvid u najčešće pojmove u tekstu.</li>
+<li><strong>Provesti analizu sentimenta:</strong> Odredili smo emocionalni ton teksta koristeći različite metode i alate.</li>
+<li><strong>Istraživati korelacije:</strong> Proučavali smo povezanost između ocjena proizvoda i izraženog sentimenta u recenzijama.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
