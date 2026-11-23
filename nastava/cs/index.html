@@ -651,6 +651,7 @@ Dictionary&lt;string, int&gt; rjecnik =
                 <small>Parovi ključ-vrijednost. <br><code>using System.Collections.Generic;</code></small>
             </div>
         </section>
+
         <section class="card">
             <div class="card-head">
                 <h2>Hashtable</h2>
@@ -660,6 +661,23 @@ Dictionary&lt;string, int&gt; rjecnik =
                 <pre>
 Hashtable ht = new Hashtable();</pre>
                 <small><code>using System.Collections;</code> <br>Nema sigurne tipove, potrebno je pretvarati vrijednosti.</small>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-head">
+                <h2>"Nadogradnja klase"</h2>
+                <span class="tag">Nasljeđivanje</span>
+            </div>
+            <div class="body">
+                <pre>//primjer
+class MojaKlasa : Hashtable
+{
+    // ovdje se mogu dodati novi 
+    // članovi klase npr. metode
+}
+                </pre>
+                <small>Unutar tijela klase koristimo <code>this</code> za pristup članovima klase.</small>
             </div>
         </section>
         
