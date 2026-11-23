@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="hr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>C# · SPA Quick Reference</title>
+    <style>
+        :root {
+            --bg: #f3f6fb;
+            --ink: #1d2b43;
+            --muted: #68778e;
+            --navy: #172d52;
+            --blue: #315fb0;
+            --line: #dce4f0;
+            --card: #fff;
+            --code: #f6f8fc;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font:
+                14px/1.45 system-ui,
+                -apple-system,
+                "Segoe UI",
+                sans-serif;
+        }
+
+        .top {
+            background: var(--navy);
+            color: white;
+            padding: 28px max(24px, calc((100vw - 1200px) / 2));
+        }
+
+        .top .eyebrow {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #b9cbed;
+            font-weight: 700;
+        }
+
+        .top h1 {
+            margin: 5px 0 6px;
+            font-size: 34px;
+            letter-spacing: -1px;
+        }
+
+        .top p {
+            margin: 0;
+            color: #d5e0f3;
+            max-width: 780px;
+        }
+
+        .toolbar {
+            max-width: 1200px;
+            margin: 18px auto 0;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar .note {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        button {
+            border: 1px solid #bdcce4;
+            border-radius: 8px;
+            padding: 9px 13px;
+            background: #fff;
+            color: #254675;
+            font-weight: 650;
+            cursor: pointer;
+        }
+
+        button.primary {
+            background: #315fb0;
+            color: white;
+            border-color: #315fb0;
+        }
+
+        .layout {
+            max-width: 1200px;
+            margin: 16px auto 50px;
+            padding: 0 20px;
+            columns: 3 310px;
+            column-gap: 17px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            margin: 0 0 17px;
+            break-inside: avoid;
+            overflow: hidden;
+            box-shadow: 0 3px 13px #253e6410;
+        }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px 10px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .card h2 {
+            font-size: 16px;
+            letter-spacing: 0.1px;
+            margin: 0;
+            color: #214b88;
+        }
+
+        .card .tag {
+            font-size: 14px;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            color: darkgreen;
+        }
+
+        .card .body {
+            padding: 11px 13px 13px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #63728a;
+            margin: 0 0 9px;
+        }
+
+        .card pre {
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            background: var(--code);
+            border: 1px solid #e8edf6;
+            border-radius: 7px;
+            margin: 0 0 7px;
+            padding: 10px;
+            font:
+                14px/1.55 "Cascadia Code",
+                Consolas,
+                "Liberation Mono",
+                monospace;
+            tab-size: 4;
+        }
+
+        .card pre:last-child {
+            margin-bottom: 0;
+        }
+
+        .kw {
+            color: #7c3fb1;
+            font-weight: 600;
+        }
+
+        .ty {
+            color: #167a8b;
+        }
+
+        .str {
+            color: #a94b2b;
+        }
+
+        .fn {
+            color: #265db0;
+        }
+
+        .cm {
+            color: #8590a1;
+            font-style: italic;
+        }
+
+        .card small {
+            display: block;
+            color: black;
+            margin-top: 6px;
+            font-size: 14px;
+        }
+
+        .footer {
+            max-width: 1200px;
+            margin: 0 auto 25px;
+            padding: 0 20px;
+            color: #7d8ba0;
+            font-size: 11px;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 11mm;
+        }
+
+        @media print {
+            body {
+                background: white;
+                font-size: 10px;
+            }
+
+            .top {
+                padding: 0 0 12px;
+                background: white;
+                color: #172d52;
+                border-bottom: 2px solid #172d52;
+                margin-bottom: 10px;
+            }
+
+            .top .eyebrow {
+                color: #315fb0;
+            }
+
+            .top h1 {
+                font-size: 23px;
+            }
+
+            .top p {
+                color: #4c5f78;
+                font-size: 10px;
+            }
+
+            .toolbar {
+                display: none;
+            }
+
+            .layout {
+                max-width: none;
+                margin: 10px 0 0;
+                padding: 0;
+                columns: 3;
+                column-gap: 9px;
+            }
+
+            .card {
+                border: 1px solid #ccd7e7;
+                border-radius: 5px;
+                margin-bottom: 8px;
+                box-shadow: none;
+            }
+
+            .card-head {
+                padding: 6px 8px;
+            }
+
+            .card h2 {
+                font-size: 10px;
+            }
+
+            .card .tag {
+                font-size: 7px;
+            }
+
+            .card .body {
+                padding: 7px;
+            }
+
+            .card p,
+            .card small {
+                font-size: 8px;
+                margin-bottom: 5px;
+            }
+
+            .card pre {
+                font-size: 8px;
+                line-height: 1.36;
+                padding: 6px;
+                border-radius: 3px;
+                margin-bottom: 4px;
+                background: #f7f9fc !important;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .footer {
+                display: none;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .top {
+                padding: 24px;
+            }
+
+            .top h1 {
+                font-size: 28px;
+            }
+
+            .layout {
+                columns: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="top">
+        <div class="eyebrow">
+            Prirodoslovno-matematički fakultet · Strukture podataka i algoritmi
+        </div>
+        <h1>
+            C#
+            <span style="font-weight: 400; color: #a9c6ff">/ Podsjetnik</span>
+        </h1>
+        <p>
+            Osnovna sintaksa za SPA.
+        </p>
+    </header>
+    <div class="toolbar">
+        <span class="note">Prilagođeno za zaslon i ispis na A4 · svi primjeri su informativni
+            fragmenti koda</span>
+        <div>
+            <button onclick="window.print()" class="primary">
+                Ispiši / Spremi kao PDF
+            </button>
+        </div>
+    </div>
+    <main class="layout">
+        <section class="card">
+            <div class="card-head">
+                <h2>Osnovna struktura</h2>
+                <span class="tag">Program.cs</span>
+            </div>
+            <div class="body">
+                <pre>
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Pozdrav!");
+    }
+}</pre>
+                <small>Naredbe završavaju znakom <code>;</code>; blokovi su omeđeni vitičastim zagradama
+                    <code>{ }</code>.</small>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-head">
+                <h2>Tipovi i varijable</h2>
+                <span class="tag">Tipovi</span>
+            </div>
+            <div class="body">
+                <pre>
+int broj = 12;
+double x = 3.14;
+char znak = 'A';
+bool uvjet = true;
+string tekst = "Primjer";
+</pre>
+            </div>
+        </section>
+
+ <section class="card">
+            <div class="card-head">
+                <h2>Pretvorbe i cast</h2>
+                <span class="tag">Tipovi</span>
+            </div>
+            <div class="body">
+                <pre>
+int a = int.Parse("42");
+double d = 7.9;
+int b = (int)d;      // 7
+
+double c = (double)5 / 2; // 2.5
+</pre>
+                <small>Cast nije isto što i parsiranje teksta. Neispravan cast može
+                    izazvati iznimku. Može se koristiti i za korisnički definirane tipove kao što su klase, npr. <code>Osoba</code>.</small>
+            </div>
+        </section>
+
+
+        <section class="card">
+            <div class="card-head">
+                <h2>Operatori</h2>
+                <span class="tag"></span>
+            </div>
+            <div class="body">
+                <pre>
++  -  *  /  %
+==  !=  &lt;  &gt;  &lt;=  &gt;=
+&amp;&amp;  ||  !
+++  --  +=  -=</pre>
+                <small>Dijeljenje <code>/</code> dva <code>int</code> broja daje cjelobrojni
+                    rezultat.</small>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-head">
+                <h2>Ispis i unos stringa</h2>
+                <span class="tag">Konzola</span>
+            </div>
+            <div class="body">
+                <pre>
+Console.Write("Tekst");
+Console.WriteLine("Redak");
+
+string s = Console.ReadLine();
+Console.WriteLine($"Tekst: {s}");
+</pre>
+                <small>Predložak za ispis: <code>$"Tekst: {s}"</code></small>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-head">
+                <h2>Naredba if</h2>
+                <span class="tag">Odluke</span>
+            </div>
+            <div class="body">
+                <pre>
+if (x &gt; 0)
+{
+    Console.WriteLine("Pozitivan");
+}
+else if (x == 0)
+{
+    Console.WriteLine("Nula");
+}
+else
+{
+    Console.WriteLine("Negativan");
+}</pre>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-head">
+                <h2>Naredba switch</h2>
+                <span class="tag">Odluke</span>
+            </div>
+            <div class="body">
+                <pre>
+switch (izbor)
+{
+    case "a":
+        Console.WriteLine("A");
+        break;
+    case "b":
+        Console.WriteLine("B");
+        break;
+    default:
+        Console.WriteLine("Ostalo");
+        break;
+}</pre>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-head">
+                <h2>for i foreach</h2>
+                <span class="tag">Petlje</span>
+            </div>
+            <div class="body">
+                <pre>
+for (int i = 0; i &lt; 5; i++)
+{
+    Console.WriteLine(i);
+}
+
+int[] brojevi = { 2, 4, 6 };
+foreach (int broj in brojevi)
+{
+    Console.WriteLine(broj);
+}
+</pre> <small><code>foreach</code> se ne smije koristiti ako se mijenjaju vrijednosti.</small>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-head">
+                <h2>while i do-while</h2>
+                <span class="tag">Petlje</span>
+            </div>
+            <div class="body">
+                <pre>
+while (x &gt; 0)
+{
+    x--;
+}
+
+do
+{
+    x++;
+} while (x &lt; 5);
+</pre>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-head">
+                <h2>Metode</h2>
+                <span class="tag">Main</span>
+            </div>
+            <div class="body">
+                <pre>
+static int Kvadrat(int x)
+{
+    return x * x;
+}
+
+static void Ispisi(string tekst)
+{
+    Console.WriteLine(tekst);
+}
+
+static void Test()
+{
+    Console.WriteLine("Poruka");
+}
+</pre>
+                <small><code>void</code> označava da metoda ne vraća vrijednost.</small>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-head">
+                <h2>Klase i objekti</h2>
+                <span class="tag">Class</span>
+            </div>
+            <div class="body">
+                <pre>
+class Osoba
+{
+    public string ime;
+    public int dob;
+}
+// stvaranje novog objekta
+Osoba o = new Osoba();
+o.ime = "Ana";
+o.dob = 20;</pre>
+                <small>Bez svojstava <code>get</code> i <code>set</code>.</small>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-head">
+                <h2>Konstruktor i this</h2>
+                <span class="tag">Class</span>
+            </div>
+            <div class="body">
+                <pre>
+class Tocka
+{
+    public double x;
+    public double y;
+
+    public Tocnka(double x, double y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+// stvaranje objekta pomoću konstruktora
+Tocka t = new Tocka(2.5, 3.0);
+</pre><small><code>this</code> se koristi za razlikovanje člana klase i parametra konstruktora.</small>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-head">
+                <h2>Nizovi</h2>
+                <span class="tag">Arrays</span>
+            </div>
+            <div class="body">
+                <pre>
+int[] a = new int[5];
+int[] b = { 1, 2, 3 };
+a[0] = 7;
+int duljina = a.Length;</pre>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-head">
+                <h2>Tekst i Split()</h2>
+                <span class="tag">String</span>
+            </div>
+            <div class="body">
+                <pre>
+string s = "Ana;20;Split";
+string[] dijelovi = s.Split(';');
+string ime = dijelovi[0];
+</pre>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-head">
+                <h2>Čitanje iz datoteke</h2>
+                <span class="tag">File</span>
+            </div>
+            <div class="body">
+                <pre>
+string[] linije = 
+    File.ReadAllLines("podaci.txt");
+foreach (string linija in linije)
+{
+    Console.WriteLine(linija);
+}    
+    </pre><small>Za <code>File</code> je potreban <code>using System.IO;</code>.</small>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-head">
+                <h2>Čitanje iz datoteke</h2>
+                <span class="tag">using</span>
+            </div>
+            <div class="body">
+                <pre>
+using (StreamReader sr = new StreamReader("podaci.txt"))
+{
+    string linija;
+    while ((linija = sr.ReadLine()) != null)
+    {
+        Console.WriteLine(linija);
+    }
+}            
+          </pre>
+                
+            </div>
+        </section>
+       
+        <section class="card">
+            <div class="card-head">
+                <h2>LinkedList&lt;T&gt;</h2>
+                <span class="tag">Vezane liste</span>
+            </div>
+            <div class="body">
+                <pre>
+LinkedList&lt;int&gt; lista =
+    new LinkedList&lt;int&gt;();</pre>
+                <small><code>using System.Collections.Generic;</code></small>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-head">
+                <h2>Dictionary&lt;TKey, TValue&gt;</h2>
+                <span class="tag">Rječnici</span>
+            </div>
+            <div class="body">
+                <pre>
+Dictionary&lt;string, int&gt; rjecnik =
+    new Dictionary&lt;string, int&gt;();</pre>
+                <small>Parovi ključ-vrijednost. <br><code>using System.Collections.Generic;</code></small>
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-head">
+                <h2>Hashtable</h2>
+                <span class="tag">Hash tablice</span>
+            </div>
+            <div class="body">
+                <pre>
+Hashtable ht = new Hashtable();</pre>
+                <small><code>using System.Collections;</code> <br>Nema sigurne tipove, potrebno je pretvarati vrijednosti.</small>
+            </div>
+        </section>
+        
+        <section class="card">
+            <div class="card-head">
+                <h2>Korisne ključne riječi</h2>
+                <span class="tag">Podsjetnik</span>
+            </div>
+            <div class="body">
+                <pre>
+new       // novi objekt
+return    // povrat iz metode
+break     // prekid petlje
+continue  // sljedeća iteracija
+static    // statički član klase
+public    // dostupnost člana</pre>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        SPA · C# sintaktički podsjetnik · primjeri su namjerno neovisni o
+ zadacima.
+    </footer>
+</body>
+
+</html>
