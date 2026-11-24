@@ -564,6 +564,7 @@ Tocka t = new Tocka(2.5, 3.0);
 </pre><small><code>this</code> se koristi za razlikovanje člana klase i parametra konstruktora.</small>
             </div>
         </section>
+
         <section class="card">
             <div class="card-head">
                 <h2>Nizovi</h2>
@@ -575,6 +576,19 @@ int[] a = new int[5];
 int[] b = { 1, 2, 3 };
 a[0] = 7;
 int duljina = a.Length;</pre>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-head">
+                <h2>List&lt;T&gt;</h2>
+                <span class="tag">LISTE</span>
+            </div>
+            <div class="body">
+                <pre>
+List&lt;int&gt; lista = new List&lt;int&gt;();
+lista.Add(5);
+int duljina = lista.Count;</pre><small><code>using System.Collections.Generic;</code><br>Za ispis ili prolaz kroz strukturu, može se koristiti petlja <code>foreach</code> ili <code>for</code> (jer lista ima indekse kao obični niz).</small>
             </div>
         </section>
 
